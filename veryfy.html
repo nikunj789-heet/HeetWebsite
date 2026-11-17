@@ -54,7 +54,30 @@ function verifyCertificate(){
    return;
   }
 
-  const student=data.slice(1).find(row=>String(row[ni]).trim().toUpperCase()===number);
+  const rows = data.slice(1);
+const searchValue = number.replace(/\s+/g, " ").trim().toUpperCase();
+
+const certificateMatch = rows.find(row =>
+  String(row[ni] || "").trim().toUpperCase() === searchValue
+);
+
+let student = certificateMatch;
+
+if (!student) {
+  const nameMatches = rows.filter(row =>
+    String(row[si] || "").trim().replace(/\s+/g, " ").toUpperCase() === searchValue
+  );
+
+  if (nameMatches.length === 1) {
+    student = nameMatches[0];
+  } else if (nameMatches.length > 1) {
+    result.textContent = "Multiple students found. Please enter Certificate Number.";
+    result.style.color = "orange";
+    button.disabled = false;
+    delete window[callback];
+    return;
+  }
+}
   result.innerHTML="";
   button.disabled=false;
 
