@@ -256,3 +256,14 @@ body {
     margin: 0 auto;
     color: #374151;
 }
+#about .eyebrow {
+    display: inline-block;
+    font-size: 24px !important;
+    font-weight: 900;
+    letter-spacing: 2px;
+    color: #1565c0;
+    background: #e8f1ff;
+    padding: 12px 22px;
+    border-radius: 30px;
+    margin-bottom: 20px;
+}
