@@ -210,3 +210,20 @@ body {
     margin: 0 0 6px 0;
     text-transform: uppercase;
 }
+  .ccc-registration-btn {
+  display: inline-block;
+  background: linear-gradient(135deg, #1565c0, #003b8e);
+  color: white !important;
+  padding: 14px 30px;
+  border-radius: 10px;
+  font-size: 18px;
+  font-weight: bold;
+  text-decoration: none;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  transition: 0.3s;
+}
+
+.ccc-registration-btn:hover {
+  background: #003b8e;
+  transform: translateY(-3px);
+}
