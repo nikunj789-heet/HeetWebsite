@@ -6,6 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Student Login | Heet Computer</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
 body{font-family:Arial;background:#f2f5fa;margin:0;padding:20px}
 .container{max-width:420px;margin:60px auto;background:white;padding:25px;border-radius:12px;box-shadow:0 4px 18px #ccc}
@@ -15,8 +16,23 @@ button{background:#1565c0;color:white;border:0;border-radius:6px;cursor:pointer}
 button:disabled{opacity:.6}
 #message{text-align:center;overflow-wrap:anywhere}
 .hidden{display:none}
+.password-wrap{position:relative}
+.password-wrap input{padding-right:55px}
+.eye-btn{
+position:absolute;
+right:5px;
+top:10px;
+width:45px;
+height:43px;
+margin:0;
+padding:5px;
+background:#e8eef8;
+color:#1565c0;
+font-size:20px;
+}
 </style>
 </head>
+
 <body>
 <div class="container">
 <h2>Heet Computer</h2>
@@ -25,17 +41,33 @@ button:disabled{opacity:.6}
 <div id="loginBox">
 <form id="loginForm">
 <input type="email" id="email" placeholder="Registered Email" required>
+
+<div class="password-wrap">
 <input type="password" id="password" placeholder="Password" required>
+<button type="button" class="eye-btn" onclick="togglePassword('password',this)">👁️</button>
+</div>
+
 <button type="submit" id="loginBtn">Login</button>
 </form>
+
 <button type="button" id="forgotBtn">Forgot Password?</button>
 </div>
 
 <div id="setPasswordBox" class="hidden">
 <h3>Create / Reset Password</h3>
+
 <form id="setPasswordForm">
+
+<div class="password-wrap">
 <input type="password" id="newPassword" placeholder="New Password (minimum 8 characters)" minlength="8" required>
+<button type="button" class="eye-btn" onclick="togglePassword('newPassword',this)">👁️</button>
+</div>
+
+<div class="password-wrap">
 <input type="password" id="confirmPassword" placeholder="Confirm Password" minlength="8" required>
+<button type="button" class="eye-btn" onclick="togglePassword('confirmPassword',this)">👁️</button>
+</div>
+
 <button type="submit">Save Password</button>
 </form>
 </div>
@@ -55,6 +87,18 @@ const supabaseClient = window.supabase.createClient(
 const message = document.getElementById("message");
 const loginBox = document.getElementById("loginBox");
 const setPasswordBox = document.getElementById("setPasswordBox");
+
+function togglePassword(id, button) {
+  const field = document.getElementById(id);
+
+  if (field.type === "password") {
+    field.type = "text";
+    button.textContent = "🙈";
+  } else {
+    field.type = "password";
+    button.textContent = "👁️";
+  }
+}
 
 function showMessage(text, color = "red") {
   message.textContent = text;
