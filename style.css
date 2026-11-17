@@ -227,11 +227,4 @@ body {
   background: #003b8e;
   transform: translateY(-3px);
 }
-.iso-certification {
-  white-space: nowrap;
-  font-size: clamp(9px, 2vw, 15px);
-  text-align: center;
-  width: 100%;
-  letter-spacing: 0;
-  margin: 8px 0;
-}
+
