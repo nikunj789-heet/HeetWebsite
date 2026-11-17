@@ -1,0 +1,209 @@
+
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CCC Student Registration - Heet Computer</title>
+
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f6f9;
+  margin: 0;
+  padding: 20px;
+}
+.container {
+  max-width: 550px;
+  margin: auto;
+  background: white;
+  padding: 22px;
+  border-radius: 10px;
+}
+h2 {
+  text-align: center;
+  color: #174a8b;
+}
+label {
+  display: block;
+  margin-top: 14px;
+  font-weight: bold;
+}
+input, select {
+  width: 100%;
+  padding: 11px;
+  margin-top: 6px;
+  box-sizing: border-box;
+}
+button, .pay-button {
+  display: block;
+  width: 100%;
+  padding: 13px;
+  margin-top: 20px;
+  border: 0;
+  border-radius: 6px;
+  background: #174a8b;
+  color: white;
+  font-size: 16px;
+  text-align: center;
+  text-decoration: none;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+button:disabled {
+  opacity: 0.6;
+}
+#result {
+  margin-top: 20px;
+  overflow-wrap: anywhere;
+}
+.success {
+  color: green;
+  font-weight: bold;
+}
+.note {
+  color: #9a3412;
+  font-size: 14px;
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<h2>Heet Computer - CCC Registration</h2>
+
+<form id="cccForm" enctype="multipart/form-data">
+
+<label>Student Full Name</label>
+<input name="student_name" type="text" maxlength="100" required>
+
+<label>Mobile Number</label>
+<input name="mobile_number" type="tel" pattern="[6-9][0-9]{9}" maxlength="10" required>
+
+<label>Email</label>
+<input name="email_address" type="email" required>
+
+<label>Aadhaar Last 4 Digits</label>
+<input name="aadhaar_last4" type="text" pattern="[0-9]{4}" maxlength="4" required>
+
+<label>Student Photo</label>
+<input name="student_photo" type="file" accept=".jpg,.jpeg,.png" required>
+
+<label>Signature</label>
+<input name="signature" type="file" accept=".jpg,.jpeg,.png" required>
+
+<label>10th Marksheet</label>
+<input name="marksheet_10" type="file" accept=".jpg,.jpeg,.png,.pdf" required>
+
+<label>12th Marksheet</label>
+<input name="marksheet_12" type="file" accept=".jpg,.jpeg,.png,.pdf" required>
+
+<label>Graduation Marksheet (Optional)</label>
+<input name="marksheet_graduation" type="file" accept=".jpg,.jpeg,.png,.pdf">
+
+<label>Aadhaar Card (Optional)</label>
+<input name="aadhaar_card" type="file" accept=".jpg,.jpeg,.png,.pdf">
+
+<label>Certificate Date Option</label>
+<select name="certificate_date_option" required>
+  <option value="">Select</option>
+  <option value="Regular Date">Regular Date</option>
+  <option value="6 Month">6 Month</option>
+  <option value="Last Year">Last Year</option>
+</select>
+
+<br><br>
+
+<div class="cf-turnstile"
+     data-sitekey="0x4AAAAAAGC3EnBv354vN04H">
+</div>
+
+<button type="submit" id="submitButton">Submit Registration</button>
+
+</form>
+
+<div id="result" aria-live="polite"></div>
+
+</div>
+
+<script>
+document.getElementById("cccForm").addEventListener("submit", async function(e) {
+  e.preventDefault();
+
+  const form = this;
+  const result = document.getElementById("result");
+  const button = document.getElementById("submitButton");
+
+  if (!form.reportValidity()) return;
+
+  button.disabled = true;
+  result.textContent = "Submitting registration...";
+
+  try {
+    const response = await fetch(
+      "https://rwtdwtbxuoilzecerojm.supabase.co/functions/v1/ccc-student-registration",
+      {
+        method: "POST",
+        body: new FormData(form)
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "Registration failed");
+    }
+
+    const registrationId = data.registration_id || data.id;
+
+    if (!registrationId) {
+      throw new Error("Registration received, but Registration ID was not returned. Please contact Heet Computer before submitting again.");
+    }
+
+    form.hidden = true;
+    result.replaceChildren();
+
+    const heading = document.createElement("h3");
+    heading.className = "success";
+    heading.textContent = "Registration Successful!";
+
+    const idText = document.createElement("p");
+    idText.textContent = "Your Registration ID: " + registrationId;
+
+    const amount = document.createElement("h3");
+    amount.textContent = "Registration Fee: ₹1,500";
+
+    const payLink = document.createElement("a");
+
+    const upiParams = new URLSearchParams({
+      pa: "sadhunikunj78-2@oksbi",
+      pn: "Heet Computer",
+      am: "1500",
+      cu: "INR",
+      tn: "CCC Registration " + registrationId
+    });
+
+    payLink.href = "upi://pay?" + upiParams.toString();
+    payLink.className = "pay-button";
+    payLink.textContent = "Pay ₹1,500 with UPI / Google Pay";
+
+    const note = document.createElement("p");
+    note.className = "note";
+    note.textContent =
+      "Payment કર્યા પછી તમારો Transaction ID સાચવી રાખજો. Payment Heet Computer દ્વારા ચકાસ્યા પછી જ Paid ગણાશે.";
+
+    result.append(heading, idText, amount, payLink, note);
+
+  } catch (error) {
+    result.textContent = error.message;
+  } finally {
+    button.disabled = false;
+  }
+});
+</script>
+
+</body>
+</html>

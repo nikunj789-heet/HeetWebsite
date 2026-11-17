@@ -1,0 +1,89 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HEET Certificate Verification</title>
+<style>
+body{font-family:Arial;background:#eaf1f8;text-align:center;padding:40px 15px}
+.container{background:white;max-width:500px;margin:40px auto;padding:30px;border-radius:15px;box-shadow:0 4px 15px #ccc}
+h1{color:#123b70}
+input{width:90%;padding:13px;border:1px solid #ccc;border-radius:7px;font-size:16px;box-sizing:border-box}
+button{background:#167a42;color:white;border:0;padding:13px 25px;border-radius:7px;font-size:16px;cursor:pointer}
+#result{margin-top:20px}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>HEET COMPUTER EDUCATION</h1>
+<h2>Certificate Verification</h2>
+<p>Verify Your Certificate Online</p>
+<input type="text" id="certificateNumber" placeholder="Enter Certificate Number">
+<br><br>
+<button id="verifyButton" onclick="verifyCertificate()">Verify Certificate</button>
+<div id="result"></div>
+</div>
+
+<script>
+const API_URL="https://script.google.com/macros/s/AKfycbxT3j2p7DAdVqzTUUTsaJA1uxeTatHALB4YDVVxE-OeEdjiTxKG2Mqno_1cMJTd8H5N/exec";
+
+function verifyCertificate(){
+ const number=document.getElementById("certificateNumber").value.trim().toUpperCase();
+ const result=document.getElementById("result");
+ const button=document.getElementById("verifyButton");
+
+ if(!number){result.textContent="Please Enter Certificate Number";result.style.color="red";return;}
+
+ button.disabled=true;
+ result.textContent="Checking Certificate...";
+
+ const callback="certificateCallback";
+ window[callback]=function(data){
+  const headers=data[0].map(h=>h.trim().toLowerCase());
+  const ni=headers.indexOf("certy_number");
+  const si=headers.indexOf("student_name");
+  const ci=headers.indexOf("course_name");
+  const vi=headers.indexOf("status");
+
+  if([ni,si,ci,vi].includes(-1)){
+   result.textContent="Sheet columns are incorrect.";
+   button.disabled=false;
+   delete window[callback];
+   return;
+  }
+
+  const student=data.slice(1).find(row=>String(row[ni]).trim().toUpperCase()===number);
+  result.innerHTML="";
+  button.disabled=false;
+
+  if(student && String(student[vi]).trim().toLowerCase()==="valid"){
+   result.style.color="green";
+   const heading=document.createElement("h3");
+   heading.textContent="✓ VALID CERTIFICATE";
+   result.appendChild(heading);
+   [["Student Name",student[si]],["Certificate Number",student[ni]],["Course",student[ci]],["Status",student[vi]]].forEach(([label,value])=>{
+    const p=document.createElement("p");
+    p.textContent=label+": "+value;
+    result.appendChild(p);
+   });
+  }else{
+   result.textContent="✗ CERTIFICATE NOT FOUND OR INVALID";
+   result.style.color="red";
+  }
+  delete window[callback];
+ };
+ const script=document.createElement("script");
+ script.src=API_URL+"?callback="+callback;
+ script.onerror=function(){
+  result.textContent="Unable to connect. Please try again.";
+  result.style.color="red";
+  button.disabled=false;
+  delete window[callback];
+  script.remove();
+ };
+ document.body.appendChild(script);
+}
+</script>
+</body>
+</html>

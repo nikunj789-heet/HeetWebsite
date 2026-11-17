@@ -1,0 +1,517 @@
+
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Heet Computer CCC Admin</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+body{font-family:Arial;background:#f3f4f6;padding:15px}
+.container{max-width:1200px;margin:auto;background:white;padding:20px;border-radius:10px}
+input,button{padding:10px;margin:6px 0;box-sizing:border-box}
+input{width:100%}
+button{cursor:pointer;background:#174a8b;color:white;border:0;border-radius:5px}
+button:disabled{opacity:.5;cursor:not-allowed}
+table{width:100%;border-collapse:collapse;margin-top:20px}
+th,td{border:1px solid #ddd;padding:9px;text-align:left}
+th{background:#174a8b;color:white}
+#panel{display:none}
+.doc{background:#16834a;margin:3px;padding:7px}
+.editBtn{background:#e09b16}
+.deleteBtn{background:#c62828}
+#studentModal,#editModal{
+ display:none;position:fixed;top:4%;left:5%;width:90%;
+ max-height:90vh;overflow:auto;background:white;padding:20px;
+ border:1px solid #999;z-index:99999;box-shadow:0 0 15px #777;
+ border-radius:10px;box-sizing:border-box
+}
+.modalInput{margin-bottom:10px}
+.modalInput label{display:block;font-weight:bold}
+@media(max-width:600px){
+ .container{padding:10px}
+ th,td{padding:6px;font-size:13px}
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<h2>Heet Computer - CCC Admin Panel</h2>
+
+<div id="loginPanel">
+<h3>Admin Login</h3>
+<input id="email" type="email" placeholder="Admin Email">
+<input id="password" type="password" placeholder="Password">
+<button onclick="adminLogin()">Login</button>
+</div>
+
+<div id="panel">
+<button onclick="loadStudents()">Refresh Students</button>
+<button onclick="logout()">Logout</button>
+
+<p id="message"></p>
+
+<input type="text" id="searchStudent"
+placeholder="Search by Name or Mobile"
+oninput="searchStudents()">
+
+<div style="overflow-x:auto">
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Name</th>
+<th>Mobile</th>
+<th>Payment</th>
+<th>Documents</th>
+<th>Details</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody id="students"></tbody>
+</table>
+</div>
+</div>
+</div>
+
+<!-- DETAILS MODAL -->
+<div id="studentModal">
+<h3>Student Full Details</h3>
+<div id="studentDetails"></div>
+<button onclick="closeDetails()">Close</button>
+</div>
+
+<!-- EDIT MODAL -->
+<div id="editModal">
+<h3>Edit Student Details</h3>
+
+<input type="hidden" id="editId">
+
+<div class="modalInput">
+<label>Student Name</label>
+<input id="editName">
+</div>
+
+<div class="modalInput">
+<label>Mobile Number</label>
+<input id="editMobile">
+</div>
+
+<div class="modalInput">
+<label>Email Address</label>
+<input id="editEmail">
+</div>
+
+<div class="modalInput">
+<label>Admission Date</label>
+<input id="editAdmission" type="date">
+</div>
+
+<div class="modalInput">
+<label>Completion Date</label>
+<input id="editCompletion" type="date">
+</div>
+
+<div class="modalInput">
+<label>Aadhaar Last 4 Digits</label>
+<input id="editAadhaar" maxlength="4">
+</div>
+
+<div class="modalInput">
+<label>Registration Status</label>
+<input id="editRegistration">
+</div>
+
+<div class="modalInput">
+<label>Payment Amount</label>
+<input id="editAmount" type="number">
+</div>
+
+<div class="modalInput">
+<label>Payment Status</label>
+<input id="editPayment">
+</div>
+
+<div class="modalInput">
+<label>Exam Status</label>
+<input id="editExamStatus">
+</div>
+
+<div class="modalInput">
+<label>Exam Score</label>
+<input id="editExamScore" type="number">
+</div>
+
+<div class="modalInput">
+<label>Certificate Number</label>
+<input id="editCertificate">
+</div>
+
+<div class="modalInput">
+<label>Certificate Issue Date</label>
+<input id="editCertificateDate" type="date">
+</div>
+
+<button onclick="saveStudent()">Save Changes</button>
+<button onclick="closeEdit()" style="background:#666">Cancel</button>
+</div>
+
+<script>
+const SUPABASE_URL = "https://rwtdwtbxuoilzecerojm.supabase.co";
+const SUPABASE_KEY = "sb_publishable_5ggHaapc4cno062CdS7OGg_-6PLyF8t";
+
+const db = window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+const BUCKET = "ccc-student-documents";
+
+let studentsData = [];
+
+async function adminLogin(){
+ const email=document.getElementById("email").value;
+ const password=document.getElementById("password").value;
+
+ const {error}=await db.auth.signInWithPassword({email,password});
+
+ if(error){alert(error.message);return;}
+
+ document.getElementById("loginPanel").style.display="none";
+ document.getElementById("panel").style.display="block";
+
+ loadStudents();
+}
+
+function getStoragePath(value){
+ if(!value)return null;
+
+ let path=String(value);
+
+ if(path.startsWith("http")){
+  const marker="/storage/v1/object/";
+  const index=path.indexOf(marker);
+
+  if(index===-1)return null;
+
+  path=path.substring(index+marker.length);
+  path=path.replace(/^(public|sign|authenticated)\//,"");
+  path=path.replace(/^ccc-student-documents\//,"");
+  path=path.split("?")[0];
+ }else{
+  path=path.replace(/^ccc-student-documents\//,"");
+ }
+
+ try{path=decodeURIComponent(path);}catch(e){}
+
+ return path||null;
+}
+
+async function viewDocument(value){
+ const newTab=window.open("about:blank","_blank");
+
+ if(!newTab){
+  alert("Browser માં pop-up allow કરો.");
+  return;
+ }
+
+ const path=getStoragePath(value);
+
+ if(!path){
+  newTab.close();
+  alert("Document path મળ્યો નથી.");
+  return;
+ }
+
+ const {data,error}=await db.storage
+ .from(BUCKET)
+ .createSignedUrl(path,300,{download:false});
+
+ if(error||!data?.signedUrl){
+  newTab.close();
+  alert("Document ખોલી શકાયું નથી: "+(error?.message||"Unknown error"));
+  return;
+ }
+
+ newTab.location.href=data.signedUrl;
+}
+
+async function loadStudents(){
+ const message=document.getElementById("message");
+ const tbody=document.getElementById("students");
+
+ message.textContent="Loading...";
+ tbody.replaceChildren();
+
+ const {data,error}=await db.from("ccc_registrations")
+ .select("id,student_name,mobile_number,email_address,admission_date,completion_date,aadhaar_last4,certificate_date_option,registration_status,payment_amount,payment_status,exam_status,exam_score,certificate_number,certificate_issue_date,student_photo_url,signature_url,marksheet_10_url,marksheet_12_url,marksheet_graduation_url,aadhaar_card_url")
+ .order("created_at",{ascending:false});
+
+ if(error){
+  message.textContent=error.message;
+  return;
+ }
+
+ studentsData=data||[];
+
+ studentsData.forEach(s=>{
+  const tr=document.createElement("tr");
+
+  function cell(value){
+   const td=document.createElement("td");
+   td.textContent=value??"";
+   tr.appendChild(td);
+   return td;
+  }
+
+  cell(s.id);
+  cell(s.student_name);
+  cell(s.mobile_number);
+  cell("₹"+s.payment_amount+" / "+s.payment_status);
+
+  // DOCUMENTS
+  const docs=cell("");
+
+  const files=[
+   ["Photo",s.student_photo_url],
+   ["Signature",s.signature_url],
+   ["10th Marksheet",s.marksheet_10_url],
+   ["12th Marksheet",s.marksheet_12_url],
+   ["Graduation",s.marksheet_graduation_url],
+   ["Aadhaar",s.aadhaar_card_url]
+  ];
+
+  files.forEach(([label,path])=>{
+   if(path){
+    const b=document.createElement("button");
+    b.className="doc";
+    b.textContent="View "+label;
+    b.onclick=()=>viewDocument(path);
+    docs.appendChild(b);
+   }
+  });
+
+  // DETAILS
+  const details=cell("");
+  const detailButton=document.createElement("button");
+
+  detailButton.textContent="View Details";
+  detailButton.onclick=()=>showDetails(s);
+
+  details.appendChild(detailButton);
+
+  // ACTIONS
+  const action=cell("");
+
+  const paid=document.createElement("button");
+  paid.textContent="Mark Paid";
+  paid.disabled=s.payment_status==="paid";
+  paid.onclick=()=>markPaid(s.id,paid);
+  action.appendChild(paid);
+
+  const edit=document.createElement("button");
+  edit.textContent="Edit";
+  edit.className="editBtn";
+  edit.onclick=()=>editStudent(s);
+  action.appendChild(edit);
+
+  const del=document.createElement("button");
+  del.textContent="Delete";
+  del.className="deleteBtn";
+  del.onclick=()=>deleteStudent(s.id,s.student_name);
+  action.appendChild(del);
+
+  tbody.appendChild(tr);
+ });
+
+ message.textContent="Total registrations: "+studentsData.length;
+ searchStudents();
+}
+
+// SHOW DETAILS
+function showDetails(s){
+ const fields=[
+  ["Name",s.student_name],
+  ["Mobile",s.mobile_number],
+  ["Email",s.email_address],
+  ["Registration ID",s.id],
+  ["Admission Date",s.admission_date],
+  ["Completion Date",s.completion_date],
+  ["Aadhaar Last 4",s.aadhaar_last4],
+  ["Certificate Date",s.certificate_date_option],
+  ["Registration Status",s.registration_status],
+  ["Payment Amount","₹"+s.payment_amount],
+  ["Payment Status",s.payment_status],
+  ["Exam Status",s.exam_status],
+  ["Exam Score",s.exam_score],
+  ["Certificate Number",s.certificate_number],
+  ["Certificate Issue Date",s.certificate_issue_date]
+ ];
+
+ const box=document.getElementById("studentDetails");
+ box.replaceChildren();
+
+ fields.forEach(([label,value])=>{
+  const p=document.createElement("p");
+  p.textContent=label+": "+(value??"Not Available");
+  box.appendChild(p);
+ });
+
+ document.getElementById("studentModal").style.display="block";
+}
+
+function closeDetails(){
+ document.getElementById("studentModal").style.display="none";
+}
+
+// EDIT STUDENT
+function editStudent(s){
+ document.getElementById("editId").value=s.id;
+ document.getElementById("editName").value=s.student_name||"";
+ document.getElementById("editMobile").value=s.mobile_number||"";
+ document.getElementById("editEmail").value=s.email_address||"";
+ document.getElementById("editAdmission").value=s.admission_date||"";
+ document.getElementById("editCompletion").value=s.completion_date||"";
+ document.getElementById("editAadhaar").value=s.aadhaar_last4||"";
+ document.getElementById("editRegistration").value=s.registration_status||"";
+ document.getElementById("editAmount").value=s.payment_amount??"";
+ document.getElementById("editPayment").value=s.payment_status||"";
+ document.getElementById("editExamStatus").value=s.exam_status||"";
+ document.getElementById("editExamScore").value=s.exam_score??"";
+ document.getElementById("editCertificate").value=s.certificate_number||"";
+ document.getElementById("editCertificateDate").value=s.certificate_issue_date||"";
+
+ document.getElementById("editModal").style.display="block";
+}
+
+function closeEdit(){
+ document.getElementById("editModal").style.display="none";
+}
+
+// SAVE EDITED STUDENT
+async function saveStudent(){
+ const id=document.getElementById("editId").value;
+
+ const amount=document.getElementById("editAmount").value;
+ const score=document.getElementById("editExamScore").value;
+
+ const updates={
+  student_name:document.getElementById("editName").value.trim(),
+  mobile_number:document.getElementById("editMobile").value.trim(),
+  email_address:document.getElementById("editEmail").value.trim()||null,
+  admission_date:document.getElementById("editAdmission").value||null,
+  completion_date:document.getElementById("editCompletion").value||null,
+  aadhaar_last4:document.getElementById("editAadhaar").value.trim()||null,
+  registration_status:document.getElementById("editRegistration").value.trim()||null,
+  payment_amount:amount===""?null:Number(amount),
+  payment_status:document.getElementById("editPayment").value.trim()||null,
+  exam_status:document.getElementById("editExamStatus").value.trim()||null,
+  exam_score:score===""?null:Number(score),
+  certificate_number:document.getElementById("editCertificate").value.trim()||null,
+  certificate_issue_date:document.getElementById("editCertificateDate").value||null
+ };
+
+ if(!updates.student_name||!updates.mobile_number){
+  alert("Student Name અને Mobile Number જરૂરી છે.");
+  return;
+ }
+
+ if(updates.aadhaar_last4 && !/^\d{4}$/.test(updates.aadhaar_last4)){
+  alert("Aadhaar ના છેલ્લાં 4 અંક જ લખો.");
+  return;
+ }
+
+ const {error}=await db.from("ccc_registrations")
+ .update(updates)
+ .eq("id",id);
+
+ if(error){
+  alert("Update Error: "+error.message);
+  return;
+ }
+
+ alert("Student Details Updated Successfully.");
+ closeEdit();
+ loadStudents();
+}
+
+// DELETE STUDENT
+async function deleteStudent(id,name){
+ const confirmed=confirm(
+  "શું તમે "+name+" નો Registration Record કાયમી Delete કરવા માંગો છો?\n\nઆ કાર્યવાહી પાછી ફેરવી શકાશે નહીં."
+ );
+
+ if(!confirmed)return;
+
+ const {data,error}=await db.from("ccc_registrations")
+ .delete()
+ .eq("id",id)
+ .select("id");
+
+ if(error){
+  alert("Delete Error: "+error.message);
+  return;
+ }
+
+ if(!data||data.length===0){
+  alert("Record Delete થયો નથી. Supabase માં DELETE permission તપાસવી પડશે.");
+  return;
+ }
+
+ alert("Student Registration Record Deleted.");
+ loadStudents();
+}
+
+// MARK PAID
+async function markPaid(id,button){
+ if(!confirm("Google Pay માં payment ચકાસી લીધું છે?"))return;
+
+ button.disabled=true;
+
+ const {error}=await db.from("ccc_registrations")
+ .update({payment_status:"paid"})
+ .eq("id",id);
+
+ if(error){
+  alert(error.message);
+  button.disabled=false;
+  return;
+ }
+
+ alert("Payment status updated.");
+ loadStudents();
+}
+
+// SEARCH
+function searchStudents(){
+ const search=document.getElementById("searchStudent").value.toLowerCase();
+ const rows=document.querySelectorAll("#students tr");
+
+ rows.forEach(row=>{
+  row.style.display=row.textContent.toLowerCase().includes(search)?"":"none";
+ });
+}
+
+// LOGOUT
+async function logout(){
+ await db.auth.signOut();
+
+ document.getElementById("panel").style.display="none";
+ document.getElementById("loginPanel").style.display="block";
+}
+
+// SESSION CHECK
+db.auth.getSession().then(({data,error})=>{
+ if(error){
+  document.getElementById("message").textContent=error.message;
+  return;
+ }
+
+ if(data.session){
+  document.getElementById("loginPanel").style.display="none";
+  document.getElementById("panel").style.display="block";
+  loadStudents();
+ }
+});
+</script>
+</body>
+</html>

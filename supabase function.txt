@@ -1,0 +1,168 @@
+
+import { withSupabase } from "jsr:@supabase/server@^1";
+
+const BUCKET = "ccc-student-documents";
+const ALLOWED_ORIGIN = "https://heetcomputer.in";
+const MAX_FILE_SIZE = 5 * 1024 * 1024;
+
+function json(data: unknown, status = 200) {
+  return Response.json(data, { status });
+}
+
+function indiaDate() {
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Kolkata",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(new Date());
+}
+
+function completionDate(admission: string) {
+  const d = new Date(`${admission}T12:00:00+05:30`);
+  d.setMonth(d.getMonth() + 2);
+  d.setDate(d.getDate() + 10);
+  return d.toLocaleDateString("en-CA", { timeZone: "Asia/Kolkata" });
+}
+
+function validFile(file: FormDataEntryValue | null, required = true) {
+  if (!(file instanceof File)) return !required;
+  return file.size > 0 &&
+    file.size <= MAX_FILE_SIZE &&
+    ["image/jpeg", "image/png", "application/pdf"].includes(file.type);
+}
+
+export default {
+  fetch: withSupabase(
+    { auth: ["publishable"] },
+    async (req, ctx) => {
+      if (req.method !== "POST") {
+        return json({ error: "POST method required" }, 405);
+      }
+
+      if (req.headers.get("origin") !== ALLOWED_ORIGIN) {
+        return json({ error: "Invalid website origin" }, 403);
+      }
+
+      try {
+        const form = await req.formData();
+
+        const name = String(form.get("student_name") ?? "")
+          .trim().toUpperCase();
+        const mobile = String(form.get("mobile_number") ?? "").trim();
+        const email = String(form.get("email_address") ?? "")
+          .trim().toLowerCase();
+        const aadhaar = String(form.get("aadhaar_last4") ?? "").trim();
+        const option = String(form.get("certificate_date_option") ?? "");
+
+        if (name.length < 2 || name.length > 100) {
+          return json({ error: "Enter a valid student name" }, 400);
+        }
+        if (!/^[6-9]\d{9}$/.test(mobile)) {
+          return json({ error: "Enter a valid 10-digit mobile number" }, 400);
+        }
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          return json({ error: "Enter a valid email address" }, 400);
+        }
+        if (!/^\d{4}$/.test(aadhaar)) {
+          return json({ error: "Enter only the last 4 Aadhaar digits" }, 400);
+        }
+        if (!["Regular Date", "6 Month", "Last Year"].includes(option)) {
+          return json({ error: "Select a valid certificate date option" }, 400);
+        }
+
+        const files = {
+          student_photo: form.get("student_photo"),
+          signature: form.get("signature"),
+          marksheet_10: form.get("marksheet_10"),
+          marksheet_12: form.get("marksheet_12"),
+          marksheet_graduation: form.get("marksheet_graduation"),
+          aadhaar_card: form.get("aadhaar_card"),
+        };
+
+        if (
+          !validFile(files.student_photo) ||
+          !validFile(files.signature) ||
+          !validFile(files.marksheet_10) ||
+          !validFile(files.marksheet_12) ||
+          !validFile(files.marksheet_graduation, false) ||
+          !validFile(files.aadhaar_card, false)
+        ) {
+          return json({
+            error: "Check required documents. Each file must be JPG, PNG or PDF and under 5 MB.",
+          }, 400);
+        }
+
+        const uploaded: string[] = [];
+
+        async function uploadFile(key: keyof typeof files) {
+          const file = files[key];
+          if (!(file instanceof File)) return null;
+
+          const ext = file.type === "image/jpeg" ? "jpg" :
+            file.type === "image/png" ? "png" : "pdf";
+          const path = `${crypto.randomUUID()}/${key}.${ext}`;
+
+          const { error } = await ctx.supabaseAdmin.storage
+            .from(BUCKET)
+            .upload(path, file, {
+              contentType: file.type,
+              upsert: false,
+            });
+
+          if (error) throw error;
+          uploaded.push(path);
+          return path;
+        }
+
+        const photo = await uploadFile("student_photo");
+        const signature = await uploadFile("signature");
+        const marksheet10 = await uploadFile("marksheet_10");
+        const marksheet12 = await uploadFile("marksheet_12");
+        const graduation = await uploadFile("marksheet_graduation");
+        const aadhaarCard = await uploadFile("aadhaar_card");
+
+        const admission = indiaDate();
+
+        const { data, error } = await ctx.supabaseAdmin
+          .from("ccc_registrations")
+          .insert({
+            student_name: name,
+            mobile_number: mobile,
+            email_address: email,
+            admission_date: admission,
+            completion_date: completionDate(admission),
+            aadhaar_last4: aadhaar,
+            student_photo_url: photo,
+            signature_url: signature,
+            marksheet_10_url: marksheet10,
+            marksheet_12_url: marksheet12,
+            marksheet_graduation_url: graduation,
+            aadhaar_card_url: aadhaarCard,
+            certificate_date_option: option,
+            registration_status: "pending",
+            payment_status: "pending",
+            payment_amount: 1500,
+            exam_status: "not_started",
+          })
+          .select("id")
+          .single();
+
+        if (error) throw error;
+
+        return json({
+          success: true,
+          registration_id: data.id,
+          message: "Registration submitted. Payment is pending.",
+          amount: 1500,
+        }, 201);
+
+      } catch (error) {
+        console.error("Registration error:", error);
+        return json({
+          error: "Registration failed. Please check the details and try again.",
+        }, 400);
+      }
+    },
+  ),
+};
