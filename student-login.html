@@ -4,37 +4,31 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Student Login | Heet Computer</title>
+<title>Student Dashboard | Heet Computer</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 body{font-family:Arial;background:#f2f5fa;margin:0;padding:20px}
-.container{max-width:420px;margin:60px auto;background:white;padding:25px;border-radius:12px;box-shadow:0 4px 18px #ccc}
+.container{max-width:500px;margin:35px auto;background:white;padding:25px;border-radius:12px;box-shadow:0 4px 18px #ccc}
 h2,h3{text-align:center;color:#1565c0}
 input,button{width:100%;padding:13px;margin:10px 0;box-sizing:border-box}
 button{background:#1565c0;color:white;border:0;border-radius:6px;cursor:pointer}
 button:disabled{opacity:.6}
+.hidden{display:none!important}
 #message{text-align:center;overflow-wrap:anywhere}
-.hidden{display:none}
 .password-wrap{position:relative}
 .password-wrap input{padding-right:55px}
-.eye-btn{
-position:absolute;
-right:5px;
-top:10px;
-width:45px;
-height:43px;
-margin:0;
-padding:5px;
-background:#e8eef8;
-color:#1565c0;
-font-size:20px;
-}
+.eye-btn{position:absolute;right:5px;top:10px;width:45px;height:43px;margin:0;padding:5px;background:#e8eef8;color:#1565c0;font-size:20px}
+.detail{padding:12px;margin:8px 0;background:#f4f6fa;border-radius:6px;overflow-wrap:anywhere}
+.detail b{color:#333}
+.paid{background:#e2f7e8;color:#137333;padding:12px;border-radius:6px;text-align:center;font-weight:bold;margin-top:15px}
+#logoutBtn{background:#c62828}
 </style>
 </head>
 
 <body>
 <div class="container">
+
 <h2>Heet Computer</h2>
 <h3>Student Login</h3>
 
@@ -55,7 +49,6 @@ font-size:20px;
 
 <div id="setPasswordBox" class="hidden">
 <h3>Create / Reset Password</h3>
-
 <form id="setPasswordForm">
 
 <div class="password-wrap">
@@ -70,6 +63,13 @@ font-size:20px;
 
 <button type="submit">Save Password</button>
 </form>
+</div>
+
+<div id="dashboardBox" class="hidden">
+<h3>My Registration</h3>
+<div id="studentDetails"></div>
+<div id="paidStatus"></div>
+<button type="button" id="logoutBtn">Logout</button>
 </div>
 
 <p id="message"></p>
@@ -87,126 +87,194 @@ const supabaseClient = window.supabase.createClient(
 const message = document.getElementById("message");
 const loginBox = document.getElementById("loginBox");
 const setPasswordBox = document.getElementById("setPasswordBox");
+const dashboardBox = document.getElementById("dashboardBox");
 
-function togglePassword(id, button) {
-  const field = document.getElementById(id);
+function showMessage(text,color="red"){
+  message.textContent=text;
+  message.style.color=color;
+}
 
-  if (field.type === "password") {
-    field.type = "text";
-    button.textContent = "🙈";
-  } else {
-    field.type = "password";
-    button.textContent = "👁️";
+function togglePassword(id,button){
+  const field=document.getElementById(id);
+  if(field.type==="password"){
+    field.type="text";
+    button.textContent="🙈";
+  }else{
+    field.type="password";
+    button.textContent="👁️";
   }
 }
 
-function showMessage(text, color = "red") {
-  message.textContent = text;
-  message.style.color = color;
+function hideAll(){
+  loginBox.classList.add("hidden");
+  setPasswordBox.classList.add("hidden");
+  dashboardBox.classList.add("hidden");
 }
 
-async function checkInvitation() {
-  const { data, error } = await supabaseClient.auth.getSession();
+async function loadDashboard(user){
+  hideAll();
+  showMessage("Loading your registration...","black");
 
-  if (error) {
-    showMessage("Session error. Please open your email link again.");
+  const {data,error}=await supabaseClient
+    .from("ccc_registrations")
+    .select("id,student_name,mobile_number,email_address,admission_date,completion_date,registration_status,payment_status")
+    .eq("auth_user_id",user.id)
+    .maybeSingle();
+
+  if(error){
+    showMessage("Unable to load registration. Please try again.");
+    loginBox.classList.remove("hidden");
     return;
   }
 
-  if (data.session) {
-    loginBox.classList.add("hidden");
-    setPasswordBox.classList.remove("hidden");
-    showMessage("Create your password to activate your student login.", "green");
+  if(!data){
+    showMessage("Your registration was not found.");
+    loginBox.classList.remove("hidden");
+    return;
   }
+
+  const details=document.getElementById("studentDetails");
+
+  details.innerHTML=`
+    <div class="detail"><b>Registration ID:</b> ${data.id}</div>
+    <div class="detail"><b>Student Name:</b> ${safe(data.student_name)}</div>
+    <div class="detail"><b>Mobile:</b> ${safe(data.mobile_number)}</div>
+    <div class="detail"><b>Email:</b> ${safe(data.email_address)}</div>
+    <div class="detail"><b>Admission Date:</b> ${safe(data.admission_date)}</div>
+    <div class="detail"><b>Completion Date:</b> ${safe(data.completion_date)}</div>
+    <div class="detail"><b>Registration Status:</b> ${safe(data.registration_status)}</div>
+  `;
+
+  const paidStatus=document.getElementById("paidStatus");
+
+  if(String(data.payment_status).toLowerCase()==="paid"){
+    paidStatus.innerHTML='<div class="paid">Payment Status: PAID ✓</div>';
+  }else{
+    paidStatus.innerHTML="";
+  }
+
+  dashboardBox.classList.remove("hidden");
+  showMessage("Welcome to your Student Dashboard.","green");
 }
 
-document.getElementById("loginForm").addEventListener("submit", async function(e) {
+function safe(value){
+  const div=document.createElement("div");
+  div.textContent=value??"-";
+  return div.innerHTML;
+}
+
+document.getElementById("loginForm").addEventListener("submit",async function(e){
   e.preventDefault();
 
-  const button = document.getElementById("loginBtn");
-  button.disabled = true;
-  showMessage("Please wait...", "black");
+  const button=document.getElementById("loginBtn");
+  button.disabled=true;
+  showMessage("Please wait...","black");
 
-  const { error } = await supabaseClient.auth.signInWithPassword({
-    email: document.getElementById("email").value.trim(),
-    password: document.getElementById("password").value
+  const {data,error}=await supabaseClient.auth.signInWithPassword({
+    email:document.getElementById("email").value.trim(),
+    password:document.getElementById("password").value
   });
 
-  button.disabled = false;
+  button.disabled=false;
 
-  if (error) {
+  if(error){
     showMessage(error.message);
     return;
   }
 
-  showMessage("Login successful! Student dashboard will be added next.", "green");
+  await loadDashboard(data.user);
 });
 
-document.getElementById("setPasswordForm").addEventListener("submit", async function(e) {
+document.getElementById("setPasswordForm").addEventListener("submit",async function(e){
   e.preventDefault();
 
-  const password = document.getElementById("newPassword").value;
-  const confirm = document.getElementById("confirmPassword").value;
+  const password=document.getElementById("newPassword").value;
+  const confirm=document.getElementById("confirmPassword").value;
 
-  if (password.length < 8) {
+  if(password.length<8){
     showMessage("Password must be at least 8 characters.");
     return;
   }
 
-  if (password !== confirm) {
+  if(password!==confirm){
     showMessage("Passwords do not match.");
     return;
   }
 
-  showMessage("Saving password...", "black");
+  showMessage("Saving password...","black");
 
-  const { error } = await supabaseClient.auth.updateUser({
-    password: password
-  });
+  const {error}=await supabaseClient.auth.updateUser({password});
 
-  if (error) {
+  if(error){
     showMessage(error.message);
     return;
   }
 
   await supabaseClient.auth.signOut();
-  setPasswordBox.classList.add("hidden");
-  loginBox.classList.remove("hidden");
   document.getElementById("setPasswordForm").reset();
-
-  showMessage("Password saved! You can now login.", "green");
+  hideAll();
+  loginBox.classList.remove("hidden");
+  showMessage("Password saved! You can now login.","green");
 });
 
-document.getElementById("forgotBtn").addEventListener("click", async function() {
-  const email = document.getElementById("email").value.trim();
+document.getElementById("forgotBtn").addEventListener("click",async function(){
+  const email=document.getElementById("email").value.trim();
 
-  if (!email) {
+  if(!email){
     showMessage("Please enter your registered email first.");
     return;
   }
 
-  showMessage("Sending password reset email...", "black");
+  showMessage("Sending password reset email...","black");
 
-  const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
-    redirectTo: "https://heetcomputer.in/student-login.html"
+  const {error}=await supabaseClient.auth.resetPasswordForEmail(email,{
+    redirectTo:"https://heetcomputer.in/student-login.html"
   });
 
-  if (error) {
+  if(error){
     showMessage(error.message);
     return;
   }
 
-  showMessage("Password reset link sent. Please check your email.", "green");
+  showMessage("Password reset link sent. Please check your email.","green");
 });
 
-supabaseClient.auth.onAuthStateChange((event, session) => {
-  if (session && (event === "PASSWORD_RECOVERY" || event === "SIGNED_IN")) {
-    loginBox.classList.add("hidden");
+document.getElementById("logoutBtn").addEventListener("click",async function(){
+  await supabaseClient.auth.signOut();
+  hideAll();
+  loginBox.classList.remove("hidden");
+  showMessage("You have logged out.","green");
+});
+
+async function checkSession(){
+  const {data,error}=await supabaseClient.auth.getSession();
+
+  if(error){
+    showMessage("Please open your email link again.");
+    return;
+  }
+
+  if(data.session){
+    if(window.location.hash.includes("type=invite") ||
+       window.location.hash.includes("type=recovery")){
+      hideAll();
+      setPasswordBox.classList.remove("hidden");
+      showMessage("Create your password to activate your student login.","green");
+    }else{
+      await loadDashboard(data.session.user);
+    }
+  }
+}
+
+checkSession();
+
+supabaseClient.auth.onAuthStateChange((event,session)=>{
+  if(event==="PASSWORD_RECOVERY" && session){
+    hideAll();
     setPasswordBox.classList.remove("hidden");
+    showMessage("Create your new password.","green");
   }
 });
-
-checkInvitation();
 </script>
 </body>
 </html>
