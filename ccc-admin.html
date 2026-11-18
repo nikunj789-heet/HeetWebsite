@@ -48,10 +48,7 @@ th{background:#174a8b;color:white}
   <input id="password" type="password" placeholder="Password">
   <button type="button" onclick="togglePassword()">👁</button>
 </div>
- function togglePassword(){
-  const p = document.getElementById("password");
-  p.type = p.type === "password" ? "text" : "password";
-}
+ 
 <button onclick="adminLogin()">Login</button>
  <button onclick="sendAdminReset()">Forgot Admin Password?</button>
 </div>
@@ -175,7 +172,15 @@ const db = window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 const BUCKET = "ccc-student-documents";
 
 let studentsData = [];
+<button type="button" onclick="togglePassword()">👁</button>
+</div>
 
+<button onclick="adminLogin()">Login</button>
+<button onclick="sendAdminReset()">Forgot Admin Password?</button>
+</div>{
+  const p = document.getElementById("password");
+  p.type = p.type === "password" ? "text" : "password";
+}
 async function adminLogin(){
  const email=document.getElementById("email").value;
  const password=document.getElementById("password").value;
