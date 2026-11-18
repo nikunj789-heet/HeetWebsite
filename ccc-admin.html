@@ -169,6 +169,10 @@ const SUPABASE_URL = "https://rwtdwtbxuoilzecerojm.supabase.co";
 const SUPABASE_KEY = "sb_publishable_5ggHaapc4cno062CdS7OGg_-6PLyF8t";
 
 const db = window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+ function togglePassword(){
+  const p = document.getElementById("password");
+  p.type = p.type === "password" ? "text" : "password";
+}
  console.log("Heet Admin JavaScript Loaded");
 const BUCKET = "ccc-student-documents";
 
