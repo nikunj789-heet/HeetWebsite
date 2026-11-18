@@ -468,7 +468,10 @@ async function markPaid(id,button){
  button.disabled=true;
 
  const {error}=await db.from("ccc_registrations")
- .update({payment_status:"paid"})
+ .update({
+  payment_status:"paid",
+  registration_status:"approved"
+})
  .eq("id",id);
 
  if(error){
