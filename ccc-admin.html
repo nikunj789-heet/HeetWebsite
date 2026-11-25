@@ -85,7 +85,7 @@ hr{margin:24px 0;border:0;border-top:1px solid #ddd}
 <input id="offerTitle" type="text" maxlength="150" placeholder="Offer title" required>
 
 <label>Offer Banner Photo</label>
-<input id="offerImage" type="file" accept="image/*">
+<input id="offerImage" type="file" accept="image/jpeg,image/png,image/webp">
 
 <label>Start Date</label>
 <input id="offerStartDate" type="date" required>
@@ -279,81 +279,219 @@ async function loadRegistrationFee(){
  }
 }
 
+const MAX_OFFER_IMAGE_SIZE = 5 * 1024 * 1024;
+const ALLOWED_OFFER_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp"];
+
 async function loadOffers(){
-  const list=document.getElementById("offersList");
-  if(!list)return;
-  list.innerHTML="<tr><td colspan='4'>Loading...</td></tr>";
-  const {data,error}=await db.from("site_offers").select("*").order("sort_order",{ascending:true});
-  if(error){list.innerHTML="<tr><td colspan='4'>"+error.message+"</td></tr>";return;}
+  const list = document.getElementById("offersList");
+  if(!list) return;
+
+  list.innerHTML = "<tr><td colspan='4'>Loading offers...</td></tr>";
+
+  const {data, error} = await db.from("site_offers")
+    .select("*")
+    .order("sort_order", {ascending:true});
+
+  if(error){
+    list.innerHTML = "";
+    const tr = document.createElement("tr");
+    addCell(tr, "Offer Load Error: " + error.message).colSpan = 4;
+    list.appendChild(tr);
+    return;
+  }
+
   list.replaceChildren();
-  (data||[]).forEach(o=>{
-    const tr=document.createElement("tr");
-    addCell(tr,o.title);
-    addCell(tr,(o.start_date||"")+" to "+(o.end_date||""));
-    addCell(tr,o.is_published?"Published":"Hidden");
-    const td=addCell(tr,"");
-    const edit=document.createElement("button");edit.textContent="Edit";edit.onclick=()=>editOffer(o);
-    const toggle=document.createElement("button");toggle.textContent=o.is_published?"Hide":"Publish";toggle.onclick=()=>toggleOffer(o.id,o.is_published);
-    const del=document.createElement("button");del.textContent="Delete";del.className="deleteBtn";del.onclick=()=>deleteOffer(o.id,o.image_path);
-    td.append(edit,toggle,del);
+
+  if(!data || data.length === 0){
+    const tr = document.createElement("tr");
+    addCell(tr, "હજુ કોઈ Offer ઉમેરવામાં આવી નથી.").colSpan = 4;
+    list.appendChild(tr);
+    return;
+  }
+
+  data.forEach(offer => {
+    const tr = document.createElement("tr");
+    addCell(tr, offer.title || "");
+    addCell(tr, (offer.start_date || "—") + " થી " + (offer.end_date || "—"));
+    addCell(tr, offer.is_published ? "Published" : "Hidden");
+
+    const actionCell = addCell(tr, "");
+    const editButton = document.createElement("button");
+    editButton.type = "button";
+    editButton.textContent = "Edit";
+    editButton.className = "editBtn";
+    editButton.onclick = () => editOffer(offer);
+
+    const toggleButton = document.createElement("button");
+    toggleButton.type = "button";
+    toggleButton.textContent = offer.is_published ? "Hide" : "Publish";
+    toggleButton.className = "publishBtn";
+    toggleButton.onclick = () => toggleOffer(offer.id, offer.is_published);
+
+    const deleteButton = document.createElement("button");
+    deleteButton.type = "button";
+    deleteButton.textContent = "Delete";
+    deleteButton.className = "deleteBtn";
+    deleteButton.onclick = () => deleteOffer(offer.id, offer.image_path);
+
+    actionCell.append(editButton, toggleButton, deleteButton);
+    list.appendChild(tr);
   });
 }
+
 function clearOfferForm(){
-  ["offerEditId","offerTitle","offerStartDate","offerEndDate","offerSortOrder","offerImage"].forEach(id=>{
-    const el=document.getElementById(id);if(el)el.value="";
-  });
-  document.getElementById("offerSortOrder").value="0";
-  document.getElementById("offerMessage").textContent="";
+  document.getElementById("offerEditId").value = "";
+  document.getElementById("offerTitle").value = "";
+  document.getElementById("offerImage").value = "";
+  document.getElementById("offerStartDate").value = "";
+  document.getElementById("offerEndDate").value = "";
+  document.getElementById("offerSortOrder").value = "0";
+  document.getElementById("offerMessage").textContent = "";
 }
-function editOffer(o){
-  document.getElementById("offerEditId").value=o.id;
-  document.getElementById("offerTitle").value=o.title||"";
-  document.getElementById("offerStartDate").value=o.start_date||"";
-  document.getElementById("offerEndDate").value=o.end_date||"";
-  document.getElementById("offerSortOrder").value=o.sort_order??0;
-  document.getElementById("offerMessage").textContent="Editing: "+o.title;
+
+function editOffer(offer){
+  document.getElementById("offerEditId").value = offer.id;
+  document.getElementById("offerTitle").value = offer.title || "";
+  document.getElementById("offerImage").value = "";
+  document.getElementById("offerStartDate").value = offer.start_date || "";
+  document.getElementById("offerEndDate").value = offer.end_date || "";
+  document.getElementById("offerSortOrder").value = offer.sort_order ?? 0;
+  document.getElementById("offerMessage").textContent =
+    "Editing: " + (offer.title || "Offer") + " (નવો Banner પસંદ કરવો જરૂરી નથી.)";
+  document.getElementById("offerManagement").scrollIntoView({behavior:"smooth", block:"start"});
 }
+
 async function saveOffer(){
-  const msg=document.getElementById("offerMessage");
-  const id=document.getElementById("offerEditId").value;
-  const title=document.getElementById("offerTitle").value.trim();
-  const file=document.getElementById("offerImage").files[0];
-  if(!title){msg.textContent="Offer Title જરૂરી છે.";return;}
-  if(!id&&!file){msg.textContent="Banner Image પસંદ કરો.";return;}
-  if(file&&!file.type.startsWith("image/")){msg.textContent="માત્ર image file પસંદ કરો.";return;}
-  msg.textContent="Saving...";
-  let imagePath="";
+  const msg = document.getElementById("offerMessage");
+  const id = document.getElementById("offerEditId").value;
+  const title = document.getElementById("offerTitle").value.trim();
+  const file = document.getElementById("offerImage").files[0];
+  const startDate = document.getElementById("offerStartDate").value;
+  const endDate = document.getElementById("offerEndDate").value;
+
+  if(!title){
+    msg.textContent = "Offer Title જરૂરી છે.";
+    return;
+  }
+  if(!startDate || !endDate){
+    msg.textContent = "Start Date અને End Date બંને પસંદ કરો.";
+    return;
+  }
+  if(endDate < startDate){
+    msg.textContent = "End Date, Start Date કરતાં પહેલાં ન હોઈ શકે.";
+    return;
+  }
+  if(!id && !file){
+    msg.textContent = "નવો Offer બનાવવા Banner Image પસંદ કરો.";
+    return;
+  }
+  if(file && !ALLOWED_OFFER_IMAGE_TYPES.includes(file.type)){
+    msg.textContent = "માત્ર JPG, PNG અથવા WEBP image જ પસંદ કરો.";
+    return;
+  }
+  if(file && file.size > MAX_OFFER_IMAGE_SIZE){
+    msg.textContent = "Banner Image 5 MB કરતાં નાની હોવી જોઈએ.";
+    return;
+  }
+
+  msg.textContent = "Saving Offer...";
+  let imagePath = "";
+  let oldImagePath = "";
+
   if(id){
-    const {data,error}=await db.from("site_offers").select("image_path").eq("id",id).single();
-    if(error){msg.textContent=error.message;return;}
-    imagePath=data.image_path||"";
+    const {data, error} = await db.from("site_offers")
+      .select("image_path")
+      .eq("id", id)
+      .single();
+
+    if(error){
+      msg.textContent = "Offer Load Error: " + error.message;
+      return;
+    }
+    oldImagePath = data.image_path || "";
+    imagePath = oldImagePath;
   }
+
+  let newlyUploadedPath = "";
   if(file){
-    const path="offers/"+Date.now()+"_"+file.name.replace(/[^a-zA-Z0-9._-]/g,"_");
-    const {error}=await db.storage.from("site-offers").upload(path,file,{upsert:false});
-    if(error){msg.textContent="Image Upload Error: "+error.message;return;}
-    imagePath=path;
+    const safeFileName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+    newlyUploadedPath = "offers/" + Date.now() + "_" + safeFileName;
+    const {error} = await db.storage.from("site-offers")
+      .upload(newlyUploadedPath, file, {
+        upsert:false,
+        contentType:file.type
+      });
+
+    if(error){
+      msg.textContent = "Banner Upload Error: " + error.message;
+      return;
+    }
+    imagePath = newlyUploadedPath;
   }
-  const record={
-    title,image_path:imagePath,
-    start_date:document.getElementById("offerStartDate").value||null,
-    end_date:document.getElementById("offerEndDate").value||null,
-    sort_order:Number(document.getElementById("offerSortOrder").value||0)
+
+  const record = {
+    title,
+    image_path:imagePath,
+    start_date:startDate,
+    end_date:endDate,
+    sort_order:Number(document.getElementById("offerSortOrder").value || 0)
   };
-  const result=id?await db.from("site_offers").update(record).eq("id",id):await db.from("site_offers").insert(record);
-  if(result.error){msg.textContent="Save Error: "+result.error.message;return;}
-  msg.textContent="Offer Successfully Saved.";
-  clearOfferForm();await loadOffers();
+
+  const result = id
+    ? await db.from("site_offers").update(record).eq("id", id)
+    : await db.from("site_offers").insert(record);
+
+  if(result.error){
+    if(newlyUploadedPath){
+      await db.storage.from("site-offers").remove([newlyUploadedPath]);
+    }
+    msg.textContent = "Offer Save Error: " + result.error.message;
+    return;
+  }
+
+  if(newlyUploadedPath && oldImagePath && oldImagePath !== newlyUploadedPath){
+    const {error:removeError} = await db.storage.from("site-offers").remove([oldImagePath]);
+    if(removeError){
+      msg.textContent = "Offer Saved, but old banner cleanup failed: " + removeError.message;
+      await loadOffers();
+      return;
+    }
+  }
+
+  msg.textContent = "Offer Successfully Saved.";
+  clearOfferForm();
+  await loadOffers();
 }
-async function toggleOffer(id,isPublished){
-  const {error}=await db.from("site_offers").update({is_published:!isPublished}).eq("id",id);
-  if(error){alert(error.message);return;}await loadOffers();
+
+async function toggleOffer(id, isPublished){
+  const {error} = await db.from("site_offers")
+    .update({is_published:!isPublished})
+    .eq("id", id);
+
+  if(error){
+    alert("Offer Status Update Error: " + error.message);
+    return;
+  }
+  await loadOffers();
 }
-async function deleteOffer(id,imagePath){
-  if(!confirm("આ Offer Delete કરવી છે?"))return;
-  const {error}=await db.from("site_offers").delete().eq("id",id);
-  if(error){alert(error.message);return;}
-  if(imagePath)await db.storage.from("site-offers").remove([imagePath]);
+
+async function deleteOffer(id, imagePath){
+  if(!confirm("શું તમે આ Offer અને તેનું Banner કાયમી Delete કરવા માંગો છો?")) return;
+
+  const {error} = await db.from("site_offers").delete().eq("id", id);
+  if(error){
+    alert("Offer Delete Error: " + error.message);
+    return;
+  }
+
+  if(imagePath){
+    const {error:storageError} = await db.storage.from("site-offers").remove([imagePath]);
+    if(storageError){
+      alert("Offer record Delete થયું, પરંતુ Banner Storage માંથી Delete ન થયું: " + storageError.message);
+    }
+  }
+
+  clearOfferForm();
   await loadOffers();
 }
 
@@ -1078,48 +1216,6 @@ db.auth.getSession().then(({data,error})=>{
   return;
  }
  if(data.session)showAdminPanel();
-});
- async function loadOffers() {
-    const { data, error } = await supabase
-        .from('site_offers')
-        .select('*')
-        .order('sort_order', { ascending: true });
-
-    const container = document.getElementById('offersList');
-
-    if (error) {
-        container.innerHTML = error.message;
-        return;
-    }
-
-    if (!data || data.length === 0) {
-        container.innerHTML = 'No offers found.';
-        return;
-    }
-
-    container.innerHTML = data.map(offer => `
-        <div style="border:1px solid #ccc;padding:12px;margin:10px 0;">
-            <h3>${offer.title || ''}</h3>
-            <img src="${offer.image_url || ''}" style="max-width:200px;">
-            <p>${offer.description || ''}</p>
-            <p>Start: ${offer.start_date || ''}</p>
-            <p>End: ${offer.end_date || ''}</p>
-            <p>Start: ${offer.start_date || ''}</p>
-            <p>Status: ${offer.is_published ? 'Published' : 'Hidden'}</p>
-            <button onclick="editOffer('${offer.id}')">Edit</button>
-            <button onclick="toggleOfferStatus('${offer.id}', ${offer.is_published})">
-    ${offer.is_published ? 'Hide' : 'Publish'}
-</button>
-<button onclick="deleteOffer('${offer.id}')">Delete</button>
-            <button onclick="deleteOffer('${offer.id}')">Delete</button>
-        </div>
-    `).join('');
-}
-}
- loadOffers();
- document.getElementById('offerForm').addEventListener('submit', saveOffer);
- document.addEventListener('DOMContentLoaded', function () {
-    loadOffers();
 });
 </script>
 </body>
