@@ -250,6 +250,9 @@ async function adminLogin(){
  showAdminPanel();
 }
 
+// Explicitly expose the handler used by the Login button inline onclick.
+window.adminLogin = adminLogin;
+
 // Compatibility alias: older Login buttons may call adminLog().
 function adminLog(){
  return adminLogin();
