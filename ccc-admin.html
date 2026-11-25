@@ -75,6 +75,40 @@ hr{margin:24px 0;border:0;border-top:1px solid #ddd}
 <p id="feeMessage"></p>
 </div>
 
+<section class="feeBox" id="offerManagement">
+<h3>Offer & Announcement Management</h3>
+<input type="hidden" id="offerEditId">
+<label>Offer Title</label><input id="offerTitle" type="text" maxlength="150" placeholder="Offer title">
+<label>Offer Banner Photo</label><input id="offerImage" type="file" accept="image/*">
+<label>Start Date</label><input id="offerStartDate" type="date">
+<label>End Date</label><input id="offerEndDate" type="date">
+<label>Display Order</label><input id="offerSortOrder" type="number" value="0">
+<button type="button" onclick="saveOffer()">Save Offer</button>
+<button type="button" onclick="clearOfferForm()" style="background:#666">Clear</button>
+<p id="offerMessage" class="status"></p>
+<div style="overflow-x:auto"><table><thead><tr><th>Offer</th><th>Dates</th><th>Status</th><th>Action</th></tr></thead><tbody id="offersList"></tbody></table></div>
+</section>
+
+<section class="feeBox" id="studyMaterialManagement">
+<h3>Study Material Management (₹50 each)</h3>
+<input type="hidden" id="materialEditId">
+<label>Material Title</label><input id="materialTitle" type="text" maxlength="180" placeholder="Material title">
+<label>Category</label><input id="materialCategory" type="text" maxlength="100" placeholder="Category">
+<label>Description</label><textarea id="materialDescription" rows="3" style="width:100%;box-sizing:border-box" placeholder="Description"></textarea>
+<label>PDF File</label><input id="materialFile" type="file" accept="application/pdf,.pdf">
+<label>Thumbnail Photo</label><input id="materialThumbnail" type="file" accept="image/*">
+<label>Price</label><input id="materialPrice" type="number" value="50" readonly>
+<button type="button" onclick="saveMaterial()">Save Material</button>
+<button type="button" onclick="clearMaterialForm()" style="background:#666">Clear</button>
+<p id="materialMessage" class="status"></p>
+<div style="overflow-x:auto"><table><thead><tr><th>Material</th><th>Category</th><th>Price</th><th>Action</th></tr></thead><tbody id="materialsList"></tbody></table></div>
+</section>
+
+<section class="feeBox" id="materialPaymentVerification">
+<h3>Study Material Payment Verification</h3>
+<div style="overflow-x:auto"><table><thead><tr><th>Material</th><th>Buyer</th><th>Mobile</th><th>UTR</th><th>Amount</th><th>Status</th><th>Action</th></tr></thead><tbody id="materialOrdersList"></tbody></table></div>
+</section>
+
 <input type="text" id="searchStudent" placeholder="Search by Name or Mobile" oninput="searchStudents()">
 
 <div style="overflow-x:auto">
@@ -201,12 +235,28 @@ function showAdminPanel(){
  document.getElementById("panel").style.display="block";
 
  loadRegistrationFee();
+ loadOffers();
  loadStudents();
  loadMaterials();
  loadMaterialOrders();
 }
 async function loadRegistrationFee(){
- 
+ const box=document.getElementById("feeMessage");
+ const {data,error}=await db.from("ccc_settings")
+  .select("setting_value")
+  .eq("setting_key","registration_fee")
+  .maybeSingle();
+ if(error){
+  box.textContent="Fee Load Error: "+error.message;
+  return;
+ }
+ if(data){
+  document.getElementById("registrationFee").value=data.setting_value;
+  box.textContent="Current Fee: ₹"+data.setting_value;
+ }else{
+  box.textContent="Registration Fee setting record મળ્યો નથી.";
+ }
+}
 
 async function loadOffers(){
   const list=document.getElementById("offersList");
@@ -291,6 +341,7 @@ let currentMaterialThumbnailPath = "";
 
 async function loadMaterials(){
   const list = document.getElementById("materialsList");
+  if(!list)return;
   list.innerHTML = "<tr><td colspan='4'>Loading...</td></tr>";
 
   const {data,error} = await db.from("study_materials")
@@ -567,23 +618,6 @@ async function verifyMaterialOrder(id,status){
 
   alert("Payment Status Updated.");
   await loadMaterialOrders();
-}
-
- const box=document.getElementById("feeMessage");
- const {data,error}=await db.from("ccc_settings")
-  .select("setting_value")
-  .eq("setting_key","registration_fee")
-  .maybeSingle();
- if(error){
-  box.textContent="Fee Load Error: "+error.message;
-  return;
- }
- if(data){
-  document.getElementById("registrationFee").value=data.setting_value;
-  box.textContent="Current Fee: ₹"+data.setting_value;
- }else{
-  box.textContent="Registration Fee setting record મળ્યો નથી.";
- }
 }
 
 async function saveRegistrationFee(){
