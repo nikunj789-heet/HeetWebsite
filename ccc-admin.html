@@ -160,7 +160,7 @@ hr{margin:24px 0;border:0;border-top:1px solid #ddd}
 
         const { error: uploadError } = await supabase.storage
             .from('site-offers')
-            .upload(fileName, imageFile);
+            .upload(fileName, imageFile, { upsert: false });
 
         if (uploadError) {
             alert(uploadError.message);
