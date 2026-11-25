@@ -31,6 +31,8 @@ th{background:#174a8b;color:white}
 #message{font-weight:bold}
 .feeBox{border:1px solid #ddd;padding:14px;border-radius:8px;margin:15px 0}
 .feeBox input{max-width:250px}
+label{display:block;font-weight:bold;margin-top:8px}
+hr{margin:24px 0;border:0;border-top:1px solid #ddd}
 .status{font-size:12px;font-weight:bold}
 @media(max-width:600px){
  .container{padding:12px;margin:8px auto}
@@ -197,11 +199,376 @@ function showAdminPanel(){
  document.getElementById("loginPanel").style.display="none";
  document.getElementById("resetPanel").style.display="none";
  document.getElementById("panel").style.display="block";
+
  loadRegistrationFee();
  loadStudents();
+ loadMaterials();
+ loadMaterialOrders();
+}
+async function loadRegistrationFee(){
+ 
+
+async function loadOffers(){
+  const list=document.getElementById("offersList");
+  if(!list)return;
+  list.innerHTML="<tr><td colspan='4'>Loading...</td></tr>";
+  const {data,error}=await db.from("site_offers").select("*").order("sort_order",{ascending:true});
+  if(error){list.innerHTML="<tr><td colspan='4'>"+error.message+"</td></tr>";return;}
+  list.replaceChildren();
+  (data||[]).forEach(o=>{
+    const tr=document.createElement("tr");
+    addCell(tr,o.title);
+    addCell(tr,(o.start_date||"")+" to "+(o.end_date||""));
+    addCell(tr,o.is_published?"Published":"Hidden");
+    const td=addCell(tr,"");
+    const edit=document.createElement("button");edit.textContent="Edit";edit.onclick=()=>editOffer(o);
+    const toggle=document.createElement("button");toggle.textContent=o.is_published?"Hide":"Publish";toggle.onclick=()=>toggleOffer(o.id,o.is_published);
+    const del=document.createElement("button");del.textContent="Delete";del.className="deleteBtn";del.onclick=()=>deleteOffer(o.id,o.image_path);
+    td.append(edit,toggle,del);
+  });
+}
+function clearOfferForm(){
+  ["offerEditId","offerTitle","offerStartDate","offerEndDate","offerSortOrder","offerImage"].forEach(id=>{
+    const el=document.getElementById(id);if(el)el.value="";
+  });
+  document.getElementById("offerSortOrder").value="0";
+  document.getElementById("offerMessage").textContent="";
+}
+function editOffer(o){
+  document.getElementById("offerEditId").value=o.id;
+  document.getElementById("offerTitle").value=o.title||"";
+  document.getElementById("offerStartDate").value=o.start_date||"";
+  document.getElementById("offerEndDate").value=o.end_date||"";
+  document.getElementById("offerSortOrder").value=o.sort_order??0;
+  document.getElementById("offerMessage").textContent="Editing: "+o.title;
+}
+async function saveOffer(){
+  const msg=document.getElementById("offerMessage");
+  const id=document.getElementById("offerEditId").value;
+  const title=document.getElementById("offerTitle").value.trim();
+  const file=document.getElementById("offerImage").files[0];
+  if(!title){msg.textContent="Offer Title જરૂરી છે.";return;}
+  if(!id&&!file){msg.textContent="Banner Image પસંદ કરો.";return;}
+  if(file&&!file.type.startsWith("image/")){msg.textContent="માત્ર image file પસંદ કરો.";return;}
+  msg.textContent="Saving...";
+  let imagePath="";
+  if(id){
+    const {data,error}=await db.from("site_offers").select("image_path").eq("id",id).single();
+    if(error){msg.textContent=error.message;return;}
+    imagePath=data.image_path||"";
+  }
+  if(file){
+    const path="offers/"+Date.now()+"_"+file.name.replace(/[^a-zA-Z0-9._-]/g,"_");
+    const {error}=await db.storage.from("site-offers").upload(path,file,{upsert:false});
+    if(error){msg.textContent="Image Upload Error: "+error.message;return;}
+    imagePath=path;
+  }
+  const record={
+    title,image_path:imagePath,
+    start_date:document.getElementById("offerStartDate").value||null,
+    end_date:document.getElementById("offerEndDate").value||null,
+    sort_order:Number(document.getElementById("offerSortOrder").value||0)
+  };
+  const result=id?await db.from("site_offers").update(record).eq("id",id):await db.from("site_offers").insert(record);
+  if(result.error){msg.textContent="Save Error: "+result.error.message;return;}
+  msg.textContent="Offer Successfully Saved.";
+  clearOfferForm();await loadOffers();
+}
+async function toggleOffer(id,isPublished){
+  const {error}=await db.from("site_offers").update({is_published:!isPublished}).eq("id",id);
+  if(error){alert(error.message);return;}await loadOffers();
+}
+async function deleteOffer(id,imagePath){
+  if(!confirm("આ Offer Delete કરવી છે?"))return;
+  const {error}=await db.from("site_offers").delete().eq("id",id);
+  if(error){alert(error.message);return;}
+  if(imagePath)await db.storage.from("site-offers").remove([imagePath]);
+  await loadOffers();
 }
 
-async function loadRegistrationFee(){
+let currentMaterialFilePath = "";
+let currentMaterialThumbnailPath = "";
+
+async function loadMaterials(){
+  const list = document.getElementById("materialsList");
+  list.innerHTML = "<tr><td colspan='4'>Loading...</td></tr>";
+
+  const {data,error} = await db.from("study_materials")
+    .select("*").order("created_at",{ascending:false});
+
+  if(error){
+    list.innerHTML = "<tr><td colspan='4'>"+error.message+"</td></tr>";
+    return;
+  }
+
+  list.innerHTML = "";
+
+  (data || []).forEach(m=>{
+    const tr = document.createElement("tr");
+
+    const name = document.createElement("td");
+    name.textContent = m.title || "";
+
+    const category = document.createElement("td");
+    category.textContent = m.category || "";
+
+    const price = document.createElement("td");
+    price.textContent = "₹"+m.price;
+
+    const action = document.createElement("td");
+    action.innerHTML = `
+      <button type="button" data-action="edit">Edit</button>
+      <button type="button" data-action="toggle">${m.is_published ? "Hide" : "Publish"}</button>
+      <button type="button" data-action="delete">Delete</button>
+    `;
+
+    action.querySelector('[data-action="edit"]').onclick = ()=>editMaterial(m.id);
+    action.querySelector('[data-action="toggle"]').onclick = ()=>toggleMaterial(m.id,m.is_published);
+    action.querySelector('[data-action="delete"]').onclick = ()=>deleteMaterial(m.id);
+
+    tr.append(name,category,price,action);
+    list.appendChild(tr);
+  });
+}
+
+async function editMaterial(id){
+  const {data,error} = await db.from("study_materials")
+    .select("*").eq("id",id).single();
+
+  if(error || !data){
+    alert("Material મળ્યું નથી.");
+    return;
+  }
+
+  document.getElementById("materialEditId").value = data.id;
+  document.getElementById("materialTitle").value = data.title || "";
+  document.getElementById("materialCategory").value = data.category || "";
+  document.getElementById("materialDescription").value = data.description || "";
+  document.getElementById("materialPrice").value = data.price || 50;
+
+  currentMaterialFilePath = data.file_path || "";
+  currentMaterialThumbnailPath = data.thumbnail_path || "";
+
+  document.getElementById("materialMessage").textContent =
+    "Editing: "+data.title+" (નવો PDF પસંદ કરવો જરૂરી નથી.)";
+}
+
+function clearMaterialForm(){
+  document.getElementById("materialEditId").value = "";
+  document.getElementById("materialTitle").value = "";
+  document.getElementById("materialCategory").value = "";
+  document.getElementById("materialDescription").value = "";
+  document.getElementById("materialPrice").value = 50;
+  document.getElementById("materialFile").value = "";
+  document.getElementById("materialThumbnail").value = "";
+
+  currentMaterialFilePath = "";
+  currentMaterialThumbnailPath = "";
+
+  document.getElementById("materialMessage").textContent = "";
+}
+
+async function saveMaterial(){
+  const msg = document.getElementById("materialMessage");
+  const id = document.getElementById("materialEditId").value;
+  const title = document.getElementById("materialTitle").value.trim();
+  const category = document.getElementById("materialCategory").value.trim();
+  const description = document.getElementById("materialDescription").value.trim();
+  const file = document.getElementById("materialFile").files[0];
+  const thumbnail = document.getElementById("materialThumbnail").files[0];
+
+  if(!title || !category){
+    msg.textContent = "Material Name અને Category જરૂરી છે.";
+    return;
+  }
+
+  if(!id && !file){
+    msg.textContent = "નવો PDF File પસંદ કરો.";
+    return;
+  }
+
+  if(file && (file.type !== "application/pdf" || file.size > 20*1024*1024)){
+    msg.textContent = "PDF હોવો જોઈએ અને 20MB થી નાનો હોવો જોઈએ.";
+    return;
+  }
+
+  msg.textContent = "Saving...";
+
+  let filePath = currentMaterialFilePath;
+  let thumbnailPath = currentMaterialThumbnailPath;
+
+  if(file){
+    const path = "materials/"+Date.now()+"_"+file.name.replace(/[^a-zA-Z0-9._-]/g,"_");
+    const {error} = await db.storage.from("study-materials").upload(path,file);
+
+    if(error){
+      msg.textContent = "PDF Upload Error: "+error.message;
+      return;
+    }
+    filePath = path;
+  }
+
+  if(thumbnail){
+    const path = "thumbnails/"+Date.now()+"_"+thumbnail.name.replace(/[^a-zA-Z0-9._-]/g,"_");
+    const {error} = await db.storage.from("site-offers").upload(path,thumbnail);
+
+    if(error){
+      msg.textContent = "Thumbnail Upload Error: "+error.message;
+      return;
+    }
+    thumbnailPath = path;
+  }
+
+  const record = {
+    title,
+    category,
+    description,
+    file_path:filePath,
+    thumbnail_path:thumbnailPath || null,
+    price:50
+  };
+
+  const result = id
+    ? await db.from("study_materials").update(record).eq("id",id)
+    : await db.from("study_materials").insert(record);
+
+  if(result.error){
+    msg.textContent = "Save Error: "+result.error.message;
+    return;
+  }
+
+  msg.textContent = "Material Successfully Saved.";
+  clearMaterialForm();
+  await loadMaterials();
+}
+
+async function toggleMaterial(id,isPublished){
+  const {error} = await db.from("study_materials")
+    .update({is_published:!isPublished}).eq("id",id);
+
+  if(error){
+    alert("Update Error: "+error.message);
+    return;
+  }
+
+  await loadMaterials();
+}
+
+async function deleteMaterial(id){
+  if(!confirm("આ Material Delete કરવું છે?")) return;
+
+  const {data,error} = await db.from("study_materials")
+    .select("file_path,thumbnail_path").eq("id",id).single();
+
+  if(error){
+    alert(error.message);
+    return;
+  }
+
+  const {error:deleteError} = await db.from("study_materials")
+    .delete().eq("id",id);
+
+  if(deleteError){
+    alert("Delete Error: "+deleteError.message);
+    return;
+  }
+
+  if(data.file_path){
+    await db.storage.from("study-materials").remove([data.file_path]);
+  }
+
+  if(data.thumbnail_path){
+    await db.storage.from("site-offers").remove([data.thumbnail_path]);
+  }
+
+  await loadMaterials();
+}
+
+async function loadMaterialOrders(){
+  const list = document.getElementById("materialOrdersList");
+  list.innerHTML = "<tr><td colspan='7'>Loading...</td></tr>";
+
+  const {data:orders,error} = await db.from("material_orders")
+    .select("*").order("created_at",{ascending:false});
+
+  if(error){
+    list.innerHTML = "<tr><td colspan='7'>"+error.message+"</td></tr>";
+    return;
+  }
+
+  const ids = [...new Set((orders || []).map(o=>o.material_id))];
+  let materials = {};
+
+  if(ids.length){
+    const {data} = await db.from("study_materials")
+      .select("id,title").in("id",ids);
+
+    (data || []).forEach(m=>materials[m.id]=m.title);
+  }
+
+  list.innerHTML = "";
+
+  (orders || []).forEach(o=>{
+    const tr = document.createElement("tr");
+    const values = [
+      materials[o.material_id] || "Deleted Material",
+      o.buyer_name,
+      o.mobile_number,
+      o.payment_reference,
+      "₹"+o.amount,
+      o.payment_status
+    ];
+
+    values.forEach(value=>{
+      const td = document.createElement("td");
+      td.textContent = value ?? "";
+      tr.appendChild(td);
+    });
+
+    const action = document.createElement("td");
+
+    if(o.payment_status === "pending"){
+      const approve = document.createElement("button");
+      approve.textContent = "Approve";
+      approve.onclick = ()=>verifyMaterialOrder(o.id,"paid");
+
+      const reject = document.createElement("button");
+      reject.textContent = "Reject";
+      reject.onclick = ()=>verifyMaterialOrder(o.id,"rejected");
+
+      action.append(approve,reject);
+    }else{
+      action.textContent = "Completed";
+    }
+
+    tr.appendChild(action);
+    list.appendChild(tr);
+  });
+}
+
+async function verifyMaterialOrder(id,status){
+  if(!confirm("Payment "+status+" કરવું છે?")) return;
+
+  const {data:{user}} = await db.auth.getUser();
+
+  const {error} = await db.from("material_orders")
+    .update({
+      payment_status:status,
+      verified_at:new Date().toISOString(),
+      verified_by:user ? user.id : null
+    })
+    .eq("id",id)
+    .eq("payment_status","pending");
+
+  if(error){
+    alert("Payment Update Error: "+error.message);
+    return;
+  }
+
+  alert("Payment Status Updated.");
+  await loadMaterialOrders();
+}
+
  const box=document.getElementById("feeMessage");
  const {data,error}=await db.from("ccc_settings")
   .select("setting_value")
