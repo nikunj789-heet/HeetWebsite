@@ -1207,6 +1207,9 @@ db.auth.getSession().then(({data,error})=>{
 }
  loadOffers();
  document.getElementById('offerForm').addEventListener('submit', saveOffer);
+ document.addEventListener('DOMContentLoaded', function () {
+    loadOffers();
+});
 </script>
 </body>
 </html>
