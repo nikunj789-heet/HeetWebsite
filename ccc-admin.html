@@ -1095,6 +1095,34 @@ db.auth.getSession().then(({data,error})=>{
  }
  if(data.session)showAdminPanel();
 });
+ async function loadOffers() {
+    const { data, error } = await supabase
+        .from('site_offers')
+        .select('*')
+        .order('sort_order', { ascending: true });
+
+    const container = document.getElementById('offersList');
+
+    if (error) {
+        container.innerHTML = 'Offers load error: ' + error.message;
+        return;
+    }
+
+    if (!data || data.length === 0) {
+        container.innerHTML = 'No offers found.';
+        return;
+    }
+
+    container.innerHTML = data.map(offer => `
+        <div style="border:1px solid #ccc;padding:12px;margin:10px 0;">
+            <h3>${offer.title || ''}</h3>
+            <img src="${offer.image_url || ''}" style="max-width:200px;">
+            <p>${offer.description || ''}</p>
+            <p>Start: ${offer.start_date || ''}</p>
+            <p>End: ${offer.end_date || ''}</p>
+        </div>
+    `).join('');
+}
 </script>
 </body>
 </html>
