@@ -1109,7 +1109,7 @@ db.auth.getSession().then(({data,error})=>{
     const container = document.getElementById('offersList');
 
     if (error) {
-        container.innerHTML = 'Offers load error: ' + error.message;
+        container.innerHTML = error.message;
         return;
     }
 
@@ -1117,95 +1117,6 @@ db.auth.getSession().then(({data,error})=>{
         container.innerHTML = 'No offers found.';
         return;
     }
-  async function saveOffer(event) {
-    event.preventDefault();
-
-    const offerId = document.getElementById('offerId').value;
-    const title = document.getElementById('offerTitle').value.trim();
-    const description = document.getElementById('offerDescription').value.trim();
-    const startDate = document.getElementById('offerStartDate').value;
-    const endDate = document.getElementById('offerEndDate').value;
-    const sortOrder = Number(document.getElementById('offerSortOrder').value);
-    const imageFile = document.getElementById('offerImage').files[0];
-
-    if (!title || !startDate || !endDate) {
-        alert('Please fill all required fields.');
-        return;
-    }
-
-    if (endDate < startDate) {
-        alert('End date cannot be before start date.');
-        return;
-    }
-
-    let imageUrl = '';
-
-    if (imageFile) {
-        const fileName = `${Date.now()}-${imageFile.name.replace(/[^a-zA-Z0-9._-]/g, '_')}`;
-
-        const { error: uploadError } = await supabase.storage
-            .from('site-offers')
-            .upload(fileName, imageFile, { upsert: false });
-
-        if (uploadError) {
-            alert('Image upload failed: ' + uploadError.message);
-            return;
-        }
-
-        const { data: publicData } = supabase.storage
-            .from('site-offers')
-            .getPublicUrl(fileName);
-
-        imageUrl = publicData.publicUrl;
-    } else if (offerId) {
-        const { data: oldOffer, error: fetchError } = await supabase
-            .from('site_offers')
-            .select('image_url')
-            .eq('id', offerId)
-            .single();
-
-        if (fetchError) {
-            alert(fetchError.message);
-            return;
-        }
-
-        imageUrl = oldOffer.image_url;
-    } else {
-        alert('Please select an offer banner image.');
-        return;
-    }
-
-    const offerData = {
-        title,
-        description,
-        image_url: imageUrl,
-        start_date: startDate,
-        end_date: endDate,
-        sort_order: sortOrder
-    };
-
-    let result;
-
-    if (offerId) {
-        result = await supabase
-            .from('site_offers')
-            .update(offerData)
-            .eq('id', offerId);
-    } else {
-        result = await supabase
-            .from('site_offers')
-            .insert([offerData]);
-    }
-
-    if (result.error) {
-        alert('Offer save failed: ' + result.error.message);
-        return;
-    }
-
-    alert('Offer saved successfully.');
-    resetOfferForm();
-    await loadOffers();
-}
 
     container.innerHTML = data.map(offer => `
         <div style="border:1px solid #ccc;padding:12px;margin:10px 0;">
@@ -1214,8 +1125,11 @@ db.auth.getSession().then(({data,error})=>{
             <p>${offer.description || ''}</p>
             <p>Start: ${offer.start_date || ''}</p>
             <p>End: ${offer.end_date || ''}</p>
+            <button onclick="editOffer('${offer.id}')">Edit</button>
+            <button onclick="deleteOffer('${offer.id}')">Delete</button>
         </div>
     `).join('');
+}
 }
 </script>
 </body>
