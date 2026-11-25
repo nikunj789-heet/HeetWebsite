@@ -273,16 +273,19 @@ hr{margin:24px 0;border:0;border-top:1px solid #ddd}
 async function deleteOffer(id) {
     if (!confirm('Are you sure you want to delete this offer?')) return;
 
-    const { data: offer, error: fetchError } = await supabase
+    const { error } = await supabase
         .from('site_offers')
-        .select('image_url')
-        .eq('id', id)
-        .single();
+        .delete()
+        .eq('id', id);
 
-    if (fetchError) {
-        alert(fetchError.message);
+    if (error) {
+        alert(error.message);
         return;
     }
+
+    alert('Offer deleted successfully.');
+    await loadOffers();
+}
  async function toggleOfferStatus(id, currentStatus) {
     const { error } = await supabase
         .from('site_offers')
