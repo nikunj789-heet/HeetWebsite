@@ -137,7 +137,40 @@ hr{margin:24px 0;border:0;border-top:1px solid #ddd}
         alert(error.message);
         return;
     }
+async function deleteOffer(id) {
+    if (!confirm('Are you sure you want to delete this offer?')) return;
 
+    const { data: offer, error: fetchError } = await supabase
+        .from('site_offers')
+        .select('image_url')
+        .eq('id', id)
+        .single();
+
+    if (fetchError) {
+        alert(fetchError.message);
+        return;
+    }
+
+    const { error } = await supabase
+        .from('site_offers')
+        .delete()
+        .eq('id', id);
+
+    if (error) {
+        alert(error.message);
+        return;
+    }
+
+    if (offer.image_url) {
+        const imagePath = offer.image_url.split('/site-offers/').pop();
+        if (imagePath) {
+            await supabase.storage.from('site-offers').remove([imagePath]);
+        }
+    }
+
+    alert('Offer deleted successfully.');
+    await loadOffers();
+}
     document.getElementById('offerId').value = data.id;
     document.getElementById('offerTitle').value = data.title || '';
     document.getElementById('offerDescription').value = data.description || '';
