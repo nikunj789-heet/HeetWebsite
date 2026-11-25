@@ -121,6 +121,11 @@ hr{margin:24px 0;border:0;border-top:1px solid #ddd}
 <label>End Date</label><input id="offerEndDate" type="date">
 <label>Display Order</label><input id="offerSortOrder" type="number" value="0">
 <button type="button" onclick="saveOffer()">Save Offer</button>
+ function resetOfferForm() {
+    document.getElementById('offerForm').reset();
+    document.getElementById('offerId').value = '';
+    document.getElementById('offerSortOrder').value = 1;
+}
 <button type="button" onclick="clearOfferForm()" style="background:#666">Clear</button>
 <p id="offerMessage" class="status"></p>
 <div style="overflow-x:auto"><table><thead><tr><th>Offer</th><th>Dates</th><th>Status</th><th>Action</th></tr></thead><tbody id="offersList"></tbody></table></div>
