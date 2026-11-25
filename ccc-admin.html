@@ -250,6 +250,11 @@ async function adminLogin(){
  showAdminPanel();
 }
 
+// Compatibility alias: older Login buttons may call adminLog().
+function adminLog(){
+ return adminLogin();
+}
+
 function showAdminPanel(){
  document.getElementById("loginPanel").style.display="none";
  document.getElementById("resetPanel").style.display="none";
