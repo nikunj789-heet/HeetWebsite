@@ -69,6 +69,43 @@ hr{margin:24px 0;border:0;border-top:1px solid #ddd}
 
 <div class="feeBox">
 <h3>Registration Fee Setting</h3>
+ <!-- OFFER MANAGEMENT -->
+<section class="admin-section" id="offerManagement">
+    <h2>Offer Management</h2>
+
+    <form id="offerForm" onsubmit="saveOffer(event)">
+        <input type="hidden" id="offerId">
+
+        <label>Offer Banner Image</label>
+        <input type="file" id="offerImage" accept="image/*">
+
+        <label>Offer Title</label>
+        <input type="text" id="offerTitle" placeholder="Enter Offer Title" required>
+
+        <label>Offer Description</label>
+        <textarea id="offerDescription" placeholder="Enter Offer Description"></textarea>
+
+        <label>Start Date</label>
+        <input type="date" id="offerStartDate" required>
+
+        <label>End Date</label>
+        <input type="date" id="offerEndDate" required>
+
+        <label>Display Order</label>
+        <input type="number" id="offerSortOrder" value="1" min="1">
+
+        <button type="submit">Save Offer</button>
+        <button type="button" onclick="resetOfferForm()">Clear</button>
+    </form>
+
+    <hr>
+
+    <h3>Uploaded Offers</h3>
+    <div id="offersList">
+        Loading Offers...
+    </div>
+</section>
+<!-- END OFFER MANAGEMENT -->
 <label>New Registration Fee (₹)</label>
 <input type="number" id="registrationFee" min="1" placeholder="Enter Registration Fee">
 <button type="button" onclick="saveRegistrationFee()">Save Registration Fee</button>
