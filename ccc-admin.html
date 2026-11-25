@@ -126,6 +126,29 @@ hr{margin:24px 0;border:0;border-top:1px solid #ddd}
     document.getElementById('offerId').value = '';
     document.getElementById('offerSortOrder').value = 1;
 }
+ async function editOffer(id) {
+    const { data, error } = await supabase
+        .from('site_offers')
+        .select('*')
+        .eq('id', id)
+        .single();
+
+    if (error) {
+        alert(error.message);
+        return;
+    }
+
+    document.getElementById('offerId').value = data.id;
+    document.getElementById('offerTitle').value = data.title || '';
+    document.getElementById('offerDescription').value = data.description || '';
+    document.getElementById('offerStartDate').value = data.start_date || '';
+    document.getElementById('offerEndDate').value = data.end_date || '';
+    document.getElementById('offerSortOrder').value = data.sort_order || 1;
+
+    document.getElementById('offerForm').scrollIntoView({
+        behavior: 'smooth'
+    });
+}
 <button type="button" onclick="clearOfferForm()" style="background:#666">Clear</button>
 <p id="offerMessage" class="status"></p>
 <div style="overflow-x:auto"><table><thead><tr><th>Offer</th><th>Dates</th><th>Status</th><th>Action</th></tr></thead><tbody id="offersList"></tbody></table></div>
