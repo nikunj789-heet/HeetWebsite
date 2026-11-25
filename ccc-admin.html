@@ -157,7 +157,10 @@ hr{margin:24px 0;border:0;border-top:1px solid #ddd}
         }
 
         const fileName = Date.now() + '-' + imageFile.name.replace(/[^a-zA-Z0-9._-]/g, '_');
-
+if (imageFile.size > 5 * 1024 * 1024) {
+    alert('Image size must be 5 MB or less.');
+    return;
+}
         const { error: uploadError } = await supabase.storage
             .from('site-offers')
             .upload(fileName, imageFile, { upsert: false });
