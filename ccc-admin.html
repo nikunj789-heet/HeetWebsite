@@ -185,6 +185,7 @@ hr{margin:24px 0;border:0;border-top:1px solid #ddd}
         }
 
         imageUrl = oldOffer.image_url;
+     <p>Status: ${offer.is_published ? 'Published' : 'Hidden'}</p>
     } else {
         alert('Please select an offer banner image.');
         return;
