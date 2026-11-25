@@ -150,6 +150,19 @@ async function deleteOffer(id) {
         alert(fetchError.message);
         return;
     }
+ async function toggleOfferStatus(id, currentStatus) {
+    const { error } = await supabase
+        .from('site_offers')
+        .update({ is_published: !currentStatus })
+        .eq('id', id);
+
+    if (error) {
+        alert(error.message);
+        return;
+    }
+
+    await loadOffers();
+}
 
     const { error } = await supabase
         .from('site_offers')
