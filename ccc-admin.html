@@ -1194,6 +1194,7 @@ db.auth.getSession().then(({data,error})=>{
             <p>${offer.description || ''}</p>
             <p>Start: ${offer.start_date || ''}</p>
             <p>End: ${offer.end_date || ''}</p>
+            <p>Status: ${offer.is_published ? 'Published' : 'Hidden'}</p>
             <button onclick="editOffer('${offer.id}')">Edit</button>
             <button onclick="toggleOfferStatus('${offer.id}', ${offer.is_published})">
     ${offer.is_published ? 'Hide' : 'Publish'}
