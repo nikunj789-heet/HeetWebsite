@@ -316,6 +316,7 @@ async function deleteOffer(id) {
     await loadOffers();
 }
     document.getElementById('offerId').value = data.id;
+    document.getElementById('offerForm').scrollIntoView({ behavior: 'smooth' });
     document.getElementById('offerTitle').value = data.title || '';
     document.getElementById('offerDescription').value = data.description || '';
     document.getElementById('offerStartDate').value = data.start_date || '';
