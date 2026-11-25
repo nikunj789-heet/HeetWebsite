@@ -69,43 +69,7 @@ hr{margin:24px 0;border:0;border-top:1px solid #ddd}
 
 <div class="feeBox">
 <h3>Registration Fee Setting</h3>
- <!-- OFFER MANAGEMENT -->
-<section class="admin-section" id="offerManagement">
-    <h2>Offer Management</h2>
-
-    <form id="offerForm" onsubmit="saveOffer(event)">
-        <input type="hidden" id="offerId">
-
-        <label>Offer Banner Image</label>
-        <input type="file" id="offerImage" accept="image/*">
-
-        <label>Offer Title</label>
-        <input type="text" id="offerTitle" placeholder="Enter Offer Title" required>
-
-        <label>Offer Description</label>
-        <textarea id="offerDescription" placeholder="Enter Offer Description"></textarea>
-
-        <label>Start Date</label>
-        <input type="date" id="offerStartDate" required>
-
-        <label>End Date</label>
-        <input type="date" id="offerEndDate" required>
-
-        <label>Display Order</label>
-        <input type="number" id="offerSortOrder" value="1" min="1">
-
-        <button type="submit">Save Offer</button>
-        <button type="button" onclick="resetOfferForm()">Clear</button>
-    </form>
-
-    <hr>
-
-    <h3>Uploaded Offers</h3>
-    <div id="offersList">
-        Loading Offers...
-    </div>
-</section>
-<!-- END OFFER MANAGEMENT -->
+ 
 <label>New Registration Fee (₹)</label>
 <input type="number" id="registrationFee" min="1" placeholder="Enter Registration Fee">
 <button type="button" onclick="saveRegistrationFee()">Save Registration Fee</button>
@@ -114,232 +78,38 @@ hr{margin:24px 0;border:0;border-top:1px solid #ddd}
 
 <section class="feeBox" id="offerManagement">
 <h3>Offer & Announcement Management</h3>
+
 <input type="hidden" id="offerEditId">
-<label>Offer Title</label><input id="offerTitle" type="text" maxlength="150" placeholder="Offer title">
-<label>Offer Banner Photo</label><input id="offerImage"required type="file" accept="image/*">
-<label>Start Date</label><input id="offerStartDate" type="date">
-<label>End Date</label><input id="offerEndDate" type="date">
-<label>Display Order</label><input id="offerSortOrder" type="number" value="0">
+
+<label>Offer Title</label>
+<input id="offerTitle" type="text" maxlength="150" placeholder="Offer title" required>
+
+<label>Offer Banner Photo</label>
+<input id="offerImage" type="file" accept="image/*">
+
+<label>Start Date</label>
+<input id="offerStartDate" type="date" required>
+
+<label>End Date</label>
+<input id="offerEndDate" type="date" required>
+
+<label>Display Order</label>
+<input id="offerSortOrder" type="number" value="0">
+
 <button type="button" onclick="saveOffer()">Save Offer</button>
- function resetOfferForm() {
-    document.getElementById('offerForm').reset();
-    document.getElementById('offerId').value = '';
-    document.getElementById('offerSortOrder').value = 1;
- document.getElementById('offerImage').value = '';
-}
- async function saveOffer(event) {
-    event.preventDefault();
-
-    const offerId = document.getElementById('offerId').value;
-    const title = document.getElementById('offerTitle').value.trim();
-    const description = document.getElementById('offerDescription').value.trim();
-    const startDate = document.getElementById('offerStartDate').value;
-    const endDate = document.getElementById('offerEndDate').value;
-    const sortOrder = Number(document.getElementById('offerSortOrder').value);
-    const imageFile = document.getElementById('offerImage').files[0];
-
-    if (!title || !startDate || !endDate) {
-        alert('Please fill all required fields.');
-        return;
-    }
-
-    if (endDate < startDate) {
-        alert('End date cannot be before start date.');
-        return;
-    }
-
-    let imageUrl = '';
-
-    if (imageFile) {
-        if (!imageFile.type.startsWith('image/')) {
-            alert('Please select a valid image file.');
-            return;
-        }
-
-        const fileName = Date.now() + '-' + imageFile.name.replace(/[^a-zA-Z0-9._-]/g, '_');
-if (imageFile.size > 5 * 1024 * 1024) {
-    alert('Image size must be 5 MB or less.');
-    return;
-}
-        const { error: uploadError } = await supabase.storage
-            .from('site-offers')
-            .upload(fileName, imageFile, { upsert: false });
-
-        if (uploadError) {
-            alert(uploadError.message);
-            return;
-        }
-
-        const { data: imageData } = supabase.storage
-            .from('site-offers')
-            .getPublicUrl(fileName);
-
-        imageUrl = imageData.publicUrl;
-    } else if (offerId) {
-        const { data: oldOffer, error: fetchError } = await supabase
-            .from('site_offers')
-            .select('image_url')
-            .eq('id', offerId)
-            .single();
-
-        if (fetchError) {
-            alert(fetchError.message);
-            return;
-        }
-
-        imageUrl = oldOffer.image_url;
-     <p>Status: ${offer.is_published ? 'Published' : 'Hidden'}</p>
-    } else {
-        alert('Please select an offer banner image.');
-        return;
-    }
-
-    const offerData = {
-        title,
-        description,
-        image_url: imageUrl,
-        start_date: startDate,
-        end_date: endDate,
-        sort_order: sortOrder
-    };
-
-    let result;
-
-    if (offerId) {
-        result = await supabase
-            .from('site_offers')
-            .update(offerData)
-            .eq('id', offerId);
-    } else {
-        result = await supabase
-            .from('site_offers')
-            .insert([{
-                ...offerData,
-                is_published: false
-            }]);
-    }
-
-    if (result.error) {
-        alert(result.error.message);
-        return;
-    }
-
-    alert(offerId ? 'Offer updated successfully.' : 'Offer saved successfully.');
-    resetOfferForm();
-    await loadOffers();
-}
-    const fileName = Date.now() + '-' + imageFile.name.replace(/[^a-zA-Z0-9._-]/g, '_');
-
-    const { error: uploadError } = await supabase.storage
-        .from('site-offers')
-        .upload(fileName, imageFile);
-
-    if (uploadError) {
-        alert(uploadError.message);
-        return;
-    }
-
-    const { data: imageData } = supabase.storage
-        .from('site-offers')
-        .getPublicUrl(fileName);
-
-    const { error } = await supabase.from('site_offers').insert([{
-        title,
-        description,
-        image_url: imageData.publicUrl,
-        start_date: startDate,
-        end_date: endDate,
-        sort_order: sortOrder,
-        is_published: false
-    }]);
-
-    if (error) {
-        alert(error.message);
-        return;
-    }
-
-    alert('Offer saved successfully.');
-    resetOfferForm();
-    loadOffers();
-}
- async function editOffer(id) {
-    const { data, error } = await supabase
-        .from('site_offers')
-        .select('*')
-        .eq('id', id)
-        .single();
-
-    if (error) {
-        alert(error.message);
-        return;
-    }
-async function deleteOffer(id) {
-    if (!confirm('Are you sure you want to delete this offer?')) return;
-
-    const { error } = await supabase
-        .from('site_offers')
-        .delete()
-        .eq('id', id);
-
-    if (error) {
-        alert(error.message);
-        return;
-    }
-
-    alert('Offer deleted successfully.');
-    await loadOffers();
-}
- async function toggleOfferStatus(id, currentStatus) {
-    const { error } = await supabase
-        .from('site_offers')
-        .update({ is_published: !currentStatus })
-        .eq('id', id);
-
-    if (error) {
-        alert(error.message);
-        return;
-    }
-
-    await loadOffers();
-}
-
-    const { error } = await supabase
-        .from('site_offers')
-        .delete()
-        .eq('id', id);
-
-    if (error) {
-        alert(error.message);
-        return;
-    }
-
-    if (offer.image_url) {
-        const imagePath = offer.image_url.split('/site-offers/').pop();
-        if (imagePath) {
-            await supabase.storage.from('site-offers').remove([imagePath]);
-        }
-    }
-
-    alert('Offer deleted successfully.');
-    await loadOffers();
-}
-    document.getElementById('offerId').value = data.id;
-    document.getElementById('offerForm').scrollIntoView({ behavior: 'smooth' });
-    document.getElementById('offerTitle').value = data.title || '';
-    document.getElementById('offerDescription').value = data.description || '';
-    document.getElementById('offerStartDate').value = data.start_date || '';
-    document.getElementById('offerEndDate').value = data.end_date || '';
-    document.getElementById('offerSortOrder').value = data.sort_order || 1;
-
-    document.getElementById('offerForm').scrollIntoView({
-        behavior: 'smooth'
-    });
-}
 <button type="button" onclick="clearOfferForm()" style="background:#666">Clear</button>
-<p id="offerMessage" class="status"></p>
-<div style="overflow-x:auto"><table><thead><tr><th>Offer</th><th>Dates</th><th>Status</th><th>Action</th></tr></thead><tbody id="offersList"></tbody></table></div>
-</section>
 
+<p id="offerMessage" class="status"></p>
+
+<div style="overflow-x:auto">
+<table>
+<thead>
+<tr><th>Offer</th><th>Dates</th><th>Status</th><th>Action</th></tr>
+</thead>
+<tbody id="offersList"></tbody>
+</table>
+</div>
+</section>
 <section class="feeBox" id="studyMaterialManagement">
 <h3>Study Material Management (₹50 each)</h3>
 <input type="hidden" id="materialEditId">
