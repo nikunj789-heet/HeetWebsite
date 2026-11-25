@@ -42,6 +42,35 @@
   gtag('config', 'G-FJTNFEZEF5');
 </script>
 
+
+<style>
+/* Offer slider and study-material storefront */
+.home-offers{padding:22px 16px;background:#f4f8ff}
+.offer-slider{max-width:1100px;margin:auto;position:relative;overflow:hidden;border-radius:16px;background:#e8eef8;min-height:120px}
+.offer-slide{display:none;width:100%;max-height:360px;object-fit:contain;background:#fff}
+.offer-slide.active{display:block}
+.offer-empty{text-align:center;padding:30px;color:#475569}
+.materials-section{background:#f8fafc}
+.materials-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;margin-top:24px}
+.material-card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;overflow:hidden;box-shadow:0 4px 14px rgba(15,23,42,.06);display:flex;flex-direction:column}
+.material-thumb{width:100%;height:155px;object-fit:cover;background:#eef2f7}
+.material-card-body{padding:16px;display:flex;flex-direction:column;gap:9px;flex:1}
+.material-card h3{margin:0;font-size:18px}
+.material-category{font-size:12px;color:#2563eb;font-weight:700;text-transform:uppercase}
+.material-description{color:#475569;font-size:14px;line-height:1.5}
+.material-price{font-weight:800;color:#0f766e}
+.material-buy{border:0;border-radius:8px;padding:11px 14px;background:#1456a0;color:#fff;font-weight:700;cursor:pointer;margin-top:auto}
+.material-payment{display:none;max-width:620px;margin:24px auto 0;background:#fff;padding:20px;border:1px solid #dbe3ef;border-radius:14px;box-shadow:0 4px 14px rgba(15,23,42,.07)}
+.material-payment.open{display:block}
+.material-payment input{width:100%;padding:12px;margin:6px 0 14px;border:1px solid #cbd5e1;border-radius:8px;box-sizing:border-box}
+.material-payment button,.material-download button{padding:12px 16px;border:0;border-radius:8px;background:#168447;color:white;font-weight:700;cursor:pointer}
+.material-payment img{display:block;width:min(240px,100%);height:auto;margin:12px auto}
+.material-status{margin-top:12px;font-weight:600;overflow-wrap:anywhere}
+.material-download{max-width:620px;margin:22px auto 0;background:#fff;padding:20px;border:1px solid #dbe3ef;border-radius:14px}
+.material-download input{width:100%;padding:12px;margin:6px 0 14px;border:1px solid #cbd5e1;border-radius:8px;box-sizing:border-box}
+@media(max-width:600px){.offer-slider{min-height:90px}.material-payment,.material-download{padding:15px}}
+</style>
+
 </head>
 <body>
   <header class="site-header" id="home">
@@ -61,6 +90,8 @@
     <a href="#home">Home</a>
     <a href="#about">About</a>
     <a href="#courses">Courses</a>
+    <a href="#homeOffers">Offers</a>
+    <a href="#studyMaterials">Study Materials</a>
     <a href="#admission">Admission</a>
     <a href="#reviews">Reviews</a>
     <a href="#contact">Contact</a>
@@ -75,6 +106,17 @@
 </div>
 
   <main>
+
+    <section id="homeOffers" class="home-offers" aria-label="Current offers">
+      <div class="section-heading">
+        <span class="eyebrow">LATEST UPDATES</span>
+        <h2 class="section-title">Offers & Announcements</h2>
+      </div>
+      <div id="offerSlider" class="offer-slider" aria-live="polite">
+        <p class="offer-empty">Loading offers...</p>
+      </div>
+    </section>
+
     <section class="hero">
   <div class="hero-content">
     <span class="eyebrow">LEARN • PRACTICE • GROW</span>
@@ -98,6 +140,50 @@
       <span class="eyebrow">WELCOME TO HEET</span>
       <h2 class="section-title">About Us</h2>
       <p>Heet Computer Education &amp; Spoken English, Gandhinagar ખાતે વિદ્યાર્થીઓને કમ્પ્યુટર કૌશલ્ય, અંગ્રેજી સંવાદ, ડિઝાઇન અને ડિજિટલ કૌશલ્ય શીખવામાં મદદ કરે છે.</p>
+    </section>
+
+
+    <section id="studyMaterials" class="section materials-section">
+      <div class="section-heading">
+        <span class="eyebrow">LEARN ANYTIME</span>
+        <h2 class="section-title">Study Materials</h2>
+        <p class="section-subtitle">PDF Notes, Question Papers અને અભ્યાસ સામગ્રી અહીંથી મેળવો.</p>
+      </div>
+      <div id="materialsList" class="materials-grid">
+        <p>Loading study materials...</p>
+      </div>
+
+      <div id="materialPaymentBox" class="material-payment">
+        <h3>Study Material Payment</h3>
+        <p id="selectedMaterialName"></p>
+        <p><strong>કિંમત: ₹50</strong></p>
+        <p>નીચે આપેલા QR દ્વારા ₹50 પેમેન્ટ કરો અને વિગતો ભરો. Admin ચકાસણી કર્યા પછી જ PDF ડાઉનલોડ થશે.</p>
+        <img src="images/payment-qr.jpeg" alt="Heet Computer payment QR code">
+        <p style="text-align:center"><strong>UPI ID: sadhunikunj78-2@oksbi</strong></p>
+        <form id="materialPaymentForm">
+          <label for="materialBuyerName">તમારું નામ</label>
+          <input id="materialBuyerName" type="text" required maxlength="100" placeholder="નામ">
+          <label for="materialBuyerMobile">મોબાઇલ નંબર</label>
+          <input id="materialBuyerMobile" type="tel" inputmode="numeric" pattern="[0-9]{10}" maxlength="10" required placeholder="10 અંકનો મોબાઇલ નંબર">
+          <label for="materialPaymentReference">UPI Transaction ID / UTR</label>
+          <input id="materialPaymentReference" type="text" required maxlength="120" placeholder="Transaction ID">
+          <button type="submit">Payment Details Submit કરો</button>
+        </form>
+        <p id="materialPaymentStatus" class="material-status" role="status"></p>
+      </div>
+
+      <div class="material-download">
+        <h3>Download Approved Material</h3>
+        <p>Admin દ્વારા payment approve થયા પછી Order Code અને Mobile Number નાખીને PDF મેળવો.</p>
+        <form id="materialDownloadForm">
+          <label for="materialOrderCode">Order Code</label>
+          <input id="materialOrderCode" type="text" required placeholder="જેમ કે HM-...">
+          <label for="materialDownloadMobile">Mobile Number</label>
+          <input id="materialDownloadMobile" type="tel" inputmode="numeric" pattern="[0-9]{10}" maxlength="10" required placeholder="10 અંકનો મોબાઇલ નંબર">
+          <button type="submit">Download PDF</button>
+        </form>
+        <p id="materialDownloadStatus" class="material-status" role="status"></p>
+      </div>
     </section>
 
     <section id="courses" class="section courses-section">
@@ -373,5 +459,163 @@ Enquire Now
   <a class="whatsapp-float" href="https://wa.me/918460575627?text=Hello%2C%20I%20want%20to%20know%20about%20your%20courses." target="_blank" rel="noopener noreferrer" aria-label="Contact us on WhatsApp">WhatsApp</a>
   <footer class="footer"><p>&copy; <span id="year"></span> Heet Computer Education &amp; Spoken English</p><p>All Rights Reserved.</p></footer>
   <script src="script.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+  (function () {
+    const SUPABASE_URL = 'https://rwtdwtbxuoilzecerojm.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_5ggHaapc4cno062CdS7OGg_-6PLyF8t';
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const offerSlider = document.getElementById('offerSlider');
+    const materialsList = document.getElementById('materialsList');
+    const paymentBox = document.getElementById('materialPaymentBox');
+    const paymentForm = document.getElementById('materialPaymentForm');
+    const paymentStatus = document.getElementById('materialPaymentStatus');
+    const downloadForm = document.getElementById('materialDownloadForm');
+    const downloadStatus = document.getElementById('materialDownloadStatus');
+    let selectedMaterial = null;
+    let offerTimer = null;
+
+    function publicImage(bucket, path) {
+      if (!path) return '';
+      return supabaseClient.storage.from(bucket).getPublicUrl(path).data.publicUrl;
+    }
+    function makeElement(tag, className, text) {
+      const el = document.createElement(tag);
+      if (className) el.className = className;
+      if (text !== undefined) el.textContent = text;
+      return el;
+    }
+
+    async function loadHomeOffers() {
+      const today = new Date().toISOString().slice(0, 10);
+      const { data, error } = await supabaseClient.from('site_offers')
+        .select('id,title,image_path,start_date,end_date')
+        .eq('is_published', true)
+        .lte('start_date', today)
+        .gte('end_date', today)
+        .order('created_at', { ascending: false });
+      offerSlider.replaceChildren();
+      if (error || !data || data.length === 0) {
+        offerSlider.append(makeElement('p', 'offer-empty', 'હાલમાં કોઈ Offer ઉપલબ્ધ નથી.'));
+        return;
+      }
+      data.forEach((offer, index) => {
+        const img = document.createElement('img');
+        img.className = 'offer-slide' + (index === 0 ? ' active' : '');
+        img.src = publicImage('site-offers', offer.image_path);
+        img.alt = offer.title || 'Heet Computer Offer';
+        img.loading = index === 0 ? 'eager' : 'lazy';
+        offerSlider.append(img);
+      });
+      if (offerTimer) clearInterval(offerTimer);
+      if (data.length > 1) {
+        let current = 0;
+        offerTimer = setInterval(() => {
+          const slides = offerSlider.querySelectorAll('.offer-slide');
+          if (!slides.length) return;
+          slides[current].classList.remove('active');
+          current = (current + 1) % slides.length;
+          slides[current].classList.add('active');
+        }, 4000);
+      }
+    }
+
+    async function loadStudyMaterials() {
+      const { data, error } = await supabaseClient.from('study_materials')
+        .select('id,title,category,description,price,thumbnail_path')
+        .eq('is_published', true)
+        .order('created_at', { ascending: false });
+      materialsList.replaceChildren();
+      if (error || !data || data.length === 0) {
+        materialsList.append(makeElement('p', '', 'હાલમાં કોઈ Study Material ઉપલબ્ધ નથી.'));
+        return;
+      }
+      data.forEach(material => {
+        const card = makeElement('article', 'material-card');
+        if (material.thumbnail_path) {
+          const img = document.createElement('img');
+          img.className = 'material-thumb';
+          img.src = publicImage('site-offers', material.thumbnail_path);
+          img.alt = material.title || 'Study Material';
+          img.loading = 'lazy';
+          card.append(img);
+        }
+        const body = makeElement('div', 'material-card-body');
+        body.append(makeElement('span', 'material-category', material.category || 'Study Material'));
+        body.append(makeElement('h3', '', material.title || 'Study Material'));
+        if (material.description) body.append(makeElement('p', 'material-description', material.description));
+        body.append(makeElement('p', 'material-price', 'Price: ₹' + (material.price || 50)));
+        const buy = makeElement('button', 'material-buy', 'Buy Now');
+        buy.type = 'button';
+        buy.addEventListener('click', () => {
+          selectedMaterial = material;
+          document.getElementById('selectedMaterialName').textContent = 'Selected: ' + (material.title || 'Study Material');
+          paymentStatus.textContent = '';
+          paymentBox.classList.add('open');
+          paymentBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
+        body.append(buy);
+        card.append(body);
+        materialsList.append(card);
+      });
+    }
+
+    paymentForm.addEventListener('submit', async event => {
+      event.preventDefault();
+      if (!selectedMaterial) {
+        paymentStatus.textContent = 'પહેલા Study Material પસંદ કરો.';
+        return;
+      }
+      const buyerName = document.getElementById('materialBuyerName').value.trim();
+      const mobile = document.getElementById('materialBuyerMobile').value.trim();
+      const reference = document.getElementById('materialPaymentReference').value.trim();
+      const orderCode = 'HM-' + new Date().toISOString().slice(0,10).replace(/-/g,'') + '-' + Math.random().toString(36).slice(2,8).toUpperCase();
+      paymentStatus.textContent = 'Submitting...';
+      const { error } = await supabaseClient.from('material_orders').insert({
+        order_code: orderCode,
+        material_id: selectedMaterial.id,
+        buyer_name: buyerName,
+        mobile_number: mobile,
+        payment_reference: reference,
+        amount: 50,
+        payment_status: 'pending'
+      });
+      if (error) {
+        paymentStatus.textContent = 'વિગતો submit થઈ શકી નથી. ફરી પ્રયાસ કરો.';
+        return;
+      }
+      paymentStatus.textContent = 'Order submit થઈ ગયો છે. તમારો Order Code: ' + orderCode + ' — આ કોડ સાચવી રાખો. Admin payment approve કર્યા પછી download કરી શકશો.';
+      document.getElementById('materialOrderCode').value = orderCode;
+      document.getElementById('materialDownloadMobile').value = mobile;
+      paymentForm.reset();
+    });
+
+    downloadForm.addEventListener('submit', async event => {
+      event.preventDefault();
+      const orderCode = document.getElementById('materialOrderCode').value.trim();
+      const mobile = document.getElementById('materialDownloadMobile').value.trim();
+      downloadStatus.textContent = 'Checking payment...';
+      const { data, error } = await supabaseClient.functions.invoke('material-download', {
+        body: { order_code: orderCode, mobile_number: mobile }
+      });
+      if (error || !data) {
+        downloadStatus.textContent = 'Download ઉપલબ્ધ નથી. Order Code અને Mobile Number તપાસો અથવા Admin approvalની રાહ જુઓ.';
+        return;
+      }
+      const signedUrl = data.signedUrl || data.signed_url || data.url;
+      if (!signedUrl) {
+        downloadStatus.textContent = data.error || 'હજુ payment approve થયું નથી અથવા download link મળ્યો નથી.';
+        return;
+      }
+      downloadStatus.textContent = 'તમારું PDF ખુલશે...';
+      window.location.href = signedUrl;
+    });
+
+    loadHomeOffers();
+    loadStudyMaterials();
+  })();
+  </script>
+
 </body>
 </html>
