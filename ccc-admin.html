@@ -126,6 +126,60 @@ hr{margin:24px 0;border:0;border-top:1px solid #ddd}
     document.getElementById('offerId').value = '';
     document.getElementById('offerSortOrder').value = 1;
 }
+ async function saveOffer(event) {
+    event.preventDefault();
+
+    const title = document.getElementById('offerTitle').value.trim();
+    const description = document.getElementById('offerDescription').value.trim();
+    const startDate = document.getElementById('offerStartDate').value;
+    const endDate = document.getElementById('offerEndDate').value;
+    const sortOrder = Number(document.getElementById('offerSortOrder').value);
+    const imageFile = document.getElementById('offerImage').files[0];
+
+    if (!title || !startDate || !endDate || !imageFile) {
+        alert('Please fill all fields and select a banner image.');
+        return;
+    }
+
+    if (endDate < startDate) {
+        alert('End date cannot be before start date.');
+        return;
+    }
+
+    const fileName = Date.now() + '-' + imageFile.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+
+    const { error: uploadError } = await supabase.storage
+        .from('site-offers')
+        .upload(fileName, imageFile);
+
+    if (uploadError) {
+        alert(uploadError.message);
+        return;
+    }
+
+    const { data: imageData } = supabase.storage
+        .from('site-offers')
+        .getPublicUrl(fileName);
+
+    const { error } = await supabase.from('site_offers').insert([{
+        title,
+        description,
+        image_url: imageData.publicUrl,
+        start_date: startDate,
+        end_date: endDate,
+        sort_order: sortOrder,
+        is_published: false
+    }]);
+
+    if (error) {
+        alert(error.message);
+        return;
+    }
+
+    alert('Offer saved successfully.');
+    resetOfferForm();
+    loadOffers();
+}
  async function editOffer(id) {
     const { data, error } = await supabase
         .from('site_offers')
