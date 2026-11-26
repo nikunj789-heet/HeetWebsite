@@ -250,8 +250,10 @@ async function adminLogin(){
  showAdminPanel();
 }
 
-// Explicitly expose the inline Login button handler.
-window.adminLogin = adminLogin;
+// Compatibility alias: older Login buttons may call adminLog().
+function adminLog(){
+ return adminLogin();
+}
 
 function showAdminPanel(){
  document.getElementById("loginPanel").style.display="none";
@@ -918,8 +920,7 @@ async function loadStudents(){
   edit.onclick=()=>editStudent(s);
   action.appendChild(edit);
 
-  if(s.documents_upload_eligible===true &&
-     String(s.payment_status||"").toLowerCase()==="paid"){
+  if(String(s.payment_status||"").toLowerCase()==="paid"){
    const upload=document.createElement("button");
    upload.textContent="PDF Upload";
    upload.className="uploadBtn";
@@ -1028,9 +1029,8 @@ async function saveStudent(){
 }
 
 function openUpload(s){
- if(s.documents_upload_eligible!==true ||
-    String(s.payment_status||"").toLowerCase()!=="paid"){
-  alert("આ વિદ્યાર્થી PDF Upload માટે Eligible નથી અથવા Payment Paid નથી.");
+ if(String(s.payment_status||"").toLowerCase()!=="paid"){
+  alert("Student Payment Paid નથી.");
   return;
  }
  uploadStudent=s;
@@ -1056,9 +1056,8 @@ function closeUpload(){
 
 async function uploadPdf(type){
  if(!uploadStudent)return;
- if(uploadStudent.documents_upload_eligible!==true ||
-    String(uploadStudent.payment_status||"").toLowerCase()!=="paid"){
-  alert("આ વિદ્યાર્થી PDF Upload માટે Eligible નથી.");
+ if(String(uploadStudent.payment_status||"").toLowerCase()!=="paid"){
+  alert("Student Payment Paid નથી.");
   return;
  }
 
@@ -1094,8 +1093,7 @@ async function uploadPdf(type){
 
  const {error:updateError}=await db.from("ccc_registrations")
   .update({[field]:path})
-  .eq("id",uploadStudent.id)
-  .eq("documents_upload_eligible",true);
+  .eq("id",uploadStudent.id);
 
  if(updateError){
   await db.storage.from(BUCKET).remove([path]);
@@ -1122,9 +1120,8 @@ async function publishDocuments(){
   alert("Certificate અને Marksheet બંને PDF પહેલાં Upload કરો.");
   return;
  }
- if(uploadStudent.documents_upload_eligible!==true ||
-    String(uploadStudent.payment_status||"").toLowerCase()!=="paid"){
-  alert("આ વિદ્યાર્થી Publish માટે Eligible નથી.");
+ if(String(uploadStudent.payment_status||"").toLowerCase()!=="paid"){
+  alert("Student Payment Paid નથી.");
   return;
  }
  if(!confirm("શું તમે બંને PDF Student Verification માટે Publish કરવા માંગો છો?")){
@@ -1135,7 +1132,6 @@ async function publishDocuments(){
  const {data,error}=await db.from("ccc_registrations")
   .update({documents_available_at:publishTime})
   .eq("id",uploadStudent.id)
-  .eq("documents_upload_eligible",true)
   .select("id,documents_available_at")
   .maybeSingle();
 
