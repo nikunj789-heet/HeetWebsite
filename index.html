@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -30,7 +29,6 @@
 }
 </script>
 
-<!-- Google Analytics 4 -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-FJTNFEZEF5"></script>
 <script>
 window.dataLayer = window.dataLayer || [];
@@ -40,512 +38,85 @@ gtag('config', 'G-FJTNFEZEF5');
 </script>
 
 <style>
-/* Responsive Advertisement Slider */
-.home-offers {
-  padding: 18px 0;
-  background: #f4f8ff;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.offer-slider {
-  width: 100%;
-  height: min(48vh, 460px);
-  min-height: 150px;
-  margin: 0 auto;
-  position: relative;
-  overflow: hidden;
-  background: #e8eef8;
-  box-sizing: border-box;
-  touch-action: pan-y;
-  user-select: none;
-  -webkit-user-select: none;
-  cursor: grab;
-}
-
-.offer-slider:active {
-  cursor: grabbing;
-}
-
-.offer-track {
-  display: flex;
-  width: 100%;
-  height: 100%;
-  transition: transform 650ms cubic-bezier(.22,.61,.36,1);
-  will-change: transform;
-}
-
-.offer-slide {
-  display: block;
-  flex: 0 0 100%;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  object-position: center;
-  background: #fff;
-  user-select: none;
-  -webkit-user-drag: none;
-  pointer-events: none;
-}
-
-.offer-empty {
-  text-align: center;
-  padding: 30px;
-  color: #475569;
-}
-
-@media (max-width: 600px) {
-  .home-offers {
-    padding: 12px 0;
-  }
-
-  .offer-slider {
-    height: min(38vh, 300px);
-    min-height: 120px;
-  }
-
-  .offer-track {
-    transition-duration: 500ms;
-  }
-}
-
-/* Study Material Storefront */
-.materials-section {
-  background: #f8fafc;
-}
-
-.materials-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit,minmax(230px,1fr));
-  gap: 18px;
-  margin-top: 24px;
-}
-
-.material-card {
-  background: #fff;
-  border: 1px solid #e2e8f0;
-  border-radius: 14px;
-  overflow: hidden;
-  box-shadow: 0 4px 14px rgba(15,23,42,.06);
-  display: flex;
-  flex-direction: column;
-}
-
-.material-thumb {
-  display: block;
-  width: 100%;
-  height: auto;
-  aspect-ratio: 4 / 3;
-  object-fit: cover;
-  object-position: center;
-  background: #eef2f7;
-}
-
-.material-card-body {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 9px;
-  flex: 1;
-}
-
-.material-card h3 {
-  margin: 0;
-  font-size: 18px;
-}
-
-.material-category {
-  font-size: 12px;
-  color: #2563eb;
-  font-weight: 700;
-  text-transform: uppercase;
-}
-
-.material-description {
-  color: #475569;
-  font-size: 14px;
-  line-height: 1.5;
-}
-
-.material-price {
-  font-weight: 800;
-  color: #0f766e;
-}
-
-.material-buy {
-  border: 0;
-  border-radius: 8px;
-  padding: 11px 14px;
-  background: #1456a0;
-  color: #fff;
-  font-weight: 700;
-  cursor: pointer;
-  margin-top: auto;
-}
-
-.material-payment {
-  display: none;
-  max-width: 620px;
-  margin: 24px auto 0;
-  background: #fff;
-  padding: 20px;
-  border: 1px solid #dbe3ef;
-  border-radius: 14px;
-  box-shadow: 0 4px 14px rgba(15,23,42,.07);
-}
-
-.material-payment.open {
-  display: block;
-}
-
-.material-payment input {
-  width: 100%;
-  padding: 12px;
-  margin: 6px 0 14px;
-  border: 1px solid #cbd5e1;
-  border-radius: 8px;
-  box-sizing: border-box;
-}
-
-.material-payment button,
-.material-download button {
-  padding: 12px 16px;
-  border: 0;
-  border-radius: 8px;
-  background: #168447;
-  color: white;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.material-payment img {
-  display: block;
-  width: min(280px,100%);
-  max-height: 320px;
-  height: auto;
-  object-fit: contain;
-  background: #fff;
-  margin: 12px auto;
-}
-
-.material-status {
-  margin-top: 12px;
-  font-weight: 600;
-  overflow-wrap: anywhere;
-}
-
-.material-download {
-  max-width: 620px;
-  margin: 22px auto 0;
-  background: #fff;
-  padding: 20px;
-  border: 1px solid #dbe3ef;
-  border-radius: 14px;
-}
-
-.material-download input {
-  width: 100%;
-  padding: 12px;
-  margin: 6px 0 14px;
-  border: 1px solid #cbd5e1;
-  border-radius: 8px;
-  box-sizing: border-box;
-}
-
-@media(max-width:600px) {
-  .material-payment,
-  .material-download {
-    padding: 15px;
-  }
-}
-
-/* HEET CHATBOT */
-.heet-chat-launcher {
-  position: fixed;
-  right: 22px;
-  bottom: 24px;
-  z-index: 9998;
-  border: none;
-  border-radius: 50px;
-  padding: 14px 20px;
-  background: linear-gradient(135deg,#1456a0,#087bce);
-  color: #fff;
-  font-size: 16px;
-  font-weight: 700;
-  box-shadow: 0 6px 22px rgba(0,45,100,.3);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 9px;
-}
-
-.heet-chat-launcher:hover {
-  transform: translateY(-2px);
-}
-
-.heet-chat-window {
-  position: fixed;
-  right: 22px;
-  bottom: 90px;
-  z-index: 9999;
-  width: 360px;
-  max-width: calc(100vw - 28px);
-  height: 510px;
-  max-height: calc(100vh - 120px);
-  background: #fff;
-  border-radius: 18px;
-  box-shadow: 0 10px 40px rgba(15,23,42,.25);
-  overflow: hidden;
-  display: none;
-  flex-direction: column;
-  border: 1px solid #dbe5f0;
-  font-family: Arial, "Noto Sans Gujarati", sans-serif;
-}
-
-.heet-chat-window.open {
-  display: flex;
-}
-
-.heet-chat-header {
-  background: linear-gradient(135deg,#104b91,#087bce);
-  color: #fff;
-  padding: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.heet-chat-brand {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.heet-chat-avatar {
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  background: #fff;
-  color: #1456a0;
-  display: grid;
-  place-items: center;
-  font-size: 22px;
-}
-
-.heet-chat-brand strong {
-  display: block;
-  font-size: 15px;
-}
-
-.heet-chat-brand small {
-  display: block;
-  font-size: 11px;
-  opacity: .9;
-  margin-top: 3px;
-}
-
-.heet-chat-close {
-  border: 0;
-  color: #fff;
-  background: transparent;
-  font-size: 25px;
-  cursor: pointer;
-  padding: 2px 7px;
-}
-
-.heet-chat-tools {
-  padding: 9px 12px;
-  background: #f4f7fb;
-  border-bottom: 1px solid #e5eaf1;
-}
-
-.heet-chat-tools select {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #cbd5e1;
-  border-radius: 8px;
-  background: #fff;
-  font-size: 13px;
-}
-
-.heet-chat-messages {
-  flex: 1;
-  overflow-y: auto;
-  padding: 14px;
-  background: #f8fafc;
-  display: flex;
-  flex-direction: column;
-  gap: 11px;
-}
-
-.heet-chat-message {
-  max-width: 88%;
-  padding: 10px 12px;
-  border-radius: 13px;
-  font-size: 13px;
-  line-height: 1.55;
-  white-space: pre-line;
-  overflow-wrap: anywhere;
-}
-
-.heet-chat-message.bot {
-  align-self: flex-start;
-  background: #fff;
-  border: 1px solid #e2e8f0;
-  color: #1e293b;
-  border-bottom-left-radius: 4px;
-}
-
-.heet-chat-message.user {
-  align-self: flex-end;
-  background: #1456a0;
-  color: #fff;
-  border-bottom-right-radius: 4px;
-}
-
-.heet-chat-quick {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  padding: 9px 12px;
-  border-top: 1px solid #e5eaf1;
-  background: #fff;
-}
-
-.heet-chat-quick button {
-  border: 1px solid #b9d2ed;
-  color: #1456a0;
-  background: #f1f7ff;
-  border-radius: 20px;
-  padding: 6px 10px;
-  font-size: 11px;
-  cursor: pointer;
-}
-
-.heet-chat-input-area {
-  display: flex;
-  gap: 7px;
-  padding: 11px;
-  background: #fff;
-  border-top: 1px solid #e5eaf1;
-}
-
-.heet-chat-input-area input {
-  flex: 1;
-  min-width: 0;
-  border: 1px solid #cbd5e1;
-  border-radius: 22px;
-  padding: 11px 14px;
-  outline: none;
-  font-size: 13px;
-}
-
-.heet-chat-input-area input:focus {
-  border-color: #1456a0;
-}
-
-.heet-chat-send {
-  border: 0;
-  border-radius: 50%;
-  width: 42px;
-  height: 42px;
-  background: #1456a0;
-  color: #fff;
-  font-size: 18px;
-  cursor: pointer;
-}
-
-.heet-chat-contact {
-  display: flex;
-  gap: 8px;
-  margin-top: 8px;
-}
-
-.heet-chat-contact a {
-  display: inline-block;
-  text-decoration: none;
-  color: #fff;
-  background: #168447;
-  border-radius: 7px;
-  padding: 7px 10px;
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.heet-chat-contact a.call {
-  background: #1456a0;
-}
-
-@media(max-width:600px) {
-  .heet-chat-launcher {
-    right: 14px;
-    bottom: 16px;
-    padding: 12px 16px;
-    font-size: 14px;
-  }
-
-  .heet-chat-window {
-    right: 10px;
-    bottom: 76px;
-    width: calc(100vw - 20px);
-    height: min(540px,calc(100vh - 95px));
-    max-height: calc(100vh - 95px);
-  }
-}
+.home-offers{padding:18px 0;background:#f4f8ff;width:100%;box-sizing:border-box}
+.offer-slider{width:100%;height:min(48vh,460px);min-height:150px;margin:0 auto;position:relative;overflow:hidden;background:#e8eef8;box-sizing:border-box;touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:grab}
+.offer-slider:active{cursor:grabbing}
+.offer-track{display:flex;width:100%;height:100%;transition:transform 650ms cubic-bezier(.22,.61,.36,1);will-change:transform}
+.offer-slide{display:block;flex:0 0 100%;width:100%;height:100%;object-fit:contain;object-position:center;background:#fff;user-select:none;-webkit-user-drag:none;pointer-events:none}
+.offer-empty{text-align:center;padding:30px;color:#475569}
+@media(max-width:600px){.home-offers{padding:12px 0}.offer-slider{height:min(38vh,300px);min-height:120px}.offer-track{transition-duration:500ms}}
+.materials-section{background:#f8fafc}
+.materials-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;margin-top:24px}
+.material-card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;overflow:hidden;box-shadow:0 4px 14px rgba(15,23,42,.06);display:flex;flex-direction:column}
+.material-thumb{display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;object-position:center;background:#eef2f7}
+.material-card-body{padding:16px;display:flex;flex-direction:column;gap:9px;flex:1}
+.material-card h3{margin:0;font-size:18px}
+.material-category{font-size:12px;color:#2563eb;font-weight:700;text-transform:uppercase}
+.material-description{color:#475569;font-size:14px;line-height:1.5}
+.material-price{font-weight:800;color:#0f766e}
+.material-buy{border:0;border-radius:8px;padding:11px 14px;background:#1456a0;color:#fff;font-weight:700;cursor:pointer;margin-top:auto}
+.material-payment{display:none;max-width:620px;margin:24px auto 0;background:#fff;padding:20px;border:1px solid #dbe3ef;border-radius:14px;box-shadow:0 4px 14px rgba(15,23,42,.07)}
+.material-payment.open{display:block}
+.material-payment input{width:100%;padding:12px;margin:6px 0 14px;border:1px solid #cbd5e1;border-radius:8px;box-sizing:border-box}
+.material-payment button,.material-download button{padding:12px 16px;border:0;border-radius:8px;background:#168447;color:white;font-weight:700;cursor:pointer}
+.material-payment img{display:block;width:min(280px,100%);max-height:320px;height:auto;object-fit:contain;background:#fff;margin:12px auto}
+.material-status{margin-top:12px;font-weight:600;overflow-wrap:anywhere}
+.material-download{max-width:620px;margin:22px auto 0;background:#fff;padding:20px;border:1px solid #dbe3ef;border-radius:14px}
+.material-download input{width:100%;padding:12px;margin:6px 0 14px;border:1px solid #cbd5e1;border-radius:8px;box-sizing:border-box}
+@media(max-width:600px){.material-payment,.material-download{padding:15px}}
+.heet-chat-launcher{position:fixed;right:22px;bottom:24px;z-index:9998;border:none;border-radius:50px;padding:14px 20px;background:linear-gradient(135deg,#1456a0,#087bce);color:#fff;font-size:16px;font-weight:700;box-shadow:0 6px 22px rgba(0,45,100,.3);cursor:pointer;display:flex;align-items:center;gap:9px}
+.heet-chat-launcher:hover{transform:translateY(-2px)}
+.heet-chat-window{position:fixed;right:22px;bottom:90px;z-index:9999;width:360px;max-width:calc(100vw - 28px);height:510px;max-height:calc(100vh - 120px);background:#fff;border-radius:18px;box-shadow:0 10px 40px rgba(15,23,42,.25);overflow:hidden;display:none;flex-direction:column;border:1px solid #dbe5f0;font-family:Arial,"Noto Sans Gujarati",sans-serif}
+.heet-chat-window.open{display:flex}
+.heet-chat-header{background:linear-gradient(135deg,#104b91,#087bce);color:#fff;padding:16px;display:flex;align-items:center;justify-content:space-between}
+.heet-chat-brand{display:flex;align-items:center;gap:10px}
+.heet-chat-avatar{width:42px;height:42px;border-radius:50%;background:#fff;color:#1456a0;display:grid;place-items:center;font-size:22px}
+.heet-chat-brand strong{display:block;font-size:15px}
+.heet-chat-brand small{display:block;font-size:11px;opacity:.9;margin-top:3px}
+.heet-chat-close{border:0;color:#fff;background:transparent;font-size:25px;cursor:pointer;padding:2px 7px}
+.heet-chat-tools{padding:9px 12px;background:#f4f7fb;border-bottom:1px solid #e5eaf1}
+.heet-chat-tools select{width:100%;padding:8px;border:1px solid #cbd5e1;border-radius:8px;background:#fff;font-size:13px}
+.heet-chat-messages{flex:1;overflow-y:auto;padding:14px;background:#f8fafc;display:flex;flex-direction:column;gap:11px}
+.heet-chat-message{max-width:88%;padding:10px 12px;border-radius:13px;font-size:13px;line-height:1.55;white-space:pre-line;overflow-wrap:anywhere}
+.heet-chat-message.bot{align-self:flex-start;background:#fff;border:1px solid #e2e8f0;color:#1e293b;border-bottom-left-radius:4px}
+.heet-chat-message.user{align-self:flex-end;background:#1456a0;color:#fff;border-bottom-right-radius:4px}
+.heet-chat-quick{display:flex;flex-wrap:wrap;gap:6px;padding:9px 12px;border-top:1px solid #e5eaf1;background:#fff}
+.heet-chat-quick button{border:1px solid #b9d2ed;color:#1456a0;background:#f1f7ff;border-radius:20px;padding:6px 10px;font-size:11px;cursor:pointer}
+.heet-chat-input-area{display:flex;gap:7px;padding:11px;background:#fff;border-top:1px solid #e5eaf1}
+.heet-chat-input-area input{flex:1;min-width:0;border:1px solid #cbd5e1;border-radius:22px;padding:11px 14px;outline:none;font-size:13px}
+.heet-chat-input-area input:focus{border-color:#1456a0}
+.heet-chat-send{border:0;border-radius:50%;width:42px;height:42px;background:#1456a0;color:#fff;font-size:18px;cursor:pointer}
+.heet-chat-contact{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.heet-chat-contact a{display:inline-block;text-decoration:none;color:#fff;background:#168447;border-radius:7px;padding:7px 10px;font-size:12px;font-weight:700}
+.heet-chat-contact a.call{background:#1456a0}
+@media(max-width:600px){.heet-chat-launcher{right:14px;bottom:16px;padding:12px 16px;font-size:14px}.heet-chat-window{right:10px;bottom:76px;width:calc(100vw - 20px);height:min(540px,calc(100vh - 95px));max-height:calc(100vh - 95px)}}
 </style>
 </head>
-
 <body>
 <header class="site-header" id="home">
-  <img src="heet-logo.webp"
-       alt="Heet Computer Education and Spoken English Gandhinagar Logo"
-       class="site-logo">
-
+  <img src="heet-logo.webp" alt="Heet Computer Education and Spoken English Gandhinagar Logo" class="site-logo">
   <div class="header-content">
-    <p class="iso-certification">
-      ISO 9001:2015 CERTIFIED | QRO | EGAC | IAF
-    </p>
+    <p class="iso-certification">ISO 9001:2015 CERTIFIED | QRO | EGAC | IAF</p>
     <h1>Heet Computer Education & Spoken English in Gandhinagar</h1>
   </div>
 </header>
 
 <nav class="navbar" aria-label="Main navigation">
-  <a href="#home">Home</a>
-  <a href="#about">About</a>
-  <a href="#courses">Courses</a>
-  <a href="#homeOffers">Offers</a>
-  <a href="#studyMaterials">Study Materials</a>
-  <a href="#admission">Admission</a>
-  <a href="#reviews">Reviews</a>
-  <a href="#contact">Contact</a>
-  <a href="ccc-admin.html">Admin Login</a>
-  <a href="veryfy.html">Verify Certificate</a>
+  <a href="#home">Home</a><a href="#about">About</a><a href="#courses">Courses</a>
+  <a href="#homeOffers">Offers</a><a href="#studyMaterials">Study Materials</a>
+  <a href="#admission">Admission</a><a href="#reviews">Reviews</a><a href="#contact">Contact</a>
+  <a href="ccc-admin.html">Admin Login</a><a href="veryfy.html">Verify Certificate</a>
 </nav>
 
 <div style="display:flex;flex-wrap:wrap;gap:12px;padding:15px;">
-  <a href="ccc-registration.html"
-     style="display:inline-block;background:linear-gradient(135deg,#1976d2,#003b8e);color:white;padding:16px 25px;border-radius:12px;font-size:20px;font-weight:bold;text-decoration:none;box-shadow:0 5px 15px #999;">
-    📝 CCC REGISTRATION
-  </a>
-
-  <a href="https://heet-ccc-mock-test-2026.heeteducationgnr.workers.dev/"
-     target="_blank" rel="noopener noreferrer"
-     style="display:inline-block;background:linear-gradient(135deg,#168447,#075b2c);color:white;padding:16px 25px;border-radius:12px;font-size:20px;font-weight:bold;text-decoration:none;box-shadow:0 5px 15px #999;">
-    💻 CCC ONLINE TEST
-  </a>
+  <a href="ccc-registration.html" style="display:inline-block;background:linear-gradient(135deg,#1976d2,#003b8e);color:white;padding:16px 25px;border-radius:12px;font-size:20px;font-weight:bold;text-decoration:none;box-shadow:0 5px 15px #999;">📝 CCC REGISTRATION</a>
+  <a href="https://heet-ccc-mock-test-2026.heeteducationgnr.workers.dev/" target="_blank" rel="noopener noreferrer" style="display:inline-block;background:linear-gradient(135deg,#168447,#075b2c);color:white;padding:16px 25px;border-radius:12px;font-size:20px;font-weight:bold;text-decoration:none;box-shadow:0 5px 15px #999;">💻 CCC ONLINE TEST</a>
 </div>
 
 <main>
-
 <section id="homeOffers" class="home-offers" aria-label="Current offers">
-  <div class="section-heading">
-    <span class="eyebrow">LATEST UPDATES</span>
-    <h2 class="section-title">Offers & Announcements</h2>
-  </div>
-
-  <div id="offerSlider" class="offer-slider" aria-live="polite">
-    <p class="offer-empty">Loading offers...</p>
-  </div>
+  <div class="section-heading"><span class="eyebrow">LATEST UPDATES</span><h2 class="section-title">Offers & Announcements</h2></div>
+  <div id="offerSlider" class="offer-slider" aria-live="polite"><p class="offer-empty">Loading offers...</p></div>
 </section>
 
 <section class="hero">
@@ -556,265 +127,80 @@ gtag('config', 'G-FJTNFEZEF5');
     <a class="button button-light" href="#courses">Explore Courses</a>
     <a class="button button-outline" href="#admission">Admission Inquiry</a>
   </div>
-
-  <div class="hero-image">
-    <img src="student-photo%20(1).jpeg"
-         alt="Students learning computer skills at Heet Computer Education Gandhinagar"
-         class="hero-student-photo">
-  </div>
+  <div class="hero-image"><img src="student-photo%20(1).jpeg" alt="Students learning computer skills at Heet Computer Education Gandhinagar" class="hero-student-photo"></div>
 </section>
 
 <section id="about" class="section">
-  <span class="eyebrow">WELCOME TO HEET</span>
-  <h2 class="section-title">About Us</h2>
+  <span class="eyebrow">WELCOME TO HEET</span><h2 class="section-title">About Us</h2>
   <p>Heet Computer Education &amp; Spoken English, Gandhinagar ખાતે વિદ્યાર્થીઓને કમ્પ્યુટર કૌશલ્ય, અંગ્રેજી સંવાદ, ડિઝાઇન અને ડિજિટલ કૌશલ્ય શીખવામાં મદદ કરે છે.</p>
 </section>
 
 <section id="studyMaterials" class="section materials-section">
-  <div class="section-heading">
-    <span class="eyebrow">LEARN ANYTIME</span>
-    <h2 class="section-title">Study Materials</h2>
-    <p class="section-subtitle">PDF Notes, Question Papers અને અભ્યાસ સામગ્રી અહીંથી મેળવો.</p>
-  </div>
-
-  <div id="materialsList" class="materials-grid">
-    <p>Loading study materials...</p>
-  </div>
-
+  <div class="section-heading"><span class="eyebrow">LEARN ANYTIME</span><h2 class="section-title">Study Materials</h2><p class="section-subtitle">PDF Notes, Question Papers અને અભ્યાસ સામગ્રી અહીંથી મેળવો.</p></div>
+  <div id="materialsList" class="materials-grid"><p>Loading study materials...</p></div>
   <div id="materialPaymentBox" class="material-payment">
-    <h3>Study Material Payment</h3>
-    <p id="selectedMaterialName"></p>
-    <p><strong>કિંમત: ₹50</strong></p>
+    <h3>Study Material Payment</h3><p id="selectedMaterialName"></p><p><strong>કિંમત: ₹50</strong></p>
     <p>નીચે આપેલા QR દ્વારા ₹50 પેમેન્ટ કરો અને વિગતો ભરો. Admin ચકાસણી કર્યા પછી જ PDF ડાઉનલોડ થશે.</p>
     <img src="Images/Payment%20QR%20-%20Heet%20UPI.jpeg" alt="Heet Computer payment QR code">
     <p style="text-align:center"><strong>UPI ID: sadhunikunj78-2@oksbi</strong></p>
-
     <form id="materialPaymentForm">
-      <label for="materialBuyerName">તમારું નામ</label>
-      <input id="materialBuyerName" type="text" required maxlength="100" placeholder="નામ">
-
-      <label for="materialBuyerMobile">મોબાઇલ નંબર</label>
-      <input id="materialBuyerMobile" type="tel" inputmode="numeric" pattern="[0-9]{10}" maxlength="10" required placeholder="10 અંકનો મોબાઇલ નંબર">
-
-      <label for="materialPaymentReference">UPI Transaction ID / UTR</label>
-      <input id="materialPaymentReference" type="text" required maxlength="120" placeholder="Transaction ID">
-
+      <label for="materialBuyerName">તમારું નામ</label><input id="materialBuyerName" type="text" required maxlength="100" placeholder="નામ">
+      <label for="materialBuyerMobile">મોબાઇલ નંબર</label><input id="materialBuyerMobile" type="tel" inputmode="numeric" pattern="[0-9]{10}" maxlength="10" required placeholder="10 અંકનો મોબાઇલ નંબર">
+      <label for="materialPaymentReference">UPI Transaction ID / UTR</label><input id="materialPaymentReference" type="text" required maxlength="120" placeholder="Transaction ID">
       <button type="submit">Payment Details Submit કરો</button>
     </form>
-
     <p id="materialPaymentStatus" class="material-status" role="status"></p>
   </div>
-
   <div class="material-download">
-    <h3>Download Approved Material</h3>
-    <p>Admin દ્વારા payment approve થયા પછી Order Code અને Mobile Number નાખીને PDF મેળવો.</p>
-
+    <h3>Download Approved Material</h3><p>Admin દ્વારા payment approve થયા પછી Order Code અને Mobile Number નાખીને PDF મેળવો.</p>
     <form id="materialDownloadForm">
-      <label for="materialOrderCode">Order Code</label>
-      <input id="materialOrderCode" type="text" required placeholder="જેમ કે HM-...">
-
-      <label for="materialDownloadMobile">Mobile Number</label>
-      <input id="materialDownloadMobile" type="tel" inputmode="numeric" pattern="[0-9]{10}" maxlength="10" required placeholder="10 અંકનો મોબાઇલ નંબર">
-
+      <label for="materialOrderCode">Order Code</label><input id="materialOrderCode" type="text" required placeholder="જેમ કે HM-...">
+      <label for="materialDownloadMobile">Mobile Number</label><input id="materialDownloadMobile" type="tel" inputmode="numeric" pattern="[0-9]{10}" maxlength="10" required placeholder="10 અંકનો મોબાઇલ નંબર">
       <button type="submit">Download PDF</button>
     </form>
-
     <p id="materialDownloadStatus" class="material-status" role="status"></p>
   </div>
 </section>
 
 <section id="courses" class="section courses-section">
-  <div class="section-heading">
-    <span class="eyebrow">FIND YOUR COURSE</span>
-    <h2 class="section-title">Our Courses</h2>
-    <p class="section-subtitle">તમારા રસ અને કારકિર્દીના લક્ષ્ય મુજબ કોર્સ પસંદ કરો.</p>
-  </div>
-
+  <div class="section-heading"><span class="eyebrow">FIND YOUR COURSE</span><h2 class="section-title">Our Courses</h2><p class="section-subtitle">તમારા રસ અને કારકિર્દીના લક્ષ્ય મુજબ કોર્સ પસંદ કરો.</p></div>
   <div class="course-tools">
-    <label class="search-wrap" for="courseSearch">
-      <span aria-hidden="true">⌕</span>
-      <input type="search" id="courseSearch" placeholder="Search courses..." aria-label="Search courses">
-    </label>
-
+    <label class="search-wrap" for="courseSearch"><span aria-hidden="true">⌕</span><input type="search" id="courseSearch" placeholder="Search courses..." aria-label="Search courses"></label>
     <div class="course-filters" role="group" aria-label="Filter courses">
-      <button type="button" class="filter-btn active" data-filter="all">All Courses</button>
-      <button type="button" class="filter-btn" data-filter="computer">Computer</button>
-      <button type="button" class="filter-btn" data-filter="english">English &amp; Typing</button>
-      <button type="button" class="filter-btn" data-filter="accounting">Accounting</button>
-      <button type="button" class="filter-btn" data-filter="design">Design &amp; AI</button>
-      <button type="button" class="filter-btn" data-filter="programming">Programming</button>
-      <button type="button" class="filter-btn" data-filter="data">Data Analytics</button>
-      <button type="button" class="filter-btn" data-filter="marketing">Digital Marketing</button>
+      <button type="button" class="filter-btn active" data-filter="all">All Courses</button><button type="button" class="filter-btn" data-filter="computer">Computer</button><button type="button" class="filter-btn" data-filter="english">English &amp; Typing</button><button type="button" class="filter-btn" data-filter="accounting">Accounting</button><button type="button" class="filter-btn" data-filter="design">Design &amp; AI</button><button type="button" class="filter-btn" data-filter="programming">Programming</button><button type="button" class="filter-btn" data-filter="data">Data Analytics</button><button type="button" class="filter-btn" data-filter="marketing">Digital Marketing</button>
     </div>
   </div>
-
   <p id="courseCount" class="course-count" aria-live="polite"></p>
-
   <div class="courses-container" id="courseList">
-    <article class="course-card" data-category="computer">
-      <div class="course-icon">💻</div>
-      <span class="course-tag">Computer</span>
-      <h3>Basic Computer</h3>
-      <p>Learn computer basics, typing and essential skills.</p>
-      <p class="course-fee">Fees: Contact for Details</p>
-      <a class="enquire-btn" href="https://wa.me/918460575627?text=Hello%2C%20I%20want%20to%20enquire%20about%20Basic%20Computer." target="_blank" rel="noopener noreferrer" onclick="gtag('event', 'course_inquiry', {course_name: 'Basic Computer'});">Enquire Now</a>
-    </article>
-
-    <article class="course-card" data-category="english">
-      <div class="course-icon">🗣️</div>
-      <span class="course-tag">English</span>
-      <h3>Spoken English</h3>
-      <p>Improve your English speaking and communication.</p>
-      <p class="course-fee">Fees: Contact for Details</p>
-      <a class="enquire-btn" href="https://wa.me/918460575627?text=Hello%2C%20I%20want%20to%20enquire%20about%20Spoken%20English." target="_blank" rel="noopener noreferrer" onclick="gtag('event', 'course_inquiry', {course_name: 'Spoken English'});">Enquire Now</a>
-    </article>
-
-    <article class="course-card" data-category="computer">
-      <div class="course-icon">▣</div>
-      <span class="course-tag">Computer</span>
-      <h3>CCC</h3>
-      <p>Build foundational computer knowledge and digital skills.</p>
-      <p class="course-fee">Fees: Contact for Details</p>
-      <a class="enquire-btn" href="https://wa.me/918460575627?text=Hello%2C%20I%20want%20to%20enquire%20about%20CCC." target="_blank" rel="noopener noreferrer" onclick="gtag('event', 'course_inquiry', {course_name: 'CCC'});">Enquire Now</a>
-    </article>
-
-    <article class="course-card" data-category="accounting">
-      <div class="course-icon">₹</div>
-      <span class="course-tag">Accounting</span>
-      <h3>Tally Prime with GST</h3>
-      <p>Learn accounting, billing and GST basics.</p>
-      <p class="course-fee">Fees: Contact for Details</p>
-      <a class="enquire-btn" href="https://wa.me/918460575627?text=Hello%2C%20I%20want%20to%20enquire%20about%20Tally%20Prime%20with%20GST." target="_blank" rel="noopener noreferrer" onclick="gtag('event', 'course_inquiry', {course_name: 'Tally Prime with GST'});">Enquire Now</a>
-    </article>
-
-    <article class="course-card" data-category="computer">
-      <div class="course-icon">📊</div>
-      <span class="course-tag">Computer</span>
-      <h3>Advance Excel</h3>
-      <p>Learn Excel formulas, functions and reports.</p>
-      <p class="course-fee">Fees: Contact for Details</p>
-      <a class="enquire-btn" href="https://wa.me/918460575627?text=Hello%2C%20I%20want%20to%20enquire%20about%20Advance%20Excel." onclick="gtag('event', 'course_inquiry', {course_name: 'Advance Excel'});">Enquire Now</a>
-    </article>
-
-    <article class="course-card" data-category="computer">
-      <div class="course-icon">✨</div>
-      <span class="course-tag">Computer</span>
-      <h3>Advance Excel With AI</h3>
-      <p>Explore Excel workflows with AI-assisted productivity.</p>
-      <p class="course-fee">Fees: Contact for Details</p>
-      <a class="enquire-btn" href="https://wa.me/918460575627?text=Hello%2C%20I%20want%20to%20enquire%20about%20Advance%20Excel%20With%20AI." onclick="gtag('event', 'course_inquiry', {course_name: 'Advance Excel With AI'});">Enquire Now</a>
-    </article>
-
-    <article class="course-card" data-category="english">
-      <div class="course-icon">Aa</div>
-      <span class="course-tag">English</span>
-      <h3>IELTS Spoken English</h3>
-      <p>Practice spoken English and communication for IELTS preparation.</p>
-      <p class="course-fee">Fees: Contact for Details</p>
-      <a class="enquire-btn" href="https://wa.me/918460575627?text=Hello%2C%20I%20want%20to%20enquire%20about%20IELTS%20Spoken%20English." onclick="gtag('event', 'course_inquiry', {course_name: 'IELTS Spoken English'});">Enquire Now</a>
-    </article>
-
-    <article class="course-card" data-category="design">
-      <div class="course-icon">🎨</div>
-      <span class="course-tag">Design</span>
-      <h3>Graphic Design With AI</h3>
-      <p>Explore creative design concepts and AI-assisted design tools.</p>
-      <p class="course-fee">Fees: Contact for Details</p>
-      <a class="enquire-btn" href="https://wa.me/918460575627?text=Hello%2C%20I%20want%20to%20enquire%20about%20Graphic%20Design%20With%20AI." onclick="gtag('event', 'course_inquiry', {course_name: 'Graphic Design With AI'});">Enquire Now</a>
-    </article>
-
-    <article class="course-card" data-category="english">
-      <div class="course-icon">⌨️</div>
-      <span class="course-tag">English</span>
-      <h3>Gujarati | English Typing With Speed Accuracy</h3>
-      <p>Improve typing speed and accuracy in Gujarati and English.</p>
-      <p class="course-fee">Fees: Contact for Details</p>
-      <a class="enquire-btn" href="https://wa.me/918460575627?text=Hello%2C%20I%20want%20to%20enquire%20about%20Gujarati%20%7C%20English%20Typing%20With%20Speed%20Accuracy." target="_blank" rel="noopener noreferrer" onclick="gtag('event', 'course_inquiry', {course_name: 'Gujarati | English Typing With Speed Accuracy'});">Enquire Now</a>
-    </article>
-
-    <article class="course-card" data-category="programming">
-      <div class="course-icon">👨‍💻</div>
-      <span class="course-tag">Programming</span>
-      <h3>Programming With Python</h3>
-      <p>Start learning programming logic and Python fundamentals.</p>
-      <p class="course-fee">Fees: Contact for Details</p>
-      <a class="enquire-btn" href="https://wa.me/918460575627?text=Hello%2C%20I%20want%20to%20enquire%20about%20Programming%20With%20Python." onclick="gtag('event', 'course_inquiry', {course_name: 'Programming With Python'});">Enquire Now</a>
-    </article>
-
-    <article class="course-card" data-category="programming">
-      <div class="course-icon">C++</div>
-      <span class="course-tag">Programming</span>
-      <h3>C &amp; C++</h3>
-      <p>Build a foundation in programming concepts with C and C++.</p>
-      <p class="course-fee">Fees: Contact for Details</p>
-      <a class="enquire-btn" href="https://wa.me/918460575627?text=Hello%2C%20I%20want%20to%20enquire%20about%20C%20%26%20C%2B%2B." onclick="gtag('event', 'course_inquiry', {course_name: 'C & C++'});">Enquire Now</a>
-    </article>
-
-    <article class="course-card" data-category="computer">
-      <div class="course-icon">🌐</div>
-      <span class="course-tag">Computer</span>
-      <h3>Web Designing</h3>
-      <p>Learn the basics of creating and styling websites.</p>
-      <p class="course-fee">Fees: Contact for Details</p>
-      <a class="enquire-btn" href="https://wa.me/918460575627?text=Hello%2C%20I%20want%20to%20enquire%20about%20Web%20Designing." onclick="gtag('event', 'course_inquiry', {course_name: 'Web Designing'});">Enquire Now</a>
-    </article>
-
-    <article class="course-card" data-category="data">
-      <div class="course-icon">📈</div>
-      <span class="course-tag">Data</span>
-      <h3>Data Analytics With Power BI</h3>
-      <p>Learn to explore data and create visual reports and dashboards.</p>
-      <p class="course-fee">Fees: Contact for Details</p>
-      <a class="enquire-btn" href="https://wa.me/918460575627?text=Hello%2C%20I%20want%20to%20enquire%20about%20Data%20Analytics%20With%20Power%20BI." onclick="gtag('event', 'course_inquiry', {course_name: 'Data Analytics With Power BI'});">Enquire Now</a>
-    </article>
-
-    <article class="course-card" data-category="marketing">
-      <div class="course-icon">📣</div>
-      <span class="course-tag">Marketing</span>
-      <h3>Digital Marketing</h3>
-      <p>Understand digital channels and online promotion basics.</p>
-      <p class="course-fee">Fees: Contact for Details</p>
-      <a class="enquire-btn" href="https://wa.me/918460575627?text=Hello%2C%20I%20want%20to%20enquire%20about%20Digital%20Marketing." onclick="gtag('event', 'course_inquiry', {course_name: 'Digital Marketing'});">Enquire Now</a>
-    </article>
+    <article class="course-card" data-category="computer"><div class="course-icon">💻</div><span class="course-tag">Computer</span><h3>Basic Computer</h3><p>Learn computer basics, typing and essential skills.</p><p class="course-fee">Fees: Contact for Details</p><a class="enquire-btn" href="https://wa.me/918460575627?text=Hello%2C%20I%20want%20to%20enquire%20about%20Basic%20Computer." target="_blank" rel="noopener noreferrer" onclick="gtag('event', 'course_inquiry', {course_name: 'Basic Computer'});">Enquire Now</a></article>
+    <article class="course-card" data-category="english"><div class="course-icon">🗣️</div><span class="course-tag">English</span><h3>Spoken English</h3><p>Improve your English speaking and communication.</p><p class="course-fee">Fees: Contact for Details</p><a class="enquire-btn" href="https://wa.me/918460575627?text=Hello%2C%20I%20want%20to%20enquire%20about%20Spoken%20English." target="_blank" rel="noopener noreferrer" onclick="gtag('event', 'course_inquiry', {course_name: 'Spoken English'});">Enquire Now</a></article>
+    <article class="course-card" data-category="computer"><div class="course-icon">▣</div><span class="course-tag">Computer</span><h3>CCC</h3><p>Build foundational computer knowledge and digital skills.</p><p class="course-fee">Fees: Contact for Details</p><a class="enquire-btn" href="https://wa.me/918460575627?text=Hello%2C%20I%20want%20to%20enquire%20about%20CCC." target="_blank" rel="noopener noreferrer" onclick="gtag('event', 'course_inquiry', {course_name: 'CCC'});">Enquire Now</a></article>
+    <article class="course-card" data-category="accounting"><div class="course-icon">₹</div><span class="course-tag">Accounting</span><h3>Tally Prime with GST</h3><p>Learn accounting, billing and GST basics.</p><p class="course-fee">Fees: Contact for Details</p><a class="enquire-btn" href="https://wa.me/918460575627?text=Hello%2C%20I%20want%20to%20enquire%20about%20Tally%20Prime%20with%20GST." target="_blank" rel="noopener noreferrer" onclick="gtag('event', 'course_inquiry', {course_name: 'Tally Prime with GST'});">Enquire Now</a></article>
+    <article class="course-card" data-category="computer"><div class="course-icon">📊</div><span class="course-tag">Computer</span><h3>Advance Excel</h3><p>Learn Excel formulas, functions and reports.</p><p class="course-fee">Fees: Contact for Details</p><a class="enquire-btn" href="https://wa.me/918460575627?text=Hello%2C%20I%20want%20to%20enquire%20about%20Advance%20Excel." onclick="gtag('event', 'course_inquiry', {course_name: 'Advance Excel'});">Enquire Now</a></article>
+    <article class="course-card" data-category="computer"><div class="course-icon">✨</div><span class="course-tag">Computer</span><h3>Advance Excel With AI</h3><p>Explore Excel workflows with AI-assisted productivity.</p><p class="course-fee">Fees: Contact for Details</p><a class="enquire-btn" href="https://wa.me/918460575627?text=Hello%2C%20I%20want%20to%20enquire%20about%20Advance%20Excel%20With%20AI." onclick="gtag('event', 'course_inquiry', {course_name: 'Advance Excel With AI'});">Enquire Now</a></article>
+    <article class="course-card" data-category="english"><div class="course-icon">Aa</div><span class="course-tag">English</span><h3>IELTS Spoken English</h3><p>Practice spoken English and communication for IELTS preparation.</p><p class="course-fee">Fees: Contact for Details</p><a class="enquire-btn" href="https://wa.me/918460575627?text=Hello%2C%20I%20want%20to%20enquire%20about%20IELTS%20Spoken%20English." onclick="gtag('event', 'course_inquiry', {course_name: 'IELTS Spoken English'});">Enquire Now</a></article>
+    <article class="course-card" data-category="design"><div class="course-icon">🎨</div><span class="course-tag">Design</span><h3>Graphic Design With AI</h3><p>Explore creative design concepts and AI-assisted design tools.</p><p class="course-fee">Fees: Contact for Details</p><a class="enquire-btn" href="https://wa.me/918460575627?text=Hello%2C%20I%20want%20to%20enquire%20about%20Graphic%20Design%20With%20AI." onclick="gtag('event', 'course_inquiry', {course_name: 'Graphic Design With AI'});">Enquire Now</a></article>
+    <article class="course-card" data-category="english"><div class="course-icon">⌨️</div><span class="course-tag">English</span><h3>Gujarati | English Typing With Speed Accuracy</h3><p>Improve typing speed and accuracy in Gujarati and English.</p><p class="course-fee">Fees: Contact for Details</p><a class="enquire-btn" href="https://wa.me/918460575627?text=Hello%2C%20I%20want%20to%20enquire%20about%20Gujarati%20%7C%20English%20Typing%20With%20Speed%20Accuracy." target="_blank" rel="noopener noreferrer" onclick="gtag('event', 'course_inquiry', {course_name: 'Gujarati | English Typing With Speed Accuracy'});">Enquire Now</a></article>
+    <article class="course-card" data-category="programming"><div class="course-icon">👨‍💻</div><span class="course-tag">Programming</span><h3>Programming With Python</h3><p>Start learning programming logic and Python fundamentals.</p><p class="course-fee">Fees: Contact for Details</p><a class="enquire-btn" href="https://wa.me/918460575627?text=Hello%2C%20I%20want%20to%20enquire%20about%20Programming%20With%20Python." onclick="gtag('event', 'course_inquiry', {course_name: 'Programming With Python'});">Enquire Now</a></article>
+    <article class="course-card" data-category="programming"><div class="course-icon">C++</div><span class="course-tag">Programming</span><h3>C &amp; C++</h3><p>Build a foundation in programming concepts with C and C++.</p><p class="course-fee">Fees: Contact for Details</p><a class="enquire-btn" href="https://wa.me/918460575627?text=Hello%2C%20I%20want%20to%20enquire%20about%20C%20%26%20C%2B%2B." onclick="gtag('event', 'course_inquiry', {course_name: 'C & C++'});">Enquire Now</a></article>
+    <article class="course-card" data-category="computer"><div class="course-icon">🌐</div><span class="course-tag">Computer</span><h3>Web Designing</h3><p>Learn the basics of creating and styling websites.</p><p class="course-fee">Fees: Contact for Details</p><a class="enquire-btn" href="https://wa.me/918460575627?text=Hello%2C%20I%20want%20to%20enquire%20about%20Web%20Designing." onclick="gtag('event', 'course_inquiry', {course_name: 'Web Designing'});">Enquire Now</a></article>
+    <article class="course-card" data-category="data"><div class="course-icon">📈</div><span class="course-tag">Data</span><h3>Data Analytics With Power BI</h3><p>Learn to explore data and create visual reports and dashboards.</p><p class="course-fee">Fees: Contact for Details</p><a class="enquire-btn" href="https://wa.me/918460575627?text=Hello%2C%20I%20want%20to%20enquire%20about%20Data%20Analytics%20With%20Power%20BI." onclick="gtag('event', 'course_inquiry', {course_name: 'Data Analytics With Power BI'});">Enquire Now</a></article>
+    <article class="course-card" data-category="marketing"><div class="course-icon">📣</div><span class="course-tag">Marketing</span><h3>Digital Marketing</h3><p>Understand digital channels and online promotion basics.</p><p class="course-fee">Fees: Contact for Details</p><a class="enquire-btn" href="https://wa.me/918460575627?text=Hello%2C%20I%20want%20to%20enquire%20about%20Digital%20Marketing." onclick="gtag('event', 'course_inquiry', {course_name: 'Digital Marketing'});">Enquire Now</a></article>
   </div>
-
   <p id="noCourses" class="no-courses" hidden>No courses found. Try another search.</p>
 </section>
 
 <section id="admission" class="section admission-section">
-  <div class="section-heading">
-    <span class="eyebrow">TAKE THE NEXT STEP</span>
-    <h2 class="section-title">Admission Inquiry</h2>
-    <p class="section-subtitle">તમારી વિગતો ભરો અને WhatsApp દ્વારા inquiry મોકલો.</p>
-  </div>
-
+  <div class="section-heading"><span class="eyebrow">TAKE THE NEXT STEP</span><h2 class="section-title">Admission Inquiry</h2><p class="section-subtitle">તમારી વિગતો ભરો અને WhatsApp દ્વારા inquiry મોકલો.</p></div>
   <div class="form-box">
     <form id="admissionForm">
-      <label for="studentName">Student Name</label>
-      <input id="studentName" name="studentName" type="text" placeholder="તમારું નામ લખો" required>
-
-      <label for="mobile">Mobile Number</label>
-      <input id="mobile" name="mobile" type="tel" inputmode="numeric" pattern="[0-9]{10}" maxlength="10" placeholder="10 અંકનો મોબાઇલ નંબર" required>
-
+      <label for="studentName">Student Name</label><input id="studentName" name="studentName" type="text" placeholder="તમારું નામ લખો" required>
+      <label for="mobile">Mobile Number</label><input id="mobile" name="mobile" type="tel" inputmode="numeric" pattern="[0-9]{10}" maxlength="10" placeholder="10 અંકનો મોબાઇલ નંબર" required>
       <label for="course">Select Course</label>
       <select id="course" name="course" required>
         <option value="">-- Course પસંદ કરો --</option>
-        <option value="Basic Computer">Basic Computer</option>
-        <option value="Spoken English">Spoken English</option>
-        <option value="CCC">CCC</option>
-        <option value="Tally Prime with GST">Tally Prime with GST</option>
-        <option value="Advance Excel">Advance Excel</option>
-        <option value="Advance Excel With AI">Advance Excel With AI</option>
-        <option value="IELTS Spoken English">IELTS Spoken English</option>
-        <option value="Graphic Design With AI">Graphic Design With AI</option>
-        <option value="Gujarati | English Typing With Speed Accuracy">Gujarati | English Typing With Speed Accuracy</option>
-        <option value="Programming With Python">Programming With Python</option>
-        <option value="C &amp; C++">C &amp; C++</option>
-        <option value="Web Designing">Web Designing</option>
-        <option value="Data Analytics With Power BI">Data Analytics With Power BI</option>
-        <option value="Digital Marketing">Digital Marketing</option>
+        <option value="Basic Computer">Basic Computer</option><option value="Spoken English">Spoken English</option><option value="CCC">CCC</option><option value="Tally Prime with GST">Tally Prime with GST</option><option value="Advance Excel">Advance Excel</option><option value="Advance Excel With AI">Advance Excel With AI</option><option value="IELTS Spoken English">IELTS Spoken English</option><option value="Graphic Design With AI">Graphic Design With AI</option><option value="Gujarati | English Typing With Speed Accuracy">Gujarati | English Typing With Speed Accuracy</option><option value="Programming With Python">Programming With Python</option><option value="C &amp; C++">C &amp; C++</option><option value="Web Designing">Web Designing</option><option value="Data Analytics With Power BI">Data Analytics With Power BI</option><option value="Digital Marketing">Digital Marketing</option>
       </select>
-
       <button class="button submit-button" type="submit">WhatsApp પર Inquiry કરો</button>
     </form>
     <div id="result" class="result" role="status" aria-live="polite"></div>
@@ -822,93 +208,45 @@ gtag('config', 'G-FJTNFEZEF5');
 </section>
 
 <section id="location" class="section contact-section">
-  <span class="eyebrow">VISIT OUR INSTITUTE</span>
-  <h2 class="section-title">Find Us on Google Maps</h2>
-
-  <address class="institute-address">
-    <strong>Heet Computer Education & Spoken English</strong><br>
-    3rd Floor, Jalaram Square,<br>
-    Above Russian Bakery, Sector-6,<br>
-    Gandhinagar, Gujarat, India.
-  </address>
-
-  <div class="map-container">
-    <iframe src="https://maps.google.com/maps?q=Jalaram%20Square%2C%20Sector-6%2C%20Gandhinagar%2C%20Gujarat&amp;output=embed"
-            width="100%" height="320" style="border:0" loading="lazy"
-            allowfullscreen title="Heet Computer Education Location"></iframe>
-  </div>
-
+  <span class="eyebrow">VISIT OUR INSTITUTE</span><h2 class="section-title">Find Us on Google Maps</h2>
+  <address class="institute-address"><strong>Heet Computer Education & Spoken English</strong><br>3rd Floor, Jalaram Square,<br>Above Russian Bakery, Sector-6,<br>Gandhinagar, Gujarat, India.</address>
+  <div class="map-container"><iframe src="https://maps.google.com/maps?q=Jalaram%20Square%2C%20Sector-6%2C%20Gandhinagar%2C%20Gujarat&amp;output=embed" width="100%" height="320" style="border:0" loading="lazy" allowfullscreen title="Heet Computer Education Location"></iframe></div>
   <a class="button" href="https://www.google.com/maps/search/?api=1&amp;query=Jalaram%20Square%2C%20Sector-6%2C%20Gandhinagar%2C%20Gujarati" target="_blank" rel="noopener noreferrer">Get Directions</a>
 </section>
 
 <section id="reviews" class="section reviews-section">
-  <span class="eyebrow">STUDENT EXPERIENCES</span>
-  <h2 class="section-title">Google Reviews</h2>
-  <p>વિદ્યાર્થીઓના અનુભવ વાંચવા માટે નીચે ક્લિક કરો.</p>
+  <span class="eyebrow">STUDENT EXPERIENCES</span><h2 class="section-title">Google Reviews</h2><p>વિદ્યાર્થીઓના અનુભવ વાંચવા માટે નીચે ક્લિક કરો.</p>
   <a class="button" href="https://g.page/r/CeWpl8BWVagwEAE/review" target="_blank" rel="noopener noreferrer">⭐ View Google Reviews</a>
 </section>
 
 <section id="contact" class="section contact-section">
-  <span class="eyebrow">GET IN TOUCH</span>
-  <h2 class="section-title">Contact Us</h2>
+  <span class="eyebrow">GET IN TOUCH</span><h2 class="section-title">Contact Us</h2>
   <p><strong>Address:</strong> 3rd Floor, Jalaram Square, Above Russian Bakery, Sector-6, Gandhinagar</p>
   <p><strong>Phone:</strong> <a href="tel:8460575627">8460575627</a></p>
   <a class="button" href="https://wa.me/918460575627" target="_blank" rel="noopener noreferrer">Chat on WhatsApp</a>
 </section>
-
 </main>
 
 <a class="whatsapp-float" href="https://wa.me/918460575627?text=Hello%2C%20I%20want%20to%20know%20about%20your%20courses." target="_blank" rel="noopener noreferrer" aria-label="Contact us on WhatsApp">WhatsApp</a>
 
-<!-- HEET CHATBOT BUTTON -->
-<button type="button" class="heet-chat-launcher" id="heetChatLauncher" aria-label="Open Heet Chatbot" aria-expanded="false">
-  <span>💬</span> Ask Heet
-</button>
+<button type="button" class="heet-chat-launcher" id="heetChatLauncher" aria-label="Open Heet Chatbot" aria-expanded="false"><span>💬</span> Ask Heet</button>
 
-<!-- HEET CHATBOT WINDOW -->
 <div class="heet-chat-window" id="heetChatWindow" role="dialog" aria-label="Heet Website Chatbot" aria-hidden="true">
   <div class="heet-chat-header">
-    <div class="heet-chat-brand">
-      <div class="heet-chat-avatar">🎓</div>
-      <div>
-        <strong>Heet Assistant</strong>
-        <small>હંમેશા તમારી મદદ માટે</small>
-      </div>
-    </div>
+    <div class="heet-chat-brand"><div class="heet-chat-avatar">🎓</div><div><strong>Heet Assistant</strong><small>હંમેશા તમારી મદદ માટે</small></div></div>
     <button type="button" class="heet-chat-close" id="heetChatClose" aria-label="Close chatbot">×</button>
   </div>
-
   <div class="heet-chat-tools">
-    <select id="heetChatLanguage" aria-label="Choose chatbot language">
-      <option value="gu">ગુજરાતી</option>
-      <option value="hi">हिन्दी</option>
-      <option value="en">English</option>
-    </select>
+    <select id="heetChatLanguage" aria-label="Choose chatbot language"><option value="gu">ગુજરાતી</option><option value="hi">हिन्दी</option><option value="en">English</option></select>
   </div>
-
-  <div class="heet-chat-messages" id="heetChatMessages" aria-live="polite">
-    <div class="heet-chat-message bot">નમસ્તે! 🙏 Heet Computer Education માં આપનું સ્વાગત છે. તમને કઈ માહિતી જોઈએ છે?</div>
-  </div>
-
+  <div class="heet-chat-messages" id="heetChatMessages" aria-live="polite"><div class="heet-chat-message bot">નમસ્તે! 🙏 Heet Computer Education માં આપનું સ્વાગત છે. તમને કઈ માહિતી જોઈએ છે?</div></div>
   <div class="heet-chat-quick" id="heetChatQuick">
-    <button type="button" data-question="courses">Courses</button>
-    <button type="button" data-question="admission">Admission</button>
-    <button type="button" data-question="ccc">CCC</button>
-    <button type="button" data-question="timing">Timing</button>
-    <button type="button" data-question="location">Location</button>
-    <button type="button" data-question="contact">Contact</button>
+    <button type="button" data-question="courses">Courses</button><button type="button" data-question="admission">Admission</button><button type="button" data-question="ccc">CCC</button><button type="button" data-question="timing">Timing</button><button type="button" data-question="location">Location</button><button type="button" data-question="contact">Contact</button>
   </div>
-
-  <form class="heet-chat-input-area" id="heetChatForm">
-    <input type="text" id="heetChatInput" placeholder="તમારો પ્રશ્ન લખો..." maxlength="300" autocomplete="off" required>
-    <button type="submit" class="heet-chat-send" aria-label="Send message">➤</button>
-  </form>
+  <form class="heet-chat-input-area" id="heetChatForm"><input type="text" id="heetChatInput" placeholder="તમારો પ્રશ્ન લખો..." maxlength="300" autocomplete="off" required><button type="submit" class="heet-chat-send" aria-label="Send message">➤</button></form>
 </div>
 
-<footer class="footer">
-  <p>&copy; <span id="year"></span> Heet Computer Education &amp; Spoken English</p>
-  <p>All Rights Reserved.</p>
-</footer>
+<footer class="footer"><p>&copy; <span id="year"></span> Heet Computer Education &amp; Spoken English</p><p>All Rights Reserved.</p></footer>
 
 <script src="script.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -917,11 +255,7 @@ gtag('config', 'G-FJTNFEZEF5');
 (function () {
   const SUPABASE_URL = 'https://rwtdwtbxuoilzecerojm.supabase.co';
   const SUPABASE_ANON_KEY = 'sb_publishable_5ggHaapc4cno062CdS7OGg_-6PLyF8t';
-
-  const supabaseClient = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_ANON_KEY
-  );
+  const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   const offerSlider = document.getElementById('offerSlider');
   const materialsList = document.getElementById('materialsList');
@@ -946,29 +280,18 @@ gtag('config', 'G-FJTNFEZEF5');
     return el;
   }
 
-  /* Load offers and create smooth swipe slider */
   async function loadHomeOffers() {
     const today = new Date().toISOString().slice(0, 10);
-
-    const { data, error } = await supabaseClient
-      .from('site_offers')
+    const { data, error } = await supabaseClient.from('site_offers')
       .select('id,title,image_path,start_date,end_date')
-      .eq('is_published', true)
-      .lte('start_date', today)
-      .gte('end_date', today)
+      .eq('is_published', true).lte('start_date', today).gte('end_date', today)
       .order('created_at', { ascending: false });
 
-    if (offerTimer) {
-      clearInterval(offerTimer);
-      offerTimer = null;
-    }
-
+    if (offerTimer) { clearInterval(offerTimer); offerTimer = null; }
     offerSlider.replaceChildren();
 
     if (error || !data || data.length === 0) {
-      offerSlider.append(
-        makeElement('p', 'offer-empty', 'હાલમાં કોઈ Offer ઉપલબ્ધ નથી.')
-      );
+      offerSlider.append(makeElement('p', 'offer-empty', 'હાલમાં કોઈ Offer ઉપલબ્ધ નથી.'));
       return;
     }
 
@@ -986,121 +309,59 @@ gtag('config', 'G-FJTNFEZEF5');
     });
 
     offerSlider.append(track);
-
     if (data.length <= 1) return;
 
-    let current = 0;
-    let startX = 0;
-    let dragDistance = 0;
-    let isDragging = false;
-    let activePointerId = null;
+    let current = 0, startX = 0, dragDistance = 0, isDragging = false, activePointerId = null;
 
     function setPosition(offset = 0, animate = true) {
-      track.style.transition = animate
-        ? 'transform 650ms cubic-bezier(.22,.61,.36,1)'
-        : 'none';
-
-      track.style.transform =
-        `translate3d(calc(-${current * 100}% + ${offset}px),0,0)`;
+      track.style.transition = animate ? 'transform 650ms cubic-bezier(.22,.61,.36,1)' : 'none';
+      track.style.transform = `translate3d(calc(-${current * 100}% + ${offset}px),0,0)`;
     }
-
-    function showSlide(index) {
-      current = (index + data.length) % data.length;
-      setPosition(0, true);
-    }
-
-    function nextSlide() {
-      showSlide(current + 1);
-    }
-
-    function previousSlide() {
-      showSlide(current - 1);
-    }
-
-    function startAutoSlide() {
-      if (offerTimer) clearInterval(offerTimer);
-      offerTimer = setInterval(nextSlide, 4000);
-    }
-
-    function stopAutoSlide() {
-      if (offerTimer) {
-        clearInterval(offerTimer);
-        offerTimer = null;
-      }
-    }
+    function showSlide(index) { current = (index + data.length) % data.length; setPosition(0, true); }
+    function nextSlide() { showSlide(current + 1); }
+    function previousSlide() { showSlide(current - 1); }
+    function startAutoSlide() { if (offerTimer) clearInterval(offerTimer); offerTimer = setInterval(nextSlide, 4000); }
+    function stopAutoSlide() { if (offerTimer) { clearInterval(offerTimer); offerTimer = null; } }
 
     offerSlider.addEventListener('pointerdown', event => {
       if (event.pointerType === 'mouse' && event.button !== 0) return;
-
-      isDragging = true;
-      activePointerId = event.pointerId;
-      startX = event.clientX;
-      dragDistance = 0;
-
-      stopAutoSlide();
-      offerSlider.setPointerCapture(event.pointerId);
-      track.style.transition = 'none';
+      isDragging = true; activePointerId = event.pointerId; startX = event.clientX; dragDistance = 0;
+      stopAutoSlide(); offerSlider.setPointerCapture(event.pointerId); track.style.transition = 'none';
     });
-
     offerSlider.addEventListener('pointermove', event => {
       if (!isDragging || event.pointerId !== activePointerId) return;
-
-      dragDistance = event.clientX - startX;
-      setPosition(dragDistance, false);
+      dragDistance = event.clientX - startX; setPosition(dragDistance, false);
     });
-
     function finishDrag(event) {
       if (!isDragging) return;
       if (event && event.pointerId !== activePointerId) return;
-
-      isDragging = false;
-      activePointerId = null;
-
-      if (dragDistance < -50) {
-        nextSlide();
-      } else if (dragDistance > 50) {
-        previousSlide();
-      } else {
-        setPosition(0, true);
-      }
-
+      isDragging = false; activePointerId = null;
+      if (dragDistance < -50) nextSlide();
+      else if (dragDistance > 50) previousSlide();
+      else setPosition(0, true);
       startAutoSlide();
     }
-
     offerSlider.addEventListener('pointerup', finishDrag);
     offerSlider.addEventListener('pointercancel', finishDrag);
     offerSlider.addEventListener('lostpointercapture', () => {
-      if (isDragging) {
-        isDragging = false;
-        activePointerId = null;
-        setPosition(0, true);
-        startAutoSlide();
-      }
+      if (isDragging) { isDragging = false; activePointerId = null; setPosition(0, true); startAutoSlide(); }
     });
-
     startAutoSlide();
   }
 
-  /* Load published study materials */
   async function loadStudyMaterials() {
-    const { data, error } = await supabaseClient
-      .from('study_materials')
+    const { data, error } = await supabaseClient.from('study_materials')
       .select('id,title,category,description,price,thumbnail_path')
-      .eq('is_published', true)
-      .order('created_at', { ascending: false });
+      .eq('is_published', true).order('created_at', { ascending: false });
 
     materialsList.replaceChildren();
-
     if (error || !data || data.length === 0) {
-      materialsList.append(
-        makeElement('p', '', 'હાલમાં કોઈ Study Material ઉપલબ્ધ નથી.')
-      );
+      materialsList.append(makeElement('p', '', 'હાલમાં કોઈ Study Material ઉપલબ્ધ નથી.'));
       return;
     }
 
     data.forEach(material => {
       const card = makeElement('article', 'material-card');
-
       if (material.thumbnail_path) {
         const img = document.createElement('img');
         img.className = 'material-thumb';
@@ -1109,132 +370,67 @@ gtag('config', 'G-FJTNFEZEF5');
         img.loading = 'lazy';
         card.append(img);
       }
-
       const body = makeElement('div', 'material-card-body');
-
-      body.append(
-        makeElement('span', 'material-category', material.category || 'Study Material')
-      );
-
-      body.append(
-        makeElement('h3', '', material.title || 'Study Material')
-      );
-
-      if (material.description) {
-        body.append(
-          makeElement('p', 'material-description', material.description)
-        );
-      }
-
-      body.append(
-        makeElement('p', 'material-price', 'Price: ₹' + (material.price || 50))
-      );
+      body.append(makeElement('span', 'material-category', material.category || 'Study Material'));
+      body.append(makeElement('h3', '', material.title || 'Study Material'));
+      if (material.description) body.append(makeElement('p', 'material-description', material.description));
+      body.append(makeElement('p', 'material-price', 'Price: ₹' + (material.price || 50)));
 
       const buy = makeElement('button', 'material-buy', 'Buy Now');
       buy.type = 'button';
-
       buy.addEventListener('click', () => {
         selectedMaterial = material;
-
-        document.getElementById('selectedMaterialName').textContent =
-          'Selected: ' + (material.title || 'Study Material');
-
+        document.getElementById('selectedMaterialName').textContent = 'Selected: ' + (material.title || 'Study Material');
         paymentStatus.textContent = '';
         paymentBox.classList.add('open');
-
-        paymentBox.scrollIntoView({
-          behavior: 'smooth',
-          block: 'center'
-        });
+        paymentBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
       });
-
-      body.append(buy);
-      card.append(body);
-      materialsList.append(card);
+      body.append(buy); card.append(body); materialsList.append(card);
     });
   }
 
-  /* Submit material payment details */
   paymentForm.addEventListener('submit', async event => {
     event.preventDefault();
-
-    if (!selectedMaterial) {
-      paymentStatus.textContent = 'પહેલા Study Material પસંદ કરો.';
-      return;
-    }
+    if (!selectedMaterial) { paymentStatus.textContent = 'પહેલા Study Material પસંદ કરો.'; return; }
 
     const buyerName = document.getElementById('materialBuyerName').value.trim();
     const mobile = document.getElementById('materialBuyerMobile').value.trim();
     const reference = document.getElementById('materialPaymentReference').value.trim();
-
-    const orderCode =
-      'HM-' +
-      new Date().toISOString().slice(0,10).replace(/-/g,'') +
-      '-' +
-      Math.random().toString(36).slice(2,8).toUpperCase();
+    const orderCode = 'HM-' + new Date().toISOString().slice(0,10).replace(/-/g,'') + '-' + Math.random().toString(36).slice(2,8).toUpperCase();
 
     paymentStatus.textContent = 'Submitting...';
-
     const { error } = await supabaseClient.from('material_orders').insert({
-      order_code: orderCode,
-      material_id: selectedMaterial.id,
-      buyer_name: buyerName,
-      mobile_number: mobile,
-      payment_reference: reference,
-      amount: 50,
-      payment_status: 'pending'
+      order_code: orderCode, material_id: selectedMaterial.id, buyer_name: buyerName,
+      mobile_number: mobile, payment_reference: reference, amount: 50, payment_status: 'pending'
     });
 
-    if (error) {
-      paymentStatus.textContent =
-        'વિગતો submit થઈ શકી નથી. ફરી પ્રયાસ કરો.';
-      return;
-    }
+    if (error) { paymentStatus.textContent = 'વિગતો submit થઈ શકી નથી. ફરી પ્રયાસ કરો.'; return; }
 
-    paymentStatus.textContent =
-      'Order submit થઈ ગયો છે. તમારો Order Code: ' +
-      orderCode +
-      ' — આ કોડ સાચવી રાખો. Admin payment approve કર્યા પછી download કરી શકશો.';
-
+    paymentStatus.textContent = 'Order submit થઈ ગયો છે. તમારો Order Code: ' + orderCode + ' — આ કોડ સાચવી રાખો. Admin payment approve કર્યા પછી download કરી શકશો.';
     document.getElementById('materialOrderCode').value = orderCode;
     document.getElementById('materialDownloadMobile').value = mobile;
-
     paymentForm.reset();
   });
 
-  /* Download approved study material */
   downloadForm.addEventListener('submit', async event => {
     event.preventDefault();
-
     const orderCode = document.getElementById('materialOrderCode').value.trim();
     const mobile = document.getElementById('materialDownloadMobile').value.trim();
-
     downloadStatus.textContent = 'Checking payment...';
 
-    const { data, error } = await supabaseClient.functions.invoke(
-      'material-download',
-      {
-        body: {
-          order_code: orderCode,
-          mobile_number: mobile
-        }
-      }
-    );
+    const { data, error } = await supabaseClient.functions.invoke('material-download', {
+      body: { order_code: orderCode, mobile_number: mobile }
+    });
 
     if (error || !data) {
-      downloadStatus.textContent =
-        'Download ઉપલબ્ધ નથી. Order Code અને Mobile Number તપાસો અથવા Admin approvalની રાહ જુઓ.';
+      downloadStatus.textContent = 'Download ઉપલબ્ધ નથી. Order Code અને Mobile Number તપાસો અથવા Admin approvalની રાહ જુઓ.';
       return;
     }
-
     const signedUrl = data.signedUrl || data.signed_url || data.url;
-
     if (!signedUrl) {
-      downloadStatus.textContent =
-        data.error || 'હજુ payment approve થયું નથી અથવા download link મળ્યો નથી.';
+      downloadStatus.textContent = data.error || 'હજુ payment approve થયું નથી અથવા download link મળ્યો નથી.';
       return;
     }
-
     downloadStatus.textContent = 'તમારું PDF ખુલશે...';
     window.location.href = signedUrl;
   });
@@ -1243,7 +439,8 @@ gtag('config', 'G-FJTNFEZEF5');
   loadStudyMaterials();
 })();
 
-/* HEET CHATBOT SCRIPT */
+/* ભાગ 2 અહીંથી શરૂ થશે: HEET CHATBOT SCRIPT */
+  /* HEET CHATBOT SCRIPT */
 (function () {
   const launcher = document.getElementById('heetChatLauncher');
   const chatWindow = document.getElementById('heetChatWindow');
@@ -1261,10 +458,8 @@ gtag('config', 'G-FJTNFEZEF5');
 
   const replies = {
     gu: {
-      welcome: 'નમસ્તે! 🙏 Heet Computer Education માં આપનું સ્વાગત છે. તમને કઈ માહિતી જોઈએ છે?',
-      courses: 'અમારા મુખ્ય કોર્સ:\n\n• Basic Computer\n• Spoken English\n• CCC\n• Tally Prime with GST\n• Advance Excel અને Advance Excel With AI\n• IELTS Spoken English\n• Graphic Design With AI\n• Gujarati અને English Typing\n• Python, C અને C++\n• Web Designing\n• Data Analytics With Power BI\n• Digital Marketing\n\nકોર્સની ફી અને સમયગાળા માટે અમારો સંપર્ક કરો.',
+      courses: 'અમારા 14 કોર્સ ઉપલબ્ધ છે. કોર્સનું નામ લખશો તો તેના 5 મુખ્ય Topics જણાવીશ.',
       admission: 'Admission માટે અમારી Website ના Admission Inquiry વિભાગમાં વિગતો ભરી શકો છો અથવા સીધો Call / WhatsApp કરી શકો છો.',
-      ccc: 'CCC Registration માટે Website પર 📝 CCC REGISTRATION બટન દબાવો.\nCCC Online Test માટે 💻 CCC ONLINE TEST બટન દબાવો.',
       timing: 'અમારા ક્લાસનો સમય:\n\n🌅 સવારે: 8 થી 12\n🕛 બપોરે બ્રેક: 12 થી 2\n🌞 બપોરે: 3 થી 5\n🌆 સાંજે: 5 થી 7\n\nરાત્રે 7 પછી ક્લાસ બંધ રહે છે. રવિવારે રજા હોય છે.',
       location: 'અમારું સરનામું:\nHeet Computer Education & Spoken English\n3rd Floor, Jalaram Square,\nAbove Russian Bakery, Sector-6,\nGandhinagar, Gujarat 382006.',
       about: 'Heet Computer Education ને 17 વર્ષનો શિક્ષણનો અનુભવ છે. અહીં Expert Teachers દ્વારા Job-oriented Computer Teaching, Updated Study Materials અને Personal Coaching આપવામાં આવે છે.\n\nFixed Batch System નથી. વિદ્યાર્થીઓ પોતાની અનુકૂળતા મુજબ સમય પસંદ કરી શકે છે. ગૃહિણીઓ અને દીકરીઓ માટે ખાસ વ્યવસ્થા છે.',
@@ -1272,39 +467,286 @@ gtag('config', 'G-FJTNFEZEF5');
       contact: 'અમારો સંપર્ક:\n📞 8460575627\n\nCall અથવા WhatsApp કરવા નીચેના બટનનો ઉપયોગ કરો.',
       materials: 'Study Materials વિભાગમાં ઉપલબ્ધ PDF Notes અને Question Papers જોઈ શકો છો. પસંદ કરેલી સામગ્રી ખરીદવા Buy Now દબાવો. Payment Admin દ્વારા approve થયા પછી PDF Download કરી શકશો.',
       thanks: 'આભાર! 😊 Heet Computer Education માં આપનું સ્વાગત છે. વધુ માહિતી માટે અમારો સંપર્ક કરો.',
-      fallback: 'માફ કરશો, તમારો પ્રશ્ન મને સમજાયો નથી. કૃપા કરીને Courses, Admission, CCC, Timing, Location અથવા Contact વિશે પૂછો.'
+      fallback: 'માફ કરશો, તમારો પ્રશ્ન મને સમજાયો નથી. કૃપા કરીને કોર્સનું નામ અથવા Courses, Admission, Registration, Timing, Location કે Contact વિશે પૂછો.'
     },
     hi: {
-      welcome: 'नमस्ते! 🙏 Heet Computer Education में आपका स्वागत है। आपको कौन-सी जानकारी चाहिए?',
-      courses: 'हमारे मुख्य कोर्स:\n\n• Basic Computer\n• Spoken English\n• CCC\n• Tally Prime with GST\n• Advance Excel और Advance Excel With AI\n• IELTS Spoken English\n• Graphic Design With AI\n• Gujarati और English Typing\n• Python, C और C++\n• Web Designing\n• Data Analytics With Power BI\n• Digital Marketing\n\nफीस और अवधि जानने के लिए संपर्क करें।',
+      courses: 'हमारे 14 कोर्स उपलब्ध हैं। किसी कोर्स का नाम लिखें, मैं उसके 5 मुख्य Topics बताऊंगा।',
       admission: 'Admission के लिए Website के Admission Inquiry सेक्शन में जानकारी भरें या सीधे Call / WhatsApp करें।',
-      ccc: 'CCC Registration के लिए Website पर 📝 CCC REGISTRATION बटन दबाएं।\nCCC Online Test के लिए 💻 CCC ONLINE TEST बटन दबाएं।',
       timing: 'क्लास का समय:\n\nसुबह: 8 से 12\nदोपहर ब्रेक: 12 से 2\nदोपहर: 3 से 5\nशाम: 5 से 7\n\nशाम 7 बजे के बाद क्लास बंद रहती है। रविवार को छुट्टी रहती है।',
       location: 'हमारा पता:\nHeet Computer Education & Spoken English\n3rd Floor, Jalaram Square,\nAbove Russian Bakery, Sector-6,\nGandhinagar, Gujarat 382006.',
-      about: 'Heet Computer Education को 17 वर्षों का शिक्षण अनुभव है। यहाँ Expert Teachers, Job-oriented Computer Teaching, Updated Study Materials और Personal Coaching की सुविधा है।\n\nFixed Batch System नहीं है। विद्यार्थी अपनी सुविधा के अनुसार समय चुन सकते हैं। गृहिणियों और लड़कियों के लिए विशेष व्यवस्था है।',
+      about: 'Heet Computer Education को 17 वर्षों का शिक्षण अनुभव है। यहाँ Expert Teachers, Job-oriented Computer Teaching, Updated Study Materials और Personal Coaching की सुविधा है।\n\nFixed Batch System नहीं है। विद्यार्थी अपनी सुविधा के अनुसार समय चुन सकते हैं।',
       fees: 'कोर्स की फीस और अवधि अलग-अलग हो सकती है। सही जानकारी के लिए कृपया Call या WhatsApp करें।',
       contact: 'संपर्क करें:\n📞 8460575627\n\nCall या WhatsApp करने के लिए नीचे दिए गए बटन का उपयोग करें।',
       materials: 'Study Materials सेक्शन में उपलब्ध PDF Notes और Question Papers देख सकते हैं। सामग्री खरीदने के लिए Buy Now दबाएं। Admin द्वारा Payment approve होने के बाद PDF Download कर सकते हैं।',
       thanks: 'धन्यवाद! 😊 Heet Computer Education में आपका स्वागत है। अधिक जानकारी के लिए संपर्क करें।',
-      fallback: 'माफ़ कीजिए, मैं आपका सवाल समझ नहीं पाया। कृपया Courses, Admission, CCC, Timing, Location या Contact के बारे में पूछें।'
+      fallback: 'माफ़ कीजिए, मैं आपका सवाल समझ नहीं पाया। कृपया कोर्स का नाम या Courses, Admission, Registration, Timing, Location या Contact के बारे में पूछें।'
     },
     en: {
-      welcome: 'Hello! 🙏 Welcome to Heet Computer Education. How can I help you?',
-      courses: 'Our courses include:\n\n• Basic Computer\n• Spoken English\n• CCC\n• Tally Prime with GST\n• Advance Excel and Advance Excel With AI\n• IELTS Spoken English\n• Graphic Design With AI\n• Gujarati and English Typing\n• Python, C and C++\n• Web Designing\n• Data Analytics With Power BI\n• Digital Marketing\n\nPlease contact us for course fees and duration.',
+      courses: 'We offer 14 courses. Type a course name to see its 5 main syllabus topics.',
       admission: 'For admission, fill in the Admission Inquiry section on our website or contact us directly by Call / WhatsApp.',
-      ccc: 'For CCC Registration, click the 📝 CCC REGISTRATION button on our website.\nFor the CCC Online Test, click the 💻 CCC ONLINE TEST button.',
       timing: 'Our class timings:\n\nMorning: 8 AM to 12 PM\nBreak: 12 PM to 2 PM\nAfternoon: 3 PM to 5 PM\nEvening: 5 PM to 7 PM\n\nClasses are closed after 7 PM. Sunday is closed.',
       location: 'Our address:\nHeet Computer Education & Spoken English\n3rd Floor, Jalaram Square,\nAbove Russian Bakery, Sector-6,\nGandhinagar, Gujarat 382006, India.',
-      about: 'Heet Computer Education has 17 years of teaching experience. We offer expert teachers, job-oriented computer teaching, updated study materials and personal coaching.\n\nWe do not follow a fixed batch system. Students can choose a suitable time. Special arrangements are available for housewives and girls.',
+      about: 'Heet Computer Education has 17 years of teaching experience. We offer expert teachers, job-oriented computer teaching, updated study materials and personal coaching.\n\nWe do not follow a fixed batch system. Students can choose a suitable time.',
       fees: 'Course fees and duration vary by course. Please call or WhatsApp us for accurate details.',
       contact: 'Contact us:\n📞 8460575627\n\nUse the buttons below to call or WhatsApp us.',
       materials: 'Visit the Study Materials section to view available PDF Notes and Question Papers. Click Buy Now to purchase a material. PDF downloads are available after Admin payment approval.',
       thanks: 'Thank you! 😊 Welcome to Heet Computer Education. Contact us for more information.',
-      fallback: 'Sorry, I could not understand your question. Please ask about Courses, Admission, CCC, Timing, Location or Contact.'
+      fallback: 'Sorry, I could not understand your question. Please type a course name or ask about Courses, Admission, Registration, Timing, Location or Contact.'
     }
   };
 
-  function addMessage(text, type) {
+  const syllabuses = {
+    'Basic Computer': [
+      'Computer Fundamentals',
+      'Windows Operating System',
+      'File and Folder Management',
+      'MS Word and Basic Excel',
+      'Internet and Email'
+    ],
+    'CCC': [
+      'Gujarati and English Typing',
+      'Windows 11',
+      'Office 365: Word, Excel and PowerPoint',
+      'Email and Internet',
+      'Digital Skills and Government Certificate Information'
+    ],
+    'Tally Basic': [
+      'Accounting Fundamentals',
+      'Company Creation and Ledger',
+      'Voucher Entry',
+      'Purchase and Sales Entry',
+      'GST Basics and Reports'
+    ],
+    'Tally Advanced': [
+      'Advanced Accounting and Inventory Management',
+      'GST Return and Taxation',
+      'E-Invoice and E-Way Bill',
+      'Payroll and TDS',
+      'Balance Sheet, Final Accounts and Practical Job Training'
+    ],
+    'Spoken Basic': [
+      'English Grammar and Sentence Formation',
+      'Daily Use English Vocabulary',
+      'Self Introduction',
+      'Daily Conversation Practice',
+      'English Speaking and Confidence Building'
+    ],
+    'Spoken IELTS': [
+      'IELTS Listening Preparation',
+      'IELTS Reading Techniques',
+      'IELTS Writing Task 1 and Task 2',
+      'IELTS Speaking Practice',
+      'Mock Tests and Band Score Improvement'
+    ],
+    'Advance Excel': [
+      'Advanced Excel Formulas and Functions',
+      'VLOOKUP, XLOOKUP and INDEX-MATCH',
+      'Pivot Table and Pivot Chart',
+      'Data Cleaning and Data Analysis',
+      'Dashboard and MIS Reports'
+    ],
+    'Advance Excel With AI': [
+      'Advanced Excel Formulas and Functions',
+      'AI Tools for Excel Automation',
+      'ChatGPT with Formulas and Data Analysis',
+      'Advanced Dashboard and Reporting',
+      'AI-based Data Cleaning and Productivity'
+    ],
+    'Graphic Design With AI': [
+      'Canva and Graphic Design Fundamentals',
+      'Photoshop and Image Editing',
+      'AI Image Generation Tools',
+      'Social Media Post and Banner Design',
+      'Logo, Poster and Professional Branding'
+    ],
+    'Gujarati English Typing': [
+      'Gujarati Typing – Inscript and Other Layouts',
+      'English Typing Practice',
+      'Typing Speed and Accuracy',
+      'MS Word Typing and Formatting',
+      'Practical Typing Test'
+    ],
+    'Programming With Python': [
+      'Python Fundamentals',
+      'Variables, Data Types and Operators',
+      'Conditions and Loops',
+      'Functions and Data Structures',
+      'Practical Python Projects'
+    ],
+    'C & C++': [
+      'C/C++ Fundamentals',
+      'Variables, Operators and Data Types',
+      'Conditions and Loops',
+      'Functions, Arrays and Pointers',
+      'OOP and Practical Projects'
+    ],
+    'Web Designing': [
+      'HTML Structure',
+      'CSS Styling',
+      'JavaScript Fundamentals',
+      'Responsive Website Design',
+      'Live Website Project and Hosting Basics'
+    ],
+    'Data Analytics With Power BI': [
+      'Power BI Fundamentals',
+      'Data Import and Transformation',
+      'Power Query',
+      'DAX Formulas and Measures',
+      'Interactive Dashboard and Reports'
+    ],
+    'Digital Marketing': [
+      'Digital Marketing Fundamentals',
+      'Search Engine Optimization (SEO)',
+      'Social Media Marketing',
+      'Google Ads and Online Advertising',
+      'Content Marketing and Analytics'
+    ]
+  };
+
+  function detectLanguage(text) {
+    if (/[\u0A80-\u0AFF]/.test(text)) return 'gu';
+    if (/[\u0900-\u097F]/.test(text)) return 'hi';
+    return selectedLanguage;
+  }
+
+  function normalize(text) {
+    return text.toLowerCase()
+      .replace(/[|]/g, ' ')
+      .replace(/[&]/g, ' and ')
+      .replace(/[^a-z0-9\u0A80-\u0AFF\u0900-\u097F ]/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
+  function isRegistrationQuestion(text) {
+    return /\b(registration|register|document|documents|કાગળ|દસ્તાવેજ|રજીસ્ટ્રેશન|નોંધણી|દાખલાના દસ્તાવેજ|पंजीकरण|रजिस्ट्रेशन|दस्तावेज)\b/i.test(text);
+  }
+
+  function getRegistrationReply(lang) {
+    const messages = {
+      gu: 'Registration માટે નીચેના Documents તૈયાર રાખો:\n\n1. Passport Size Photo\n2. Signature\n3. 10th અથવા 12th Marksheet\n4. Mobile Number\n5. Aadhaar Card\n6. Email Address\n\nનીચેના WhatsApp બટન પર ક્લિક કરીને આ વિગતો મોકલી શકો છો.',
+      hi: 'Registration के लिए नीचे दिए गए Documents तैयार रखें:\n\n1. Passport Size Photo\n2. Signature\n3. 10th या 12th Marksheet\n4. Mobile Number\n5. Aadhaar Card\n6. Email Address\n\nनीचे WhatsApp बटन पर क्लिक करके जानकारी भेज सकते हैं।',
+      en: 'Please keep these documents ready for Registration:\n\n1. Passport Size Photo\n2. Signature\n3. 10th or 12th Marksheet\n4. Mobile Number\n5. Aadhaar Card\n6. Email Address\n\nClick the WhatsApp button below to send these details.'
+    };
+    return messages[lang];
+  }
+
+  function makeSyllabusReply(course, topics, lang) {
+    const headings = {
+      gu: '📘 કોર્સ: ',
+      hi: '📘 कोर्स: ',
+      en: '📘 Course: '
+    };
+    const topicHeading = {
+      gu: '\n\nઆ કોર્સના 5 મુખ્ય Topics:',
+      hi: '\n\nइस कोर्स के 5 मुख्य Topics:',
+      en: '\n\n5 Main Syllabus Topics:'
+    };
+    const footer = {
+      gu: '\n\nફી અને સમયગાળાની માહિતી માટે અમારો સંપર્ક કરો.',
+      hi: '\n\nफीस और अवधि की जानकारी के लिए संपर्क करें।',
+      en: '\n\nContact us for fees and course duration.'
+    };
+
+    return headings[lang] + course + topicHeading[lang] +
+      '\n\n' + topics.map((topic, index) => (index + 1) + '. ' + topic).join('\n') +
+      footer[lang];
+  }
+
+  function getCourseReply(question, lang) {
+    const text = normalize(question);
+
+    if (text.includes('tally')) {
+      const advanced = /\b(advanced|advance|job|જોબ|એડવાન્સ|એડવાન્સ્ડ)\b/.test(text);
+      const basic = /\b(basic|બેસિક|બેઝિક)\b/.test(text);
+
+      if (advanced && !basic) {
+        return makeSyllabusReply('Tally Prime with GST – Advanced', syllabuses['Tally Advanced'], lang);
+      }
+
+      if (basic && !advanced) {
+        return makeSyllabusReply('Tally Prime with GST – Basic', syllabuses['Tally Basic'], lang);
+      }
+
+      return makeSyllabusReply('Tally Prime with GST – Basic', syllabuses['Tally Basic'], lang) +
+        '\n\n' +
+        makeSyllabusReply('Tally Prime with GST – Advanced', syllabuses['Tally Advanced'], lang);
+    }
+
+    if (text.includes('spoken english') || text.includes('સ્પોકન ઇંગ્લિશ') || text.includes('स्पोकन इंग्लिश')) {
+      const wantsIELTS = /\b(ielts|આઇલેટ્સ|આયલેટ્સ)\b/.test(text);
+      const wantsBasic = /\b(basic|બેસિક|बेसिक)\b/.test(text);
+
+      if (wantsIELTS && !wantsBasic) {
+        return makeSyllabusReply('Spoken English – IELTS', syllabuses['Spoken IELTS'], lang);
+      }
+
+      if (wantsBasic && !wantsIELTS) {
+        return makeSyllabusReply('Spoken English – Basic', syllabuses['Spoken Basic'], lang);
+      }
+
+      return makeSyllabusReply('Spoken English – Basic', syllabuses['Spoken Basic'], lang) +
+        '\n\n' +
+        makeSyllabusReply('Spoken English – IELTS', syllabuses['Spoken IELTS'], lang);
+    }
+
+    if (text.includes('ielts')) {
+      return makeSyllabusReply('IELTS Spoken English', syllabuses['Spoken IELTS'], lang);
+    }
+
+    const courseMatches = [
+      ['Data Analytics With Power BI', ['data analytics', 'power bi']],
+      ['Advance Excel With AI', ['advance excel with ai', 'advanced excel with ai', 'excel with ai']],
+      ['Advance Excel', ['advance excel', 'advanced excel']],
+      ['Graphic Design With AI', ['graphic design', 'ગ્રાફિક ડિઝાઇન']],
+      ['Gujarati English Typing', ['typing', 'ટાઇપિંગ', 'ટાઈપિંગ', 'ટાઇપ']],
+      ['Programming With Python', ['programming with python', 'python', 'પાયથન']],
+      ['C & C++', ['c and c++', 'c c++', 'c++', 'c language']],
+      ['Web Designing', ['web designing', 'web design', 'વેબ ડિઝાઇન']],
+      ['Digital Marketing', ['digital marketing', 'ડિજિટલ માર્કેટિંગ']],
+      ['Basic Computer', ['basic computer', 'computer basics', 'બેઝિક કમ્પ્યુટર']],
+      ['CCC', ['ccc', 'સી સી સી', 'સીસીસી']]
+    ];
+
+    for (const [course, keywords] of courseMatches) {
+      if (keywords.some(keyword => text.includes(normalize(keyword)))) {
+        return makeSyllabusReply(course, syllabuses[course], lang);
+      }
+    }
+
+    return null;
+  }
+
+  function getReply(question) {
+    const lang = detectLanguage(question);
+    const text = normalize(question);
+    const r = replies[lang];
+
+    // Registration documents are shown only when explicitly requested.
+    if (isRegistrationQuestion(question)) {
+      return { text: getRegistrationReply(lang), registration: true };
+    }
+
+    // First identify a specific course and show its syllabus.
+    const courseReply = getCourseReply(question, lang);
+    if (courseReply) {
+      return { text: courseReply, registration: false };
+    }
+
+    if (/course|કોર્સ|कोर्स|class|ક્લાસ|क्लास/.test(text)) return { text: r.courses };
+    if (/admission|પ્રવેશ|એડમિશન|दाखिला|एडमिशन/.test(text)) return { text: r.admission };
+    if (/time|timing|સમય|ટાઈમ|ટાઇમ|समय|टाइम/.test(text)) return { text: r.timing };
+    if (/location|address|સરનામું|સરનામા|ક્યાં|પતા|कहाँ|लोकेशन/.test(text)) return { text: r.location };
+    if (/about|experience|વિશે|અનુભવ|जानकारी|अनुभव/.test(text)) return { text: r.about };
+    if (/fee|fees|કિંમત|ફી|ફીસ|शुल्क|फीस|कीमत/.test(text)) return { text: r.fees };
+    if (/contact|phone|mobile|call|whatsapp|સંપર્ક|મોબાઇલ|ફોન|संपर्क|फोन/.test(text)) return { text: r.contact };
+    if (/material|study|pdf|notes|મટીરીયલ|મટિરિયલ|નોટ્સ|અભ્યાસ|स्टडी|नोट्स|पीडीएफ/.test(text)) return { text: r.materials };
+    if (/thank|thanks|આભાર|ધન્યવાદ|शुक्रिया|धन्यवाद/.test(text)) return { text: r.thanks };
+
+    return { text: r.fallback };
+  }
+
+  function addMessage(text, type, isRegistration = false) {
     const bubble = document.createElement('div');
     bubble.className = 'heet-chat-message ' + type;
     bubble.textContent = text;
@@ -1320,41 +762,21 @@ gtag('config', 'G-FJTNFEZEF5');
       callLink.textContent = '📞 Call ' + phone;
 
       const whatsappLink = document.createElement('a');
-      whatsappLink.href = whatsapp;
+      whatsappLink.href = isRegistration
+        ? whatsapp + '?text=' + encodeURIComponent(
+            'Hello Heet Computer Education, I want to register. I will provide these documents:\n1. Passport Size Photo\n2. Signature\n3. 10th or 12th Marksheet\n4. Mobile Number\n5. Aadhaar Card\n6. Email Address'
+          )
+        : whatsapp;
+
       whatsappLink.target = '_blank';
       whatsappLink.rel = 'noopener noreferrer';
-      whatsappLink.textContent = 'WhatsApp';
+      whatsappLink.textContent = isRegistration ? '📲 Registration WhatsApp' : 'WhatsApp';
 
       contact.append(callLink, whatsappLink);
       bubble.appendChild(contact);
     }
 
     messages.scrollTop = messages.scrollHeight;
-  }
-
-  function detectLanguage(text) {
-    if (/[\u0A80-\u0AFF]/.test(text)) return 'gu';
-    if (/[\u0900-\u097F]/.test(text)) return 'hi';
-    return selectedLanguage;
-  }
-
-  function getReply(question) {
-    const text = question.toLowerCase();
-    const lang = detectLanguage(question);
-    const r = replies[lang];
-
-    if (/course|કોર્સ|कोर्स|class|ક્લાસ|क्लास/.test(text)) return r.courses;
-    if (/admission|પ્રવેશ|એડમિશન|दाखिला|एडमिशन/.test(text)) return r.admission;
-    if (/ccc|સીसीસી|સીસીસી/.test(text)) return r.ccc;
-    if (/time|timing|સમય|ટાઈમ|ટાઇમ|સમय|टाइम/.test(text)) return r.timing;
-    if (/location|address|સરનામું|સરનામા|ક્યાં|પતા|कहाँ|लोकेशन/.test(text)) return r.location;
-    if (/about|experience|વિશે|અનુભવ|जानकारी|अनुभव/.test(text)) return r.about;
-    if (/fee|fees|કિંમત|ફી|ફીસ|शुल्क|फीस|कीमत/.test(text)) return r.fees;
-    if (/contact|phone|mobile|call|whatsapp|સંપર્ક|મોબાઇલ|ફોન|સંપर्क|फोन/.test(text)) return r.contact;
-    if (/material|study|pdf|notes|મટીરીયલ|મટિરિયલ|નોટ્સ|અભ્યાસ|स्टडी|नोट्स|पीडीएफ/.test(text)) return r.materials;
-    if (/thank|thanks|આભાર|ધન્યવાદ|शुक्रिया|धन्यवाद/.test(text)) return r.thanks;
-
-    return r.fallback;
   }
 
   function openChat() {
@@ -1391,24 +813,22 @@ gtag('config', 'G-FJTNFEZEF5');
 
     addMessage(cleanQuestion, 'user');
 
-    const detected = detectLanguage(cleanQuestion);
     const previousLanguage = selectedLanguage;
+    const detected = detectLanguage(cleanQuestion);
     selectedLanguage = detected;
 
     const answer = getReply(cleanQuestion);
     selectedLanguage = previousLanguage;
 
     window.setTimeout(function () {
-      addMessage(answer, 'bot');
+      addMessage(answer.text, 'bot', answer.registration === true);
     }, 350);
   }
 
   chatForm.addEventListener('submit', function (event) {
     event.preventDefault();
-
     const question = chatInput.value.trim();
     if (!question) return;
-
     sendQuestion(question);
     chatInput.value = '';
   });
@@ -1416,6 +836,7 @@ gtag('config', 'G-FJTNFEZEF5');
   quickButtons.forEach(function (button) {
     button.addEventListener('click', function () {
       const questionType = button.dataset.question;
+
       const quickQuestions = {
         courses: {
           gu: 'કયા કોર્સ છે?',
