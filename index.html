@@ -258,6 +258,240 @@ gtag('config', 'G-FJTNFEZEF5');
     padding: 15px;
   }
 }
+
+/* HEET CHATBOT */
+.heet-chat-launcher {
+  position: fixed;
+  right: 22px;
+  bottom: 24px;
+  z-index: 9998;
+  border: none;
+  border-radius: 50px;
+  padding: 14px 20px;
+  background: linear-gradient(135deg,#1456a0,#087bce);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  box-shadow: 0 6px 22px rgba(0,45,100,.3);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.heet-chat-launcher:hover {
+  transform: translateY(-2px);
+}
+
+.heet-chat-window {
+  position: fixed;
+  right: 22px;
+  bottom: 90px;
+  z-index: 9999;
+  width: 360px;
+  max-width: calc(100vw - 28px);
+  height: 510px;
+  max-height: calc(100vh - 120px);
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 10px 40px rgba(15,23,42,.25);
+  overflow: hidden;
+  display: none;
+  flex-direction: column;
+  border: 1px solid #dbe5f0;
+  font-family: Arial, "Noto Sans Gujarati", sans-serif;
+}
+
+.heet-chat-window.open {
+  display: flex;
+}
+
+.heet-chat-header {
+  background: linear-gradient(135deg,#104b91,#087bce);
+  color: #fff;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.heet-chat-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.heet-chat-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #fff;
+  color: #1456a0;
+  display: grid;
+  place-items: center;
+  font-size: 22px;
+}
+
+.heet-chat-brand strong {
+  display: block;
+  font-size: 15px;
+}
+
+.heet-chat-brand small {
+  display: block;
+  font-size: 11px;
+  opacity: .9;
+  margin-top: 3px;
+}
+
+.heet-chat-close {
+  border: 0;
+  color: #fff;
+  background: transparent;
+  font-size: 25px;
+  cursor: pointer;
+  padding: 2px 7px;
+}
+
+.heet-chat-tools {
+  padding: 9px 12px;
+  background: #f4f7fb;
+  border-bottom: 1px solid #e5eaf1;
+}
+
+.heet-chat-tools select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background: #fff;
+  font-size: 13px;
+}
+
+.heet-chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px;
+  background: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+
+.heet-chat-message {
+  max-width: 88%;
+  padding: 10px 12px;
+  border-radius: 13px;
+  font-size: 13px;
+  line-height: 1.55;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+.heet-chat-message.bot {
+  align-self: flex-start;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  color: #1e293b;
+  border-bottom-left-radius: 4px;
+}
+
+.heet-chat-message.user {
+  align-self: flex-end;
+  background: #1456a0;
+  color: #fff;
+  border-bottom-right-radius: 4px;
+}
+
+.heet-chat-quick {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 9px 12px;
+  border-top: 1px solid #e5eaf1;
+  background: #fff;
+}
+
+.heet-chat-quick button {
+  border: 1px solid #b9d2ed;
+  color: #1456a0;
+  background: #f1f7ff;
+  border-radius: 20px;
+  padding: 6px 10px;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.heet-chat-input-area {
+  display: flex;
+  gap: 7px;
+  padding: 11px;
+  background: #fff;
+  border-top: 1px solid #e5eaf1;
+}
+
+.heet-chat-input-area input {
+  flex: 1;
+  min-width: 0;
+  border: 1px solid #cbd5e1;
+  border-radius: 22px;
+  padding: 11px 14px;
+  outline: none;
+  font-size: 13px;
+}
+
+.heet-chat-input-area input:focus {
+  border-color: #1456a0;
+}
+
+.heet-chat-send {
+  border: 0;
+  border-radius: 50%;
+  width: 42px;
+  height: 42px;
+  background: #1456a0;
+  color: #fff;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.heet-chat-contact {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.heet-chat-contact a {
+  display: inline-block;
+  text-decoration: none;
+  color: #fff;
+  background: #168447;
+  border-radius: 7px;
+  padding: 7px 10px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.heet-chat-contact a.call {
+  background: #1456a0;
+}
+
+@media(max-width:600px) {
+  .heet-chat-launcher {
+    right: 14px;
+    bottom: 16px;
+    padding: 12px 16px;
+    font-size: 14px;
+  }
+
+  .heet-chat-window {
+    right: 10px;
+    bottom: 76px;
+    width: calc(100vw - 20px);
+    height: min(540px,calc(100vh - 95px));
+    max-height: calc(100vh - 95px);
+  }
+}
 </style>
 </head>
 
@@ -626,6 +860,51 @@ gtag('config', 'G-FJTNFEZEF5');
 
 <a class="whatsapp-float" href="https://wa.me/918460575627?text=Hello%2C%20I%20want%20to%20know%20about%20your%20courses." target="_blank" rel="noopener noreferrer" aria-label="Contact us on WhatsApp">WhatsApp</a>
 
+<!-- HEET CHATBOT BUTTON -->
+<button type="button" class="heet-chat-launcher" id="heetChatLauncher" aria-label="Open Heet Chatbot" aria-expanded="false">
+  <span>💬</span> Ask Heet
+</button>
+
+<!-- HEET CHATBOT WINDOW -->
+<div class="heet-chat-window" id="heetChatWindow" role="dialog" aria-label="Heet Website Chatbot" aria-hidden="true">
+  <div class="heet-chat-header">
+    <div class="heet-chat-brand">
+      <div class="heet-chat-avatar">🎓</div>
+      <div>
+        <strong>Heet Assistant</strong>
+        <small>હંમેશા તમારી મદદ માટે</small>
+      </div>
+    </div>
+    <button type="button" class="heet-chat-close" id="heetChatClose" aria-label="Close chatbot">×</button>
+  </div>
+
+  <div class="heet-chat-tools">
+    <select id="heetChatLanguage" aria-label="Choose chatbot language">
+      <option value="gu">ગુજરાતી</option>
+      <option value="hi">हिन्दी</option>
+      <option value="en">English</option>
+    </select>
+  </div>
+
+  <div class="heet-chat-messages" id="heetChatMessages" aria-live="polite">
+    <div class="heet-chat-message bot">નમસ્તે! 🙏 Heet Computer Education માં આપનું સ્વાગત છે. તમને કઈ માહિતી જોઈએ છે?</div>
+  </div>
+
+  <div class="heet-chat-quick" id="heetChatQuick">
+    <button type="button" data-question="courses">Courses</button>
+    <button type="button" data-question="admission">Admission</button>
+    <button type="button" data-question="ccc">CCC</button>
+    <button type="button" data-question="timing">Timing</button>
+    <button type="button" data-question="location">Location</button>
+    <button type="button" data-question="contact">Contact</button>
+  </div>
+
+  <form class="heet-chat-input-area" id="heetChatForm">
+    <input type="text" id="heetChatInput" placeholder="તમારો પ્રશ્ન લખો..." maxlength="300" autocomplete="off" required>
+    <button type="submit" class="heet-chat-send" aria-label="Send message">➤</button>
+  </form>
+</div>
+
 <footer class="footer">
   <p>&copy; <span id="year"></span> Heet Computer Education &amp; Spoken English</p>
   <p>All Rights Reserved.</p>
@@ -962,6 +1241,223 @@ gtag('config', 'G-FJTNFEZEF5');
 
   loadHomeOffers();
   loadStudyMaterials();
+})();
+
+/* HEET CHATBOT SCRIPT */
+(function () {
+  const launcher = document.getElementById('heetChatLauncher');
+  const chatWindow = document.getElementById('heetChatWindow');
+  const closeButton = document.getElementById('heetChatClose');
+  const messages = document.getElementById('heetChatMessages');
+  const chatForm = document.getElementById('heetChatForm');
+  const chatInput = document.getElementById('heetChatInput');
+  const languageSelect = document.getElementById('heetChatLanguage');
+  const quickButtons = document.querySelectorAll('#heetChatQuick button');
+
+  let selectedLanguage = 'gu';
+
+  const phone = '8460575627';
+  const whatsapp = 'https://wa.me/918460575627';
+
+  const replies = {
+    gu: {
+      welcome: 'નમસ્તે! 🙏 Heet Computer Education માં આપનું સ્વાગત છે. તમને કઈ માહિતી જોઈએ છે?',
+      courses: 'અમારા મુખ્ય કોર્સ:\n\n• Basic Computer\n• Spoken English\n• CCC\n• Tally Prime with GST\n• Advance Excel અને Advance Excel With AI\n• IELTS Spoken English\n• Graphic Design With AI\n• Gujarati અને English Typing\n• Python, C અને C++\n• Web Designing\n• Data Analytics With Power BI\n• Digital Marketing\n\nકોર્સની ફી અને સમયગાળા માટે અમારો સંપર્ક કરો.',
+      admission: 'Admission માટે અમારી Website ના Admission Inquiry વિભાગમાં વિગતો ભરી શકો છો અથવા સીધો Call / WhatsApp કરી શકો છો.',
+      ccc: 'CCC Registration માટે Website પર 📝 CCC REGISTRATION બટન દબાવો.\nCCC Online Test માટે 💻 CCC ONLINE TEST બટન દબાવો.',
+      timing: 'અમારા ક્લાસનો સમય:\n\n🌅 સવારે: 8 થી 12\n🕛 બપોરે બ્રેક: 12 થી 2\n🌞 બપોરે: 3 થી 5\n🌆 સાંજે: 5 થી 7\n\nરાત્રે 7 પછી ક્લાસ બંધ રહે છે. રવિવારે રજા હોય છે.',
+      location: 'અમારું સરનામું:\nHeet Computer Education & Spoken English\n3rd Floor, Jalaram Square,\nAbove Russian Bakery, Sector-6,\nGandhinagar, Gujarat 382006.',
+      about: 'Heet Computer Education ને 17 વર્ષનો શિક્ષણનો અનુભવ છે. અહીં Expert Teachers દ્વારા Job-oriented Computer Teaching, Updated Study Materials અને Personal Coaching આપવામાં આવે છે.\n\nFixed Batch System નથી. વિદ્યાર્થીઓ પોતાની અનુકૂળતા મુજબ સમય પસંદ કરી શકે છે. ગૃહિણીઓ અને દીકરીઓ માટે ખાસ વ્યવસ્થા છે.',
+      fees: 'કોર્સની ફી અને સમયગાળો કોર્સ પ્રમાણે અલગ હોઈ શકે છે. સાચી માહિતી માટે કૃપા કરીને અમને Call અથવા WhatsApp કરો.',
+      contact: 'અમારો સંપર્ક:\n📞 8460575627\n\nCall અથવા WhatsApp કરવા નીચેના બટનનો ઉપયોગ કરો.',
+      materials: 'Study Materials વિભાગમાં ઉપલબ્ધ PDF Notes અને Question Papers જોઈ શકો છો. પસંદ કરેલી સામગ્રી ખરીદવા Buy Now દબાવો. Payment Admin દ્વારા approve થયા પછી PDF Download કરી શકશો.',
+      thanks: 'આભાર! 😊 Heet Computer Education માં આપનું સ્વાગત છે. વધુ માહિતી માટે અમારો સંપર્ક કરો.',
+      fallback: 'માફ કરશો, તમારો પ્રશ્ન મને સમજાયો નથી. કૃપા કરીને Courses, Admission, CCC, Timing, Location અથવા Contact વિશે પૂછો.'
+    },
+    hi: {
+      welcome: 'नमस्ते! 🙏 Heet Computer Education में आपका स्वागत है। आपको कौन-सी जानकारी चाहिए?',
+      courses: 'हमारे मुख्य कोर्स:\n\n• Basic Computer\n• Spoken English\n• CCC\n• Tally Prime with GST\n• Advance Excel और Advance Excel With AI\n• IELTS Spoken English\n• Graphic Design With AI\n• Gujarati और English Typing\n• Python, C और C++\n• Web Designing\n• Data Analytics With Power BI\n• Digital Marketing\n\nफीस और अवधि जानने के लिए संपर्क करें।',
+      admission: 'Admission के लिए Website के Admission Inquiry सेक्शन में जानकारी भरें या सीधे Call / WhatsApp करें।',
+      ccc: 'CCC Registration के लिए Website पर 📝 CCC REGISTRATION बटन दबाएं।\nCCC Online Test के लिए 💻 CCC ONLINE TEST बटन दबाएं।',
+      timing: 'क्लास का समय:\n\nसुबह: 8 से 12\nदोपहर ब्रेक: 12 से 2\nदोपहर: 3 से 5\nशाम: 5 से 7\n\nशाम 7 बजे के बाद क्लास बंद रहती है। रविवार को छुट्टी रहती है।',
+      location: 'हमारा पता:\nHeet Computer Education & Spoken English\n3rd Floor, Jalaram Square,\nAbove Russian Bakery, Sector-6,\nGandhinagar, Gujarat 382006.',
+      about: 'Heet Computer Education को 17 वर्षों का शिक्षण अनुभव है। यहाँ Expert Teachers, Job-oriented Computer Teaching, Updated Study Materials और Personal Coaching की सुविधा है।\n\nFixed Batch System नहीं है। विद्यार्थी अपनी सुविधा के अनुसार समय चुन सकते हैं। गृहिणियों और लड़कियों के लिए विशेष व्यवस्था है।',
+      fees: 'कोर्स की फीस और अवधि अलग-अलग हो सकती है। सही जानकारी के लिए कृपया Call या WhatsApp करें।',
+      contact: 'संपर्क करें:\n📞 8460575627\n\nCall या WhatsApp करने के लिए नीचे दिए गए बटन का उपयोग करें।',
+      materials: 'Study Materials सेक्शन में उपलब्ध PDF Notes और Question Papers देख सकते हैं। सामग्री खरीदने के लिए Buy Now दबाएं। Admin द्वारा Payment approve होने के बाद PDF Download कर सकते हैं।',
+      thanks: 'धन्यवाद! 😊 Heet Computer Education में आपका स्वागत है। अधिक जानकारी के लिए संपर्क करें।',
+      fallback: 'माफ़ कीजिए, मैं आपका सवाल समझ नहीं पाया। कृपया Courses, Admission, CCC, Timing, Location या Contact के बारे में पूछें।'
+    },
+    en: {
+      welcome: 'Hello! 🙏 Welcome to Heet Computer Education. How can I help you?',
+      courses: 'Our courses include:\n\n• Basic Computer\n• Spoken English\n• CCC\n• Tally Prime with GST\n• Advance Excel and Advance Excel With AI\n• IELTS Spoken English\n• Graphic Design With AI\n• Gujarati and English Typing\n• Python, C and C++\n• Web Designing\n• Data Analytics With Power BI\n• Digital Marketing\n\nPlease contact us for course fees and duration.',
+      admission: 'For admission, fill in the Admission Inquiry section on our website or contact us directly by Call / WhatsApp.',
+      ccc: 'For CCC Registration, click the 📝 CCC REGISTRATION button on our website.\nFor the CCC Online Test, click the 💻 CCC ONLINE TEST button.',
+      timing: 'Our class timings:\n\nMorning: 8 AM to 12 PM\nBreak: 12 PM to 2 PM\nAfternoon: 3 PM to 5 PM\nEvening: 5 PM to 7 PM\n\nClasses are closed after 7 PM. Sunday is closed.',
+      location: 'Our address:\nHeet Computer Education & Spoken English\n3rd Floor, Jalaram Square,\nAbove Russian Bakery, Sector-6,\nGandhinagar, Gujarat 382006, India.',
+      about: 'Heet Computer Education has 17 years of teaching experience. We offer expert teachers, job-oriented computer teaching, updated study materials and personal coaching.\n\nWe do not follow a fixed batch system. Students can choose a suitable time. Special arrangements are available for housewives and girls.',
+      fees: 'Course fees and duration vary by course. Please call or WhatsApp us for accurate details.',
+      contact: 'Contact us:\n📞 8460575627\n\nUse the buttons below to call or WhatsApp us.',
+      materials: 'Visit the Study Materials section to view available PDF Notes and Question Papers. Click Buy Now to purchase a material. PDF downloads are available after Admin payment approval.',
+      thanks: 'Thank you! 😊 Welcome to Heet Computer Education. Contact us for more information.',
+      fallback: 'Sorry, I could not understand your question. Please ask about Courses, Admission, CCC, Timing, Location or Contact.'
+    }
+  };
+
+  function addMessage(text, type) {
+    const bubble = document.createElement('div');
+    bubble.className = 'heet-chat-message ' + type;
+    bubble.textContent = text;
+    messages.appendChild(bubble);
+
+    if (type === 'bot') {
+      const contact = document.createElement('div');
+      contact.className = 'heet-chat-contact';
+
+      const callLink = document.createElement('a');
+      callLink.className = 'call';
+      callLink.href = 'tel:' + phone;
+      callLink.textContent = '📞 Call ' + phone;
+
+      const whatsappLink = document.createElement('a');
+      whatsappLink.href = whatsapp;
+      whatsappLink.target = '_blank';
+      whatsappLink.rel = 'noopener noreferrer';
+      whatsappLink.textContent = 'WhatsApp';
+
+      contact.append(callLink, whatsappLink);
+      bubble.appendChild(contact);
+    }
+
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  function detectLanguage(text) {
+    if (/[\u0A80-\u0AFF]/.test(text)) return 'gu';
+    if (/[\u0900-\u097F]/.test(text)) return 'hi';
+    return selectedLanguage;
+  }
+
+  function getReply(question) {
+    const text = question.toLowerCase();
+    const lang = detectLanguage(question);
+    const r = replies[lang];
+
+    if (/course|કોર્સ|कोर्स|class|ક્લાસ|क्लास/.test(text)) return r.courses;
+    if (/admission|પ્રવેશ|એડમિશન|दाखिला|एडमिशन/.test(text)) return r.admission;
+    if (/ccc|સીसीસી|સીસીસી/.test(text)) return r.ccc;
+    if (/time|timing|સમય|ટાઈમ|ટાઇમ|સમय|टाइम/.test(text)) return r.timing;
+    if (/location|address|સરનામું|સરનામા|ક્યાં|પતા|कहाँ|लोकेशन/.test(text)) return r.location;
+    if (/about|experience|વિશે|અનુભવ|जानकारी|अनुभव/.test(text)) return r.about;
+    if (/fee|fees|કિંમત|ફી|ફીસ|शुल्क|फीस|कीमत/.test(text)) return r.fees;
+    if (/contact|phone|mobile|call|whatsapp|સંપર્ક|મોબાઇલ|ફોન|સંપर्क|फोन/.test(text)) return r.contact;
+    if (/material|study|pdf|notes|મટીરીયલ|મટિરિયલ|નોટ્સ|અભ્યાસ|स्टडी|नोट्स|पीडीएफ/.test(text)) return r.materials;
+    if (/thank|thanks|આભાર|ધન્યવાદ|शुक्रिया|धन्यवाद/.test(text)) return r.thanks;
+
+    return r.fallback;
+  }
+
+  function openChat() {
+    chatWindow.classList.add('open');
+    chatWindow.setAttribute('aria-hidden', 'false');
+    launcher.setAttribute('aria-expanded', 'true');
+    chatInput.focus();
+  }
+
+  function closeChat() {
+    chatWindow.classList.remove('open');
+    chatWindow.setAttribute('aria-hidden', 'true');
+    launcher.setAttribute('aria-expanded', 'false');
+  }
+
+  launcher.addEventListener('click', openChat);
+  closeButton.addEventListener('click', closeChat);
+
+  languageSelect.addEventListener('change', function () {
+    selectedLanguage = this.value;
+
+    const placeholders = {
+      gu: 'તમારો પ્રશ્ન લખો...',
+      hi: 'अपना सवाल लिखें...',
+      en: 'Type your question...'
+    };
+
+    chatInput.placeholder = placeholders[selectedLanguage];
+  });
+
+  function sendQuestion(question) {
+    const cleanQuestion = question.trim();
+    if (!cleanQuestion) return;
+
+    addMessage(cleanQuestion, 'user');
+
+    const detected = detectLanguage(cleanQuestion);
+    const previousLanguage = selectedLanguage;
+    selectedLanguage = detected;
+
+    const answer = getReply(cleanQuestion);
+    selectedLanguage = previousLanguage;
+
+    window.setTimeout(function () {
+      addMessage(answer, 'bot');
+    }, 350);
+  }
+
+  chatForm.addEventListener('submit', function (event) {
+    event.preventDefault();
+
+    const question = chatInput.value.trim();
+    if (!question) return;
+
+    sendQuestion(question);
+    chatInput.value = '';
+  });
+
+  quickButtons.forEach(function (button) {
+    button.addEventListener('click', function () {
+      const questionType = button.dataset.question;
+      const quickQuestions = {
+        courses: {
+          gu: 'કયા કોર્સ છે?',
+          hi: 'कौन से कोर्स हैं?',
+          en: 'What courses do you offer?'
+        },
+        admission: {
+          gu: 'Admission કેવી રીતે લેવું?',
+          hi: 'Admission कैसे लें?',
+          en: 'How can I get admission?'
+        },
+        ccc: {
+          gu: 'CCC વિશે માહિતી આપો',
+          hi: 'CCC की जानकारी दें',
+          en: 'Tell me about CCC'
+        },
+        timing: {
+          gu: 'ક્લાસનો સમય શું છે?',
+          hi: 'क्लास का समय क्या है?',
+          en: 'What are the class timings?'
+        },
+        location: {
+          gu: 'તમારું સરનામું આપો',
+          hi: 'आपका पता बताएं',
+          en: 'Where are you located?'
+        },
+        contact: {
+          gu: 'સંપર્ક નંબર આપો',
+          hi: 'Contact number बताएं',
+          en: 'How can I contact you?'
+        }
+      };
+
+      sendQuestion(quickQuestions[questionType][selectedLanguage]);
+    });
+  });
+
+  document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape' && chatWindow.classList.contains('open')) {
+      closeChat();
+    }
+  });
 })();
 </script>
 
