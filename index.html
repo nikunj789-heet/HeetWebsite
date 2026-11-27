@@ -440,7 +440,8 @@ gtag('config', 'G-FJTNFEZEF5');
 })();
 
 /* ભાગ 2 અહીંથી શરૂ થશે: HEET CHATBOT SCRIPT */
-  /* HEET CHATBOT SCRIPT */
+
+/* HEET CHATBOT SCRIPT */
 (function () {
   const launcher = document.getElementById('heetChatLauncher');
   const chatWindow = document.getElementById('heetChatWindow');
@@ -450,6 +451,10 @@ gtag('config', 'G-FJTNFEZEF5');
   const chatInput = document.getElementById('heetChatInput');
   const languageSelect = document.getElementById('heetChatLanguage');
   const quickButtons = document.querySelectorAll('#heetChatQuick button');
+
+  if (!launcher || !chatWindow || !closeButton || !messages || !chatForm || !chatInput || !languageSelect) {
+    return;
+  }
 
   let selectedLanguage = 'gu';
 
@@ -503,7 +508,7 @@ gtag('config', 'G-FJTNFEZEF5');
       'MS Word and Basic Excel',
       'Internet and Email'
     ],
-        'CCC': [
+    'CCC': [
       'Windows 11',
       'Office 365 Latest',
       'MS Word, MS Excel and MS PowerPoint',
@@ -603,14 +608,14 @@ gtag('config', 'G-FJTNFEZEF5');
     ]
   };
 
-  function detectLanguage(text) {
-    if (/[\u0A80-\u0AFF]/.test(text)) return 'gu';
-    if (/[\u0900-\u097F]/.test(text)) return 'hi';
+  function detectLanguage(value) {
+    if (/[\u0A80-\u0AFF]/.test(value)) return 'gu';
+    if (/[\u0900-\u097F]/.test(value)) return 'hi';
     return selectedLanguage;
   }
 
-  function normalize(text) {
-    return text.toLowerCase()
+  function normalize(value) {
+    return value.toLowerCase()
       .replace(/[|]/g, ' ')
       .replace(/[&]/g, ' and ')
       .replace(/[^a-z0-9\u0A80-\u0AFF\u0900-\u097F ]/g, ' ')
@@ -618,8 +623,15 @@ gtag('config', 'G-FJTNFEZEF5');
       .trim();
   }
 
-  function isRegistrationQuestion(text) {
-    return /\b(registration|register|document|documents|કાગળ|દસ્તાવેજ|રજીસ્ટ્રેશન|નોંધણી|દાખલાના દસ્તાવેજ|पंजीकरण|रजिस्ट्रेशन|दस्तावेज)\b/i.test(text);
+  function isRegistrationQuestion(value) {
+    return /\b(registration|register|document|documents)\b/i.test(value) ||
+      value.includes('કાગળ') ||
+      value.includes('દસ્તાવેજ') ||
+      value.includes('રજીસ્ટ્રેશન') ||
+      value.includes('નોંધણી') ||
+      value.includes('पंजीकरण') ||
+      value.includes('रजिस्ट्रेशन') ||
+      value.includes('दस्तावेज');
   }
 
   function getRegistrationReply(lang) {
@@ -649,35 +661,38 @@ gtag('config', 'G-FJTNFEZEF5');
     };
 
     return headings[lang] + course + topicHeading[lang] +
-      '\n\n' + topics.map((topic, index) => (index + 1) + '. ' + topic).join('\n') +
-      footer[lang];
+      '\n\n' + topics.map(function (topic, index) {
+        return (index + 1) + '. ' + topic;
+      }).join('\n') + footer[lang];
   }
 
-   function getCourseReply(question, lang) {
+  function getCourseReply(question, lang) {
     const raw = question.toLowerCase();
     const text = normalize(question);
 
-    // CCC must be checked first
+    // CCC is checked first and only by its exact course name.
     if (
-      /ccc/i.test(raw) ||
-      raw.includes('સી સી સી') ||
-      raw.includes('સીસીસી')
+      /\bccc\b/i.test(raw) ||
+      text.includes('સી સી સી') ||
+      text.includes('સીસીસી')
     ) {
       return makeSyllabusReply('CCC', syllabuses['CCC'], lang);
     }
 
-    // C & C++ separate matching
+    // C & C++ is matched only when the actual C++ name is typed.
     if (
-      raw.includes('c++') ||
-      /c\s+and\s+c/i.test(raw) ||
-      /c\s+language/i.test(raw)
+      /c\s*\+\s*\+/i.test(raw) ||
+      /c\s*&\s*c\s*\+\s*\+/i.test(raw) ||
+      /\bc\s+language\b/i.test(raw)
     ) {
       return makeSyllabusReply('C & C++', syllabuses['C & C++'], lang);
     }
 
     if (text.includes('tally')) {
-      const advanced = /\b(advanced|advance|job|જોબ|એડવાન્સ|એડવાન્સ્ડ)\b/.test(text);
-      const basic = /\b(basic|બેસિક|બેઝિક)\b/.test(text);
+      const advanced = /\b(advanced|advance|job)\b/.test(text) ||
+        text.includes('જોબ') || text.includes('એડવાન્સ');
+      const basic = /\b(basic)\b/.test(text) ||
+        text.includes('બેસિક') || text.includes('બેઝિક');
 
       if (advanced && !basic) {
         return makeSyllabusReply('Tally Prime with GST – Advanced', syllabuses['Tally Advanced'], lang);
@@ -692,9 +707,14 @@ gtag('config', 'G-FJTNFEZEF5');
         makeSyllabusReply('Tally Prime with GST – Advanced', syllabuses['Tally Advanced'], lang);
     }
 
-    if (text.includes('spoken english') || text.includes('સ્પોકન ઇંગ્લિશ') || text.includes('स्पोकन इंग्लिश')) {
-      const wantsIELTS = /\b(ielts|આઇલેટ્સ|આયલેટ્સ)\b/.test(text);
-      const wantsBasic = /\b(basic|બેસિક|बेसिक)\b/.test(text);
+    if (
+      text.includes('spoken english') ||
+      text.includes('સ્પોકન ઇંગ્લિશ') ||
+      text.includes('स्पोकन इंग्लिश')
+    ) {
+      const wantsIELTS = /\bielts\b/i.test(raw) ||
+        text.includes('આઇલેટ્સ') || text.includes('આયલેટ્સ');
+      const wantsBasic = /\bbasic\b/i.test(raw) || text.includes('બેસિક') || text.includes('बेसिक');
 
       if (wantsIELTS && !wantsBasic) {
         return makeSyllabusReply('Spoken English – IELTS', syllabuses['Spoken IELTS'], lang);
@@ -709,7 +729,7 @@ gtag('config', 'G-FJTNFEZEF5');
         makeSyllabusReply('Spoken English – IELTS', syllabuses['Spoken IELTS'], lang);
     }
 
-    if (text.includes('ielts')) {
+    if (/\bielts\b/i.test(raw)) {
       return makeSyllabusReply('IELTS Spoken English', syllabuses['Spoken IELTS'], lang);
     }
 
@@ -725,31 +745,13 @@ gtag('config', 'G-FJTNFEZEF5');
       ['Basic Computer', ['basic computer', 'computer basics', 'બેઝિક કમ્પ્યુટર']]
     ];
 
-    for (const [course, keywords] of courseMatches) {
-      if (keywords.some(keyword => text.includes(normalize(keyword)))) {
-        return makeSyllabusReply(course, syllabuses[course], lang);
-      }
-    }
+    for (const item of courseMatches) {
+      const course = item[0];
+      const keywords = item[1];
 
-    return null;
-  }
-
-    const courseMatches = [
-      ['Data Analytics With Power BI', ['data analytics', 'power bi']],
-      ['Advance Excel With AI', ['advance excel with ai', 'advanced excel with ai', 'excel with ai']],
-      ['Advance Excel', ['advance excel', 'advanced excel']],
-      ['Graphic Design With AI', ['graphic design', 'ગ્રાફિક ડિઝાઇન']],
-      ['Gujarati English Typing', ['typing', 'ટાઇપિંગ', 'ટાઈપિંગ', 'ટાઇપ']],
-      ['Programming With Python', ['programming with python', 'python', 'પાયથન']],
-      ['C & C++', ['c and c++', 'c c++', 'c++', 'c language']],
-      ['Web Designing', ['web designing', 'web design', 'વેબ ડિઝાઇન']],
-      ['Digital Marketing', ['digital marketing', 'ડિજિટલ માર્કેટિંગ']],
-      ['Basic Computer', ['basic computer', 'computer basics', 'બેઝિક કમ્પ્યુટર']],
-      ['CCC', ['ccc', 'સી સી સી', 'સીસીસી']]
-    ];
-
-    for (const [course, keywords] of courseMatches) {
-      if (keywords.some(keyword => text.includes(normalize(keyword)))) {
+      if (keywords.some(function (keyword) {
+        return text.includes(normalize(keyword));
+      })) {
         return makeSyllabusReply(course, syllabuses[course], lang);
       }
     }
@@ -762,12 +764,10 @@ gtag('config', 'G-FJTNFEZEF5');
     const text = normalize(question);
     const r = replies[lang];
 
-    // Registration documents are shown only when explicitly requested.
-    if (isRegistrationQuestion(question)) {
+    if (isRegistrationQuestion(question.toLowerCase())) {
       return { text: getRegistrationReply(lang), registration: true };
     }
 
-    // First identify a specific course and show its syllabus.
     const courseReply = getCourseReply(question, lang);
     if (courseReply) {
       return { text: courseReply, registration: false };
@@ -786,11 +786,13 @@ gtag('config', 'G-FJTNFEZEF5');
     return { text: r.fallback };
   }
 
-  function addMessage(text, type, isRegistration = false) {
+  function addMessage(messageText, type, isRegistration) {
     const bubble = document.createElement('div');
     bubble.className = 'heet-chat-message ' + type;
-    bubble.textContent = text;
-    messages.appendChild(bubble);
+
+    const messageContent = document.createElement('div');
+    messageContent.textContent = messageText;
+    bubble.appendChild(messageContent);
 
     if (type === 'bot') {
       const contact = document.createElement('div');
@@ -804,8 +806,8 @@ gtag('config', 'G-FJTNFEZEF5');
       const whatsappLink = document.createElement('a');
       whatsappLink.href = isRegistration
         ? whatsapp + '?text=' + encodeURIComponent(
-            'Hello Heet Computer Education, I want to register. I will provide these documents:\n1. Passport Size Photo\n2. Signature\n3. 10th or 12th Marksheet\n4. Mobile Number\n5. Aadhaar Card\n6. Email Address'
-          )
+          'Hello Heet Computer Education, I want to register. I will provide these documents:\n1. Passport Size Photo\n2. Signature\n3. 10th or 12th Marksheet\n4. Mobile Number\n5. Aadhaar Card\n6. Email Address'
+        )
         : whatsapp;
 
       whatsappLink.target = '_blank';
@@ -816,6 +818,7 @@ gtag('config', 'G-FJTNFEZEF5');
       bubble.appendChild(contact);
     }
 
+    messages.appendChild(bubble);
     messages.scrollTop = messages.scrollHeight;
   }
 
@@ -844,18 +847,17 @@ gtag('config', 'G-FJTNFEZEF5');
       en: 'Type your question...'
     };
 
-    chatInput.placeholder = placeholders[selectedLanguage];
+    chatInput.placeholder = placeholders[selectedLanguage] || placeholders.gu;
   });
 
   function sendQuestion(question) {
     const cleanQuestion = question.trim();
     if (!cleanQuestion) return;
 
-    addMessage(cleanQuestion, 'user');
+    addMessage(cleanQuestion, 'user', false);
 
     const previousLanguage = selectedLanguage;
-    const detected = detectLanguage(cleanQuestion);
-    selectedLanguage = detected;
+    selectedLanguage = detectLanguage(cleanQuestion);
 
     const answer = getReply(cleanQuestion);
     selectedLanguage = previousLanguage;
@@ -869,6 +871,7 @@ gtag('config', 'G-FJTNFEZEF5');
     event.preventDefault();
     const question = chatInput.value.trim();
     if (!question) return;
+
     sendQuestion(question);
     chatInput.value = '';
   });
@@ -889,9 +892,9 @@ gtag('config', 'G-FJTNFEZEF5');
           en: 'How can I get admission?'
         },
         ccc: {
-          gu: 'CCC વિશે માહિતી આપો',
-          hi: 'CCC की जानकारी दें',
-          en: 'Tell me about CCC'
+          gu: 'CCC',
+          hi: 'CCC',
+          en: 'CCC'
         },
         timing: {
           gu: 'ક્લાસનો સમય શું છે?',
@@ -910,7 +913,9 @@ gtag('config', 'G-FJTNFEZEF5');
         }
       };
 
-      sendQuestion(quickQuestions[questionType][selectedLanguage]);
+      if (quickQuestions[questionType]) {
+        sendQuestion(quickQuestions[questionType][selectedLanguage] || quickQuestions[questionType].gu);
+      }
     });
   });
 
@@ -921,6 +926,3 @@ gtag('config', 'G-FJTNFEZEF5');
   });
 })();
 </script>
-
-</body>
-</html>
