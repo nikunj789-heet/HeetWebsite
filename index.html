@@ -653,8 +653,27 @@ gtag('config', 'G-FJTNFEZEF5');
       footer[lang];
   }
 
-  function getCourseReply(question, lang) {
+   function getCourseReply(question, lang) {
+    const raw = question.toLowerCase();
     const text = normalize(question);
+
+    // CCC must be checked first
+    if (
+      /ccc/i.test(raw) ||
+      raw.includes('સી સી સી') ||
+      raw.includes('સીસીસી')
+    ) {
+      return makeSyllabusReply('CCC', syllabuses['CCC'], lang);
+    }
+
+    // C & C++ separate matching
+    if (
+      raw.includes('c++') ||
+      /c\s+and\s+c/i.test(raw) ||
+      /c\s+language/i.test(raw)
+    ) {
+      return makeSyllabusReply('C & C++', syllabuses['C & C++'], lang);
+    }
 
     if (text.includes('tally')) {
       const advanced = /\b(advanced|advance|job|જોબ|એડવાન્સ|એડવાન્સ્ડ)\b/.test(text);
@@ -693,6 +712,27 @@ gtag('config', 'G-FJTNFEZEF5');
     if (text.includes('ielts')) {
       return makeSyllabusReply('IELTS Spoken English', syllabuses['Spoken IELTS'], lang);
     }
+
+    const courseMatches = [
+      ['Data Analytics With Power BI', ['data analytics', 'power bi']],
+      ['Advance Excel With AI', ['advance excel with ai', 'advanced excel with ai', 'excel with ai']],
+      ['Advance Excel', ['advance excel', 'advanced excel']],
+      ['Graphic Design With AI', ['graphic design', 'ગ્રાફિક ડિઝાઇન']],
+      ['Gujarati English Typing', ['typing', 'ટાઇપિંગ', 'ટાઈપિંગ', 'ટાઇપ']],
+      ['Programming With Python', ['programming with python', 'python', 'પાયથન']],
+      ['Web Designing', ['web designing', 'web design', 'વેબ ડિઝાઇન']],
+      ['Digital Marketing', ['digital marketing', 'ડિજિટલ માર્કેટિંગ']],
+      ['Basic Computer', ['basic computer', 'computer basics', 'બેઝિક કમ્પ્યુટર']]
+    ];
+
+    for (const [course, keywords] of courseMatches) {
+      if (keywords.some(keyword => text.includes(normalize(keyword)))) {
+        return makeSyllabusReply(course, syllabuses[course], lang);
+      }
+    }
+
+    return null;
+  }
 
     const courseMatches = [
       ['Data Analytics With Power BI', ['data analytics', 'power bi']],
